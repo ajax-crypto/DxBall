@@ -24,7 +24,7 @@ function GameLoop() {
 	}
 	else {
 		if(run)
-			gameLoop = setTimeout("GameLoop()", 10); 	
+			gameLoop = setTimeout(GameLoop, 10); 	
 	}
 }; 
 
