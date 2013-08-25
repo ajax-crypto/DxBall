@@ -9,7 +9,9 @@ var gameLoop ;
 var run = true ; 
 var state = true ; 
 var points = 1 ; 
+
 var PADDLE_IMAGE_PATH = "img/paddle.png" ; 
+var SPLASH_SCREEN_PATH = "img/splash.png" ; 
 
 var Colors = Object.freeze({ "WHITE" : "#FFFFFF",
 							 "BLACK" : "#000000"
@@ -47,3 +49,7 @@ var rowcolors = ["#FF1C0A",
 				 "#7FFFD4", 
 				 "#8A2BE2", 
 				 "#A0522D"];
+				 
+var GAME_LEVEL = 0 ; 
+
+var FPS = 100 ; 

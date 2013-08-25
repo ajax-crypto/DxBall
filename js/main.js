@@ -13,26 +13,24 @@ function GameLoop() {
 	drawScene(); 
 	var gameState = handleCollisions(); 
 	if(gameState == false) {
-		end(); 
-		//alert('You have scored ' + points + ' points'); 
-		//location.reload();  
+		clearTimeout(gameLoop); 
+		end(false); 
 	}
 	else if(isComplete()) {
-		end(); 
-		//alert('You have completed with a score of ' + points + ' points'); 
-		//location.reload();
+		clearTimeout(gameLoop); 
+		end(true); 
 	}
 	else {
 		if(run)
-			gameLoop = setTimeout(GameLoop, 10); 	
+			gameLoop = setTimeout(GameLoop, 1000/FPS); 	
 	}
 }; 
 
 function RunGame() {
 	if(state == false) 
 		state = true ;
-	console.log("Defaults : bw ="+BrickDefaults.TRUE_WIDTH+
-		", bh="+BrickDefaults.TRUE_HEIGHT); 
+	//console.log("Defaults : bw ="+BrickDefaults.TRUE_WIDTH+
+	//	", bh="+BrickDefaults.TRUE_HEIGHT); S
 	clearTimeout(gameLoop); 
 	GameLoop(); 
 }

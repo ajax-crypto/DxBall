@@ -42,7 +42,7 @@ function initBricks() {
         for (j=0; j < NCOLS; j++) {
             bricks[i][j] = new Brick(BrickDefaults.WIDTH, BrickDefaults.HEIGHT, 
 				BrickDefaults.PADDING, ~~(Math.random()*10), rowcolors[~~(Math.
-				random()*10)], brickMatrix[i][j]); 
+				random()*10)], levels[GAME_LEVEL][i][j]); 
         }
     }
 }
