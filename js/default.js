@@ -1,5 +1,6 @@
-﻿
-var ctx = document.getElementById('canvas').getContext('2d');
+﻿var canvas = document.getElementById('dxball'); 
+var ctx = canvas.getContext('2d');
+
 var WIDTH = 640;
 var HEIGHT = 480;
 var rightDown = false;
@@ -53,3 +54,5 @@ var rowcolors = ["#FF1C0A",
 var GAME_LEVEL = 0 ; 
 
 var FPS = 100 ; 
+
+var AUTHOR = 'Akash Pradhan' ; 

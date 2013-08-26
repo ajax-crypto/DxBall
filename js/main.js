@@ -30,7 +30,7 @@ function RunGame() {
 	if(state == false) 
 		state = true ;
 	//console.log("Defaults : bw ="+BrickDefaults.TRUE_WIDTH+
-	//	", bh="+BrickDefaults.TRUE_HEIGHT); S
+	//	", bh="+BrickDefaults.TRUE_HEIGHT); 
 	clearTimeout(gameLoop); 
 	GameLoop(); 
 }

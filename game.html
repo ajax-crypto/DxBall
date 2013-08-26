@@ -18,22 +18,24 @@
   </style>
     
   </head>
+  
   <body>
-    <canvas id='canvas' width = 640 height = 480 tabindex = '1'></canvas>
+    <canvas id='dxball' width = 640 height = 480 tabindex = '1'></canvas>
 	<center>
 		<button id='start'>Start</button> 
 		<button id='pause'>Pause</button> 
 	</center>
 	<script src="js/default.js"></script>
-	<script src="js/levels.js"></script>
 	<script src="js/draw.js"></script>
+	<script src="js/game_scenes.js"></script>
+	<script type="text/javascript"> drawSplashScreen(); </script> 
+	<script src="js/levels.js"></script>
 	<script src="js/events.js"></script>
 	<script src="js/bricks.js"></script>
 	<script src="js/paddle.js"></script>
 	<script src="js/ball.js"></script>
-	<script src="js/game_scenes.js"></script>
-	<script type="text/javascript"> drawSplashScreen(); </script> 
 	<script src="js/collision.js"></script>
     <script src="js/main.js"></script>
   </body>
+  
 </html>

@@ -9,8 +9,9 @@
     return { top: _y, left: _x };
 }
 
-var canvasMinX = getOffset(document.getElementById('canvas')).left;
+var canvasMinX = getOffset(canvas).left;
 var canvasMaxX = canvasMinX + WIDTH;
+var canvasMinY = getOffset(canvas).top; 
 
 function roundRect(x, y, width, height, radius, fill) {
     if (typeof radius === "undefined") {
@@ -33,23 +34,23 @@ function roundRect(x, y, width, height, radius, fill) {
 		ctx.stroke(); 
 }
 
-function circle(x,y,r) {
+function circle(x, y, r) {
 	ctx.beginPath();
 	ctx.arc(x, y, r, 0, Math.PI*2, true);
 	ctx.closePath();
 	ctx.fill();
 }
 
-function rect(x,y,w,h) {
+function rect(x, y, w, h) {
 	ctx.beginPath();
-	ctx.rect(x,y,w,h);
+	ctx.rect(x, y, w, h);
 	ctx.closePath();
 	ctx.fill();
 }
 
 function clear() {
 	ctx.clearRect(0, 0, WIDTH, HEIGHT);
-	rect(0,0,WIDTH,HEIGHT);
+	rect(0, 0, WIDTH, HEIGHT);
 }
 
 function image(img, cx, cy, x, y, w, h) {
