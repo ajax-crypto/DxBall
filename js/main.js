@@ -9,7 +9,7 @@ function isComplete() {
 	return true ;
 }
 
-function GameLoop() { 
+function gameLoop() { 
 	
 	var sceneChanged ; 
 	
@@ -36,32 +36,25 @@ function GameLoop() {
 		++GAME_LEVEL ;
 	}
 	
-	if(gameState == PAUSED)
-		toggleRunningState(); 
+	if(gameState != PAUSED)
+		loop = setTimeout(gameLoop, 1000/FPS); 
 }
 
-function toggleRunningState() {
-	if(isRunning) {
-		clearInterval(gameLoop);
-		isRunning = false ;
-	}
-	else {
-		isRunning = true ; 
-		gameLoop = setInterval(GameLoop, 1000/FPS); 
-	}
-}
-
-function RunGame() {
+function restartGame() {
 	gameState = RUNNING ; 
-	isRunning = true ; 
-	clearInterval(gameLoop);
-	gameLoop = setInterval(GameLoop, 1000/FPS); 
+	clearTimeout(loop);
+	startGame(); 
+}
+
+function startGame() {
 	initBricks(); 
 	initBall(); 
-	GameLoop(); 
+	playState = true ; 
+	gameLoop(); 
 }
 
-initBricks(); 
-initBall(); 
-toggleRunningState();
+function resumeGame() {
+	gameState = RUNNING ; 
+	gameLoop();
+}
 	

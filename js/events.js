@@ -1,6 +1,6 @@
 ﻿document.getElementById('start').addEventListener('click', function() { 
 		pause.innerHTML = "Pause" ; 
-		RunGame(); 
+		restartGame(); 
 	}, false); 
 	
 document.getElementById('pause').addEventListener('click', function() {
@@ -9,7 +9,7 @@ document.getElementById('pause').addEventListener('click', function() {
 			pause.innerHTML = "Resume" ; 
 		}
 		else if(gameState == PAUSED) {
-			gameState = RUNNING ; 
+			resumeGame(); 
 			pause.innerHTML = "Pause" ;
 		}
 	}, false); 
@@ -38,7 +38,6 @@ var runningGameSceneHandler = {
 			break ;
 				
 			case 'mousemove' : 
-				//console.log("mouse moved");
 				if (evt.pageX > canvasMinX && evt.pageX < canvasMaxX) {
 					paddle.x = Math.max(evt.pageX - canvasMinX - (paddle.width/2), 0);
 					paddle.x = Math.min(WIDTH - paddle.width, paddle.x);
@@ -65,7 +64,6 @@ var splashScreenHandler = {
 			break ;
 				
 			case 'mousemove' : 
-				//console.log("mouse moved");
 				var mouse = {
 					x: evt.pageX - canvasMinX,
 					y: evt.pageY - canvasMinY
@@ -98,13 +96,11 @@ function handleGameEvents(currState, prevState) {
 	unregisterEvents(prevState); 
 	switch(currState) {
 		case START : 
-			//console.log("start "); 
 		case SPLASH_SCREEN :
 			canvas.addEventListener('click', splashScreenHandler, false); 
 			canvas.addEventListener('mousemove', splashScreenHandler, false); 
 		break;
 		case RUNNING : 
-			//console.log("running... "); 
 			canvas.addEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);

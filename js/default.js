@@ -6,7 +6,7 @@ var HEIGHT = 480;
 var rightDown = false;
 var leftDown = false;
 var bricks;
-var gameLoop ; 
+var loop ; 
 var points = 1 ; 
 
 var PADDLE_IMAGE_PATH = "img/paddle.png" ; 
@@ -67,4 +67,3 @@ var CREDIT_SCENE = 5 ;
 var gameState = START ; 
 var prevState = -2 ; 
 var playState = true ; 
-var isRunning = false ; 
