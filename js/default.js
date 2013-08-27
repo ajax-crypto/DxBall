@@ -7,8 +7,6 @@ var rightDown = false;
 var leftDown = false;
 var bricks;
 var gameLoop ; 
-var run = true ; 
-var state = true ; 
 var points = 1 ; 
 
 var PADDLE_IMAGE_PATH = "img/paddle.png" ; 
@@ -56,3 +54,16 @@ var GAME_LEVEL = 0 ;
 var FPS = 100 ; 
 
 var AUTHOR = 'Akash Pradhan' ; 
+
+var START = -1 ; 
+var SPLASH_SCREEN = 0 ; 
+var RUNNING = 1 ; 
+var LEVEL_COMPLETE = 2 ;
+var GAME_OVER = 3 ; 
+var PAUSED = 4 ; 
+var CREDIT_SCENE = 5 ; 
+
+var gameState = START ; 
+var prevState = -2 ; 
+var playState = true ; 
+var isRunning = false ; 

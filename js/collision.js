@@ -31,9 +31,9 @@ function handleBallBrick() {
 				bricks[row][col].visible = false ;
 				bricks[row][col].destroyed = true ;
 				
-				if(bricks[row][col] > 0) 
+				if(bricks[row][col].paddleElongate > 0) 
 					paddle.elongate(); 
-				else if(bricks[row][col] < 0)
+				else if(bricks[row][col].paddleElongate < 0)
 					paddle.shorten(); 
 			}
 			

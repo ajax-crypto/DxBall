@@ -4,35 +4,52 @@
 function isComplete() {
 	for (i=0; i < NROWS; i++) 
 		for (j=0; j < NCOLS; j++) 
-			if(bricks[i][j].destroyed == false && bricks[i][j].destructible > 0) 
+			if(levels[GAME_LEVEL][i][j].destroyed == false && levels[GAME_LEVEL][i][j].destructible > 0) 
 				return false;
 	return true ;
 }
 
-function GameLoop() {
-	drawScene(); 
-	var gameState = handleCollisions(); 
-	if(gameState == false) {
-		clearTimeout(gameLoop); 
-		end(false); 
+function GameLoop() { 
+	if(prevState != gameState)
+		handleGameEvents(gameState, prevState); 
+	prevState = gameState ; 
+	drawGameScenes(gameState); 
+	if(playState)
+		playState = handleCollisions(); 
+	else if(!playState) {
+		console.log("Game over"); 
+		gameState = GAME_OVER ;
 	}
 	else if(isComplete()) {
-		clearTimeout(gameLoop); 
-		end(true); 
+		gameState = LEVEL_COMPLETE ; 
+		++GAME_LEVEL ;
+	}
+	if(gameState == PAUSED)
+		toggleRunningState(); 
+}
+
+function toggleRunningState() {
+	if(isRunning) {
+		clearInterval(gameLoop);
+		isRunning = false ;
 	}
 	else {
-		if(run)
-			gameLoop = setTimeout(GameLoop, 1000/FPS); 	
+		isRunning = true ; 
+		gameLoop = setInterval(GameLoop, 1000/FPS); 
 	}
-}; 
+}
 
 function RunGame() {
-	if(state == false) 
-		state = true ;
-	//console.log("Defaults : bw ="+BrickDefaults.TRUE_WIDTH+
-	//	", bh="+BrickDefaults.TRUE_HEIGHT); 
-	clearTimeout(gameLoop); 
+	gameState = RUNNING ; 
+	isRunning = true ; 
+	clearInterval(gameLoop);
+	gameLoop = setInterval(GameLoop, 1000/FPS); 
+	initBricks(); 
+	initBall(); 
 	GameLoop(); 
 }
 
+initBricks(); 
+initBall(); 
+toggleRunningState();
 	

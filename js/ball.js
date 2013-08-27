@@ -41,4 +41,6 @@ var ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS,
 function initBall() {
 	ball.x = BallDefaults.X ;
 	ball.y = BallDefaults.Y ;
+	ball.dx = BallDefaults.DX ;
+	ball.dy = BallDefaults.DY ; 
 }
