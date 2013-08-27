@@ -31,12 +31,11 @@ function drawLevelCompleteScene() {
 }
 
 function drawCreditScene() {
-	clear(); 
-	ctx.fillStyle = '#FF0000' ; 
-	rect(0, 0, WIDTH, HEIGHT); 
-	ctx.fillStyle = '#FFFAF0' ;
-	ctx.font = "20px Verdana" ;
-	ctx.fillText(AUTHOR, WIDTH/2-70, HEIGHT/2);
+	credit_image = new Image(); 
+	credit_image.onload = function() {
+		ctx.drawImage(credit_image, 0, 0);
+	};
+	credit_image.src = CREDIT_SCREEN_PATH ; 
 }
 
 function drawSplashScreen() {

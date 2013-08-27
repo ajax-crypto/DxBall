@@ -80,8 +80,8 @@ var splashScreenHandler = {
 	}
 };
 
-function unregisterEvents(_gameState) {
-	switch(_gameState) {
+function unregisterEvents(state) {
+	switch(state) {
 		case RUNNING : 
 			canvas.removeEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.removeEventListener('keyup', runningGameSceneHandler, false); 
@@ -94,9 +94,9 @@ function unregisterEvents(_gameState) {
 	}
 }
 
-function handleGameEvents(_gameState, prevState) {
+function handleGameEvents(currState, prevState) {
 	unregisterEvents(prevState); 
-	switch(_gameState) {
+	switch(currState) {
 		case START : 
 			//console.log("start "); 
 		case SPLASH_SCREEN :

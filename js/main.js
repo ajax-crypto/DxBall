@@ -10,10 +10,21 @@ function isComplete() {
 }
 
 function GameLoop() { 
-	if(prevState != gameState)
+	
+	var sceneChanged ; 
+	
+	if(prevState != gameState) {
 		handleGameEvents(gameState, prevState); 
+	}
+	
+	if(prevState != gameState || gameState == RUNNING)
+		sceneChanged = true ; 
+	
 	prevState = gameState ; 
-	drawGameScenes(gameState); 
+	
+	if(sceneChanged)
+		drawGameScenes(gameState); 
+		
 	if(playState)
 		playState = handleCollisions(); 
 	else if(!playState) {
@@ -24,6 +35,7 @@ function GameLoop() {
 		gameState = LEVEL_COMPLETE ; 
 		++GAME_LEVEL ;
 	}
+	
 	if(gameState == PAUSED)
 		toggleRunningState(); 
 }
