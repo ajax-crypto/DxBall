@@ -52,3 +52,11 @@ function drawbricks() {
 		for (j=0; j < NCOLS; j++) 
 			bricks[i][j].draw(i, j); 
 }
+
+var totalBricks = 0; 
+for(var i=0; i<NROWS; ++i)
+	for(var j=0; j<NCOLS; ++j)
+		if(levels[GAME_LEVEL][i][j]) {
+			//console.log("d : " + bricks[i][j].destructible);
+			++totalBricks ;
+		}

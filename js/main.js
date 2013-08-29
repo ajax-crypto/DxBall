@@ -2,39 +2,32 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
-	for (i=0; i < NROWS; i++) 
-		for (j=0; j < NCOLS; j++) 
-			if(levels[GAME_LEVEL][i][j].destroyed == false && levels[GAME_LEVEL][i][j].destructible > 0) 
-				return false;
-	return true ;
+	return (totalBricks == 0) ; 
 }
 
 function gameLoop() { 
-	
-	var sceneChanged ; 
-	
-	if(prevState != gameState) {
+	if(prevState != gameState)
 		handleGameEvents(gameState, prevState); 
-	}
 	
 	if(prevState != gameState || gameState == RUNNING)
-		sceneChanged = true ; 
-	
-	prevState = gameState ; 
-	
-	if(sceneChanged)
 		drawGameScenes(gameState); 
+	
+	prevState = gameState ; 	
 		
-	if(playState)
+	if(gameState == RUNNING) {
 		playState = handleCollisions(); 
-	else if(!playState) {
-		console.log("Game over"); 
-		gameState = GAME_OVER ;
-	}
-	else if(isComplete()) {
-		gameState = LEVEL_COMPLETE ; 
-		++GAME_LEVEL ;
-	}
+		
+		if(!playState) {
+		    //console.log("Game over"); 
+			gameState = GAME_OVER ;
+		}
+	
+		if(isComplete()) {
+			//console.log("level " + GAME_LEVEL); 
+			gameState = LEVEL_COMPLETE ; 
+			++GAME_LEVEL ;
+		} 
+	}	
 	
 	if(gameState != PAUSED)
 		loop = setTimeout(gameLoop, 1000/FPS); 
@@ -55,6 +48,7 @@ function startGame() {
 
 function resumeGame() {
 	gameState = RUNNING ; 
+	console.log(gameState + " " + prevState); 
 	gameLoop();
 }
 	

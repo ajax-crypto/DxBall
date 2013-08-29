@@ -61,5 +61,8 @@ function drawGameScenes(_gameState) {
 		case GAME_OVER :
 			drawGameOverScene();
 			break ; 
+		case LEVEL_COMPLETE :
+			drawLevelCompleteScene();
+			break ;
 	}
 }

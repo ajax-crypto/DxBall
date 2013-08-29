@@ -63,6 +63,7 @@ var LEVEL_COMPLETE = 2 ;
 var GAME_OVER = 3 ; 
 var PAUSED = 4 ; 
 var CREDIT_SCENE = 5 ; 
+var LEVEL_SELECT = 6 ; 
 
 var gameState = START ; 
 var prevState = -2 ; 

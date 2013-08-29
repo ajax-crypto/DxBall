@@ -30,6 +30,7 @@ function handleBallBrick() {
 			if(bricks[row][col].destructible == 1) {
 				bricks[row][col].visible = false ;
 				bricks[row][col].destroyed = true ;
+				--totalBricks ; 
 				
 				if(bricks[row][col].paddleElongate > 0) 
 					paddle.elongate(); 
@@ -49,7 +50,7 @@ function handleBallBrick() {
 function handleBallPaddle() {
 	var ballright = ball.x + ball.dx + ball.radius ; 
 	var ballleft  = ball.x + ball.dx - ball.radius ; 
-	var bally   = ball.y + ball.dy ;
+	var bally     = ball.y + ball.dy ;
 	
     if (ballright > WIDTH || ballleft < 0)
 		ball.dx = -ball.dx;

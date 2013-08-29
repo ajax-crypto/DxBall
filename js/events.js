@@ -14,11 +14,6 @@ document.getElementById('pause').addEventListener('click', function() {
 		}
 	}, false); 
 
-function checkBounds(pos) {
-	if(pos.x < 402 && pos.x > 250 && pos.y < 480 && pos.y > 417)
-		return true ; 
-	return false ;
-}
 
 var runningGameSceneHandler = {
 	handleEvent : function(evt) {
@@ -41,11 +36,17 @@ var runningGameSceneHandler = {
 				if (evt.pageX > canvasMinX && evt.pageX < canvasMaxX) {
 					paddle.x = Math.max(evt.pageX - canvasMinX - (paddle.width/2), 0);
 					paddle.x = Math.min(WIDTH - paddle.width, paddle.x);
-			   }
+			    }
 			break ;
 		}
 	}
 }; 
+
+function checkBounds(pos) {
+	if(pos.x < 402 && pos.x > 250 && pos.y < 480 && pos.y > 417)
+		return true ; 
+	return false ;
+}
 
 var splashScreenHandler = {
 	handleEvent : function(evt) {
@@ -68,7 +69,7 @@ var splashScreenHandler = {
 					x: evt.pageX - canvasMinX,
 					y: evt.pageY - canvasMinY
 				}; 
-	
+	  
 				if(checkBounds(mouse)) 
 					canvas.style.cursor = 'pointer' ;
 				else
@@ -78,12 +79,24 @@ var splashScreenHandler = {
 	}
 };
 
+var levelSelectSceneHandler = {
+	handleEvent : function(evt) {
+		switch(evt) {
+			case 'click' : 
+				var mouse = {
+					x: evt.pageX - canvasMinX,
+					y: evt.pageY - canvasMinY
+				}; 
+		}
+	}
+};
+				
 function unregisterEvents(state) {
 	switch(state) {
 		case RUNNING : 
 			canvas.removeEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.removeEventListener('keyup', runningGameSceneHandler, false); 
-			canvas.removeEventListener('mousemove', runningGameSceneHandler, false);
+			canvas.removeEventListener('mousemove', runningGameSceneHandler, false); 
 		break ;
 		case SPLASH_SCREEN :
 			canvas.removeEventListener('click', splashScreenHandler, false); 
@@ -105,5 +118,6 @@ function handleGameEvents(currState, prevState) {
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);
 		break ;
+		case LEVEL_COMPLETE : break ; 
 	}
 }
