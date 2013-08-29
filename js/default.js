@@ -11,7 +11,8 @@ var points = 1 ;
 
 var PADDLE_IMAGE_PATH = "img/paddle.png" ; 
 var SPLASH_SCREEN_PATH = "img/splash.png" ; 
-CREDIT_SCREEN_PATH  = "img/credit.png" ; 
+var CREDIT_SCREEN_PATH  = "img/credit.png" ; 
+var LEVELS_SCREEN_PATH  = "img/chapter1.png"; 
 
 var Colors = Object.freeze({ "WHITE" : "#FFFFFF",
 							 "BLACK" : "#000000"

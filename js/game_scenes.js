@@ -46,6 +46,14 @@ function drawSplashScreen() {
 	splash_image.src = SPLASH_SCREEN_PATH ; 
 }
 
+function drawLevelSelectScene() {
+	levels_image = new Image(); 
+	levels_image.onload = function() {
+		ctx.drawImage(levels_image, 0, 0); 
+	}; 
+	levels_image.src = LEVELS_SCREEN_PATH ; 
+}
+
 function drawGameScenes(_gameState) {
 	switch(_gameState) {
 		case START :
@@ -63,6 +71,9 @@ function drawGameScenes(_gameState) {
 			break ; 
 		case LEVEL_COMPLETE :
 			drawLevelCompleteScene();
+			break ;
+		case LEVEL_SELECT :
+			drawLevelSelectScene();
 			break ;
 	}
 }

@@ -12,7 +12,9 @@ function gameLoop() {
 	if(prevState != gameState || gameState == RUNNING)
 		drawGameScenes(gameState); 
 	
-	prevState = gameState ; 	
+	prevState = gameState ; 
+
+	console.log(gameState); 
 		
 	if(gameState == RUNNING) {
 		playState = handleCollisions(); 
@@ -34,7 +36,7 @@ function gameLoop() {
 }
 
 function restartGame() {
-	gameState = RUNNING ; 
+	gameState = LEVEL_SELECT ; 
 	clearTimeout(loop);
 	startGame(); 
 }
@@ -48,7 +50,7 @@ function startGame() {
 
 function resumeGame() {
 	gameState = RUNNING ; 
-	console.log(gameState + " " + prevState); 
+	//console.log(gameState + " " + prevState); 
 	gameLoop();
 }
 	
