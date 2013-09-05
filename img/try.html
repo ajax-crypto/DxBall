@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<style>
+img { visibility : hidden; }; 
+</style> 
+<body>
+
+<img id="lol" src="paddle.png">
+<img id="rofl" src="credit.png">
+<canvas id="haha" height=480 width=640></canvas>
+
+<script>
+var ctx = document.getElementById('haha').getContext('2d'); 
+var img2 = document.getElementById('rofl');
+var img1 = document.getElementById('lol');
+
+img1.onload = function() { //ctx.drawImage(img1, 0, 0); 
+} ; 
+img2.onload = function() { 
+ctx.drawImage(img2, 0, 0);
+ctx.drawImage(img1, 0, 0); } ; 
+
+</script>
+
+</body>
+</html> 

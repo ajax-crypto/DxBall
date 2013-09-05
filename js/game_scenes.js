@@ -47,11 +47,23 @@ function drawSplashScreen() {
 }
 
 function drawLevelSelectScene() {
+	DrawLevelIcons[GAME_LEVEL].unlocked = true ; 
 	levels_image = new Image(); 
+	llevel = new Image();
+	ulevel = new Image(); 
+	var loaded = 0 ; 
+	ulevel.onload = function() { loaded += 1 ; }; 
+	llevel.onload = function() { loaded += 1 ; };  
 	levels_image.onload = function() {
 		ctx.drawImage(levels_image, 0, 0); 
+		if(loaded > 1)
+			for(i=0; i<6; ++i)
+				ctx.drawImage((DrawLevelIcons[i].unlocked == true ? ulevel : llevel), 
+					DrawLevelIcons[i].x, DrawLevelIcons[i].y); 
 	}; 
-	levels_image.src = LEVELS_SCREEN_PATH ; 
+	ulevel.src = LEVEL_UNLOCKED_ICON_PATH ; 
+	llevel.src = LEVEL_LOCKED_ICON_PATH ; 
+	levels_image.src = LEVEL_SELECT_SCREEN_PATH ; 
 }
 
 function drawGameScenes(_gameState) {

@@ -88,10 +88,14 @@ var levelSelectSceneHandler = {
 				
 				//console.log(mouse.x + "," + mouse.y); 
 				
-				if(checkBounds(mouse, 65, 56, 202, 195)) {
-					clear();
-					gameState = RUNNING ;
-				}
+				for(i=0; i<=GAME_LEVEL; ++i)
+					if(checkBounds(mouse, DrawLevelIcons[i].x, DrawLevelIcons[i].y, 
+						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
+						+ LEVEL_ICON_HEIGHT)) {
+						clear();
+						gameState = RUNNING ;
+						//console.log("Hurrah !") ;
+					}
 				//console.log("clicked !" + gameState); 
 			break; 
 			
@@ -101,10 +105,13 @@ var levelSelectSceneHandler = {
 					y: evt.pageY - canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, 65, 56, 202, 195))
-					canvas.style.cursor = 'pointer' ;
-				else
-					canvas.style.cursor = 'default' ;
+				for(i=0; i<=GAME_LEVEL; ++i)
+					if(checkBounds(mouse, DrawLevelIcons[i].x, DrawLevelIcons[i].y, 
+						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
+						+ LEVEL_ICON_HEIGHT)) 
+						canvas.style.cursor = 'pointer' ;
+					else
+						canvas.style.cursor = 'default' ;
 			break;
 		}
 	}
