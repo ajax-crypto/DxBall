@@ -26,8 +26,13 @@ function drawLevelCompleteScene() {
 	ctx.fillStyle = '#8B0000' ; 
 	rect(350, 400, WIDTH-350, HEIGHT-400); 
 	ctx.fillStyle = Colors.WHITE ; 
-	ctx.fillText("NEXT >>", 350 + (WIDTH-350)/2 - 40, 400 + (HEIGHT-400)/2); 
 	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
+	ctx.globalCompositeOperation="source-over";
+	var next = new Image(); 
+	next.onload = function() {
+		ctx.drawImage(next, 204, 90); 
+	}; 
+	next.src = NEXT_LEVEL_PATH ; 
 }
 
 function drawCreditScene() {

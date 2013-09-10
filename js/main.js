@@ -2,6 +2,7 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
+	console.log(totalBricks + " left "); 
 	return (totalBricks == 0) ; 
 }
 

@@ -15,6 +15,7 @@ var CREDIT_SCREEN_PATH  = "img/credit.png" ;
 var LEVEL_SELECT_SCREEN_PATH  = "img/lselect.png"; 
 var LEVEL_UNLOCKED_ICON_PATH = "img/llevel.png"; 
 var LEVEL_LOCKED_ICON_PATH = "img/ulevel.png"; 
+var NEXT_LEVEL_PATH = "img/next.png"; 
 
 var Colors = Object.freeze({ "WHITE" : "#FFFFFF",
 							 "BLACK" : "#000000"
