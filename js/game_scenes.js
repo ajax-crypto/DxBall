@@ -23,14 +23,12 @@ function drawLevelCompleteScene() {
 	ctx.fillStyle = '#FFFAF0' ; 
 	ctx.font = "20px Verdana" ;
 	ctx.fillText("LEVEL COMPLETE", WIDTH/2-80, HEIGHT/2);
-	ctx.fillStyle = '#8B0000' ; 
-	rect(350, 400, WIDTH-350, HEIGHT-400); 
 	ctx.fillStyle = Colors.WHITE ; 
 	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
 	ctx.globalCompositeOperation="source-over";
 	var next = new Image(); 
 	next.onload = function() {
-		ctx.drawImage(next, 204, 90); 
+		ctx.drawImage(next, 204, HEIGHT-90); 
 	}; 
 	next.src = NEXT_LEVEL_PATH ; 
 }

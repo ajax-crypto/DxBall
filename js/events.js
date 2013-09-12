@@ -88,18 +88,17 @@ var levelSelectSceneHandler = {
 				
 				//console.log(mouse.x + "," + mouse.y); 
 				
-				for(i=0; i<=GAME_LEVEL; ++i)
+				for(i=0; i<6; ++i)
 					if(checkBounds(mouse, DrawLevelIcons[i].x, DrawLevelIcons[i].y, 
 						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
-						+ LEVEL_ICON_HEIGHT)) {
+						+ LEVEL_ICON_HEIGHT) && DrawLevelIcons[i].unlocked == true) {
 						clear();
 						gameState = RUNNING ;
-						//console.log("Hurrah !") ;
+						GAME_LEVEL = i ; 
 					}
-				//console.log("clicked !" + gameState); 
 			break; 
 			
-			case 'mouseover':
+			case 'mousemove':
 				var mouse = {
 					x: evt.pageX - canvasMinX,
 					y: evt.pageY - canvasMinY
@@ -116,6 +115,46 @@ var levelSelectSceneHandler = {
 		}
 	}
 };
+
+var creditSceneHandler = {
+	handleEvent : function(evt) {
+		switch(evt.type) {
+			case 'click' : gameState = LEVEL_SELECT ; 
+			break ; 
+			case 'mousemove' : canvas.style.cursor = 'pointer' ; 
+			break ; 
+		}
+	}
+};
+
+var levelCompleteSceneHandler = {
+	handleEvent : function(evt) {
+		switch(evt.type) {
+			case 'click' : 
+				var mouse = {
+					x: evt.pageX - canvasMinX,
+					y: evt.pageY - canvasMinY
+				}; 
+				
+				if(checkBounds(mouse, 204, HEIGHT-90, 435, 480)) {
+					clear(); 
+					gameState = LEVEL_SELECT ; 
+				}
+			break ; 
+			case 'mousemove' : 
+			var mouse = {
+					x: evt.pageX - canvasMinX,
+					y: evt.pageY - canvasMinY
+				}; 
+				
+				if(checkBounds(mouse, 204, HEIGHT-90, 435, 480))
+					canvas.style.cursor = 'pointer' ; 
+				else
+					canvas.style.cursor = 'default' ; 
+			break; 
+		}
+	}
+}; 
 				
 function unregisterEvents(state) {
 	switch(state) {
@@ -132,6 +171,14 @@ function unregisterEvents(state) {
 			canvas.removeEventListener('click', levelSelectSceneHandler, false); 
 			canvas.removeEventListener('mousemove', levelSelectSceneHandler, false); 
 		break ; 
+		case CREDIT_SCENE :
+			canvas.removeEventListener('click', creditSceneHandler, false); 
+			canvas.removeEventListener('mousemove', creditSceneHandler, false); 
+		break ; 
+		case LEVEL_COMPLETE : 
+			canvas.removeEventListener('click', levelCompleteSceneHandler, false);
+			canvas.removeEventListener('mousemove', levelCompleteSceneHandler, false);
+		break ;
 	}
 }
 
@@ -148,10 +195,17 @@ function handleGameEvents(currState, prevState) {
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);
 		break ;
-		case LEVEL_COMPLETE : break ; 
+		case LEVEL_COMPLETE : 
+			canvas.addEventListener('click', levelCompleteSceneHandler, false);
+			canvas.addEventListener('mousemove', levelCompleteSceneHandler, false);
+		break ; 
 		case LEVEL_SELECT :
 			canvas.addEventListener('click', levelSelectSceneHandler, false); 
-			canvas.addEventListener('mousemove', levelSelectSceneHandler, false); 
+			canvas.addEventListener('mousemove', levelSelectSceneHandler, false);
+		break ; 
+		case CREDIT_SCENE : 
+			canvas.addEventListener('click', creditSceneHandler, false); 
+			canvas.addEventListener('mousemove', creditSceneHandler, false); 
 		break ; 
 	}
 }

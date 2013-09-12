@@ -2,7 +2,7 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
-	console.log(totalBricks + " left "); 
+	//console.log(totalBricks + " left "); 
 	return (totalBricks == 0) ; 
 }
 
@@ -15,7 +15,7 @@ function gameLoop() {
 	
 	prevState = gameState ; 
 
-	console.log(gameState); 
+	//console.log(gameState); 
 		
 	if(gameState == RUNNING) {
 		playState = handleCollisions(); 
@@ -43,6 +43,7 @@ function restartGame() {
 }
 
 function startGame() {
+	//console.log("Starting level " + GAME_LEVEL); 
 	initBricks(); 
 	initBall(); 
 	playState = true ; 

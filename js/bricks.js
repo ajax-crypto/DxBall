@@ -39,6 +39,7 @@ var totalBricks = 0;
 
 function initBricks() {
     bricks = new Array(NROWS); 
+	totalBricks = 0 ; 
     for (i=0; i < NROWS; i++) {
         bricks[i] = new Array(NCOLS);
         for (j=0; j < NCOLS; j++) {
