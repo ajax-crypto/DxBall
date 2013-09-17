@@ -18,7 +18,7 @@ function drawGameOverScene() {
 
 function drawLevelCompleteScene() {
 	clear(); 
-	ctx.fillStyle = '#FF0000' ;
+	ctx.fillStyle = '#00FF00' ;
 	rect(0, 0, WIDTH, HEIGHT); 
 	ctx.fillStyle = '#FFFAF0' ; 
 	ctx.font = "20px Verdana" ;

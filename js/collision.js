@@ -31,7 +31,7 @@ function handleBallBrick() {
 				bricks[row][col].visible = false ;
 				bricks[row][col].destroyed = true ;
 				--totalBricks ; 
-				//console.log("here : " + totalBricks); 
+				console.log("bricks remaining : " + totalBricks); 
 				
 				if(bricks[row][col].paddleElongate > 0) 
 					paddle.elongate(); 

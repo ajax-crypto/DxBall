@@ -42,7 +42,7 @@ var BallDefaults = Object.freeze({ "RADIUS" : 6,
 								   "DY" : -4,
 								   "X" : 25,
 								   "Y" : 250, 
-								   "SPEED_UP" : 4
+								   "SPEED_UP" : 2
 								}); 
 
 var rowcolors = ["#FF1C0A", 
@@ -77,7 +77,7 @@ for(i=0; i<6; ++i)
 
 DrawLevelIcons[0].unlocked = true ; 
 
-var FPS = 100 ; 
+var FPS = 50 ; 
 
 var AUTHOR = 'Akash Pradhan' ; 
 

@@ -93,8 +93,9 @@ var levelSelectSceneHandler = {
 						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
 						+ LEVEL_ICON_HEIGHT) && DrawLevelIcons[i].unlocked == true) {
 						clear();
-						gameState = RUNNING ;
+						gameState = RUNNING ; 
 						GAME_LEVEL = i ; 
+						startGame(); 
 					}
 			break; 
 			

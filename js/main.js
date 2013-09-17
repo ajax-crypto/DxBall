@@ -2,7 +2,7 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
-	//console.log(totalBricks + " left "); 
+	console.log(totalBricks + " left "); 
 	return (totalBricks == 0) ; 
 }
 
@@ -26,7 +26,7 @@ function gameLoop() {
 		}
 	
 		if(isComplete()) {
-			//console.log("level " + GAME_LEVEL); 
+			console.log("level " + GAME_LEVEL); 
 			gameState = LEVEL_COMPLETE ; 
 			++GAME_LEVEL ;
 		} 
