@@ -43,7 +43,8 @@ function restartGame() {
 }
 
 function startGame() {
-	//console.log("Starting level " + GAME_LEVEL); 
+	clearTimeout(loop); 
+	console.log("Starting ball speed " + ball.dx + " " + ball.dy); 
 	initBricks(); 
 	initBall(); 
 	playState = true ; 

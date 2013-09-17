@@ -77,7 +77,7 @@ for(i=0; i<6; ++i)
 
 DrawLevelIcons[0].unlocked = true ; 
 
-var FPS = 50 ; 
+var FPS = 60 ; 
 
 var AUTHOR = 'Akash Pradhan' ; 
 

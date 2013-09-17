@@ -14,9 +14,6 @@ var canvasMaxX = canvasMinX + WIDTH;
 var canvasMinY = getOffset(canvas).top; 
 
 function roundRect(x, y, width, height, radius, fill) {
-    if (typeof radius === "undefined") {
-		radius = 5;
-	}
 	ctx.beginPath();
 	ctx.moveTo(x + radius, y);
 	ctx.lineTo(x + width - radius, y);
