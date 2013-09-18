@@ -1,9 +1,9 @@
 ﻿// Handles paddle collision with canvas walls
 function handlePaddle() {
 	if (rightDown && (paddle.x < canvasMaxX)) 
-		paddle.x += paddle.speed;
+		paddle.moveRight();
 	else if (leftDown && (paddle.x > canvasMinX)) 
-		paddle.x -= paddle.speed;
+		paddle.moveleft();
 }
 
 // Handles ball and brick collision
@@ -28,8 +28,7 @@ function handleBallBrick() {
 				ball.normalSpeed(); 
 			
 			if(bricks[row][col].destructible == 1) {
-				bricks[row][col].visible = false ;
-				bricks[row][col].destroyed = true ;
+				bricks[row][col].destroy() ;
 				--totalBricks ; 
 				console.log("bricks remaining : " + totalBricks); 
 				
@@ -40,7 +39,7 @@ function handleBallBrick() {
 			}
 			
 			else if(bricks[row][col].destructible > 1)
-				bricks[row][col].destructible-- ; 
+				bricks[row][col].weaken() ; 
 				
 			points += bricks[row][col].points ; 
 		}
@@ -82,8 +81,7 @@ function handleCollisions() {
 	handlePaddle();
 	handleBallBrick();
 	var temp = handleBallPaddle(); 
-	ball.x += ball.dx;
-	ball.y += ball.dy;
+	ball.move(); 
 	
 	return temp ; 
 }

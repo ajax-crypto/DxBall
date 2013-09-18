@@ -4,8 +4,6 @@ draw.js
 events.js
 game_scenes.js
 levels.js
-bricks.js
-paddle.js
-ball.js
+gameobjs.js
 collision.js
 main.js
