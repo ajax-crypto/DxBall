@@ -20,16 +20,16 @@ var runningGameSceneHandler = {
 		switch(evt.type) {
 			case 'keydown' : 
 				if (evt.keyCode == 39) 
-					rightDown = false;
+					rightDown = true;
 				else if (evt.keyCode == 37) 
-					leftDown = false;
+					leftDown = true;
 			break ;
 				 
 			case 'keyup' : 
 				if (evt.keyCode == 39) 
-					rightDown = true;
+					rightDown = false;
 				else if (evt.keyCode == 37) 
-					leftDown = true;
+					leftDown = false;
 			break ;
 				
 			case 'mousemove' : 

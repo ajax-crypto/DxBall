@@ -2,7 +2,7 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
-	console.log(totalBricks + " left "); 
+	//console.log(totalBricks + " left "); 
 	return (totalBricks == 0) ; 
 }
 
@@ -10,7 +10,7 @@ function gameLoop() {
 	if(prevState != gameState)
 		handleGameEvents(gameState, prevState); 
 	
-	if(prevState != gameState || gameState == RUNNING)
+	if(gameState == RUNNING || prevState != gameState)
 		drawGameScenes(gameState); 
 	
 	prevState = gameState ; 

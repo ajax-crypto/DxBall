@@ -71,21 +71,19 @@ for(i=0; i<6; ++i)
 {
 	if(i < 3)
 		DrawLevelIcons[i] = { x: (i*LEVEL_ICON_WIDTH) + (i+1)*ICON_PADDING_WIDTH,
-						 y: ICON_PADDING_HEIGHT, 
-						 unlocked: false
-					   }; 
+						      y: ICON_PADDING_HEIGHT, 
+						      unlocked: false
+					        }; 
 	else
 		DrawLevelIcons[i] = { x: ((i-3)*LEVEL_ICON_WIDTH) + (i-2)*ICON_PADDING_WIDTH,
-		                 y: ICON_PADDING_HEIGHT*2 + LEVEL_ICON_HEIGHT,
-						 unlocked: false
-					   };
+		                      y: ICON_PADDING_HEIGHT*2 + LEVEL_ICON_HEIGHT,
+						      unlocked: false
+					        };
 }
 
 DrawLevelIcons[0].unlocked = true ; 
 
 var FPS = 60 ; 
-
-var AUTHOR = 'Akash Pradhan' ; 
 
 var START = -1 ; 
 var SPLASH_SCREEN = 0 ; 

@@ -1,9 +1,11 @@
 ﻿// Handles paddle collision with canvas walls
 function handlePaddle() {
-	if (rightDown && (paddle.x < canvasMaxX)) 
+	if (rightDown && (paddle.x < canvasMaxX)) {
 		paddle.moveRight();
-	else if (leftDown && (paddle.x > canvasMinX)) 
-		paddle.moveleft();
+	}
+	else if (leftDown && (paddle.x > canvasMinX)) {
+		paddle.moveLeft();
+	}
 }
 
 // Handles ball and brick collision

@@ -73,7 +73,7 @@ function Paddle(xpos, height, width, color, speed) {
 			this.width -= 10 ;
 		if(this.ticks == 0)
 			this.width += 10 ;
-	}
+	};
 	
 	this.elongate = function() {
 		this.ticks = 3 ; 
@@ -81,15 +81,15 @@ function Paddle(xpos, height, width, color, speed) {
 			this.width += 10 ;
 		if(this.ticks == 0)
 			this.width -= 10 ;
-	}
+	};
 	
 	this.moveLeft = function() {
 		this.x -= this.speed ; 
-	}
+	};
 	
 	this.moveRight = function() {
 		this.x += this.speed ;
-	}	
+	};	
 }
 
 var paddle = new Paddle(PaddleDefaults.XPOS, PaddleDefaults.HEIGHT, PaddleDefaults.WIDTH, 
@@ -97,41 +97,47 @@ var paddle = new Paddle(PaddleDefaults.XPOS, PaddleDefaults.HEIGHT, PaddleDefaul
 
 /***************************** Bricks ***************************/
 
-function Brick(color, visibility) {
+function Brick(type) {
 	this.width = BrickDefaults.WIDTH ;
 	this.height = BrickDefaults.HEIGHT ;
 	this.padding = BrickDefaults.PADDING ; 
-	this.points = 0 ;
-	this.color = color ;
+	this.points = 100 ;
+	this.color = Colors.BLACK ;
 	this.speedup = false ; 
-	this.visible = visibility ; 
+	this.visible = true ; 
 	this.destructible = 1 ; 
 	this.destroyed = false ; 
 	this.paddleElongate = 0 ; 
-	switch(this.color) {
-		case Colors.RED : 
-			this.destructible = 0 ;
-			this.points = 50 ;
-		break;
-		case Colors.GOLD : 
+	this.type = type ;
+	switch(this.type) {
+		case 0 :
+			this.visible = false ;
+		break ;
+		case 1 :
+			this.color = Colors.AQUA ;
+			this.speedup = true ;
+		break ;
+		case 2 :
+			this.color = Colors.MAROON ;
+			this.destructible = 3 ;
+		break ;
+		case 3 :
+			this.color = Colors.GOLD ;
 			this.points = 150 ;
 		break ;
-		case Colors.WHITE : 
-			this.paddleElongate = 1 ; 
-			this.points = 0 ; 
-		break ;
-		case Colors.FORESTGREEN : 
+		case 4 :
+			this.color = Colors.FORESTGREEN ;
 			this.paddleElongate = -1 ;
-			this.points = 100 ; 
-	    break ;
-		case Colors.MAROON : 
-			this.destructible = 3; 
-			this.points = 60 ; 
-		break ; 
-		case Colors.AQUA : 
-			this.speedup = true ;
-			this.points = 120 ; 
-		break ; 
+		break ;
+		case 5 :
+			this.color = Colors.WHITE ;
+			this.paddleElongate = 1 ;
+		break ;
+		case 6 :
+			this.color = Colors.RED ;
+			this.destructible = 0 ;
+			this.points = -50 ;
+		break ;
 	}
 	
 	this.draw = function(x, y) { 
@@ -162,7 +168,7 @@ function initBricks() {
     for (i=0; i < NROWS; i++) {
         bricks[i] = new Array(NCOLS);
         for (j=0; j < NCOLS; j++) {
-            bricks[i][j] = new Brick(brick_type[GAME_LEVEL][i][j], levels[GAME_LEVEL][i][j]); 
+            bricks[i][j] = new Brick(gamedata[GAME_LEVEL][i][j]); 
 			if(bricks[i][j].visible == true && bricks[i][j].destructible != 0)
 				++totalBricks ; 
         }
