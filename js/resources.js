@@ -28,12 +28,10 @@ function Resource(res) {
 var imgres = [] ; 
 
 var licondata = new Array(6);
-var LEVEL_ICON_WIDTH = 120;
-var LEVEL_ICON_HEIGHT = 110;
-var ICON_PADDING_WIDTH = 70;
-var ICON_PADDING_HEIGHT = 86; 
 
 function givePositions() {
+	var ICON_PADDING_WIDTH  = ~~((WIDTH-(3*imgres[4].width))/4); 
+	var ICON_PADDING_HEIGHT = ~~((HEIGHT-(2*imgres[4].height))/3); 
 	for(i=0; i<6; ++i)
 	{
 		if(i < 3)
@@ -57,7 +55,8 @@ function preloadimages(arr){
     function imageloadpost(){
         loadedimages++;
         if (loadedimages == arr.length){
-            postaction(newimages) ;//call postaction and pass in newimages array as parameter
+			//call postaction and pass in newimages array as parameter
+            postaction(newimages) ;
         }
     }
     for (var i=0; i<arr.length; ++i){
@@ -70,9 +69,11 @@ function preloadimages(arr){
             imageloadpost();
         };
     }
-    return { //return blank object with done() method
+    //return blank object with done() method
+    return { 
         done:function(f){
-            postaction = f || postaction ;//remember user defined callback functions to be called when images load
+			//remember user defined callback functions to be called when images load
+            postaction = f || postaction ;
         }
     }
 }
