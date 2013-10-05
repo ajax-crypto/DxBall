@@ -59,12 +59,10 @@ function Paddle(xpos, height, width, color, speed) {
 	this.color = color ; 
 	this.speed = speed ; 
 	this.ticks = 0 ; 
-	this.image = new Image();
-	this.image.src = PADDLE_IMAGE_PATH ; 
 	
 	this.draw = function() {
 		ctx.fillStyle = this.color;
-		image(this.image, 0, 0, this.x, HEIGHT-this.height, this.width, this.height); 
+		image(imgres[0].res, 0, 0, this.x, HEIGHT-this.height, this.width, this.height); 
 	} ; 
 	
 	this.shorten = function() {

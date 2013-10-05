@@ -26,47 +26,22 @@ function drawLevelCompleteScene() {
 	ctx.fillStyle = Colors.WHITE ; 
 	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
 	ctx.globalCompositeOperation="source-over";
-	var next = new Image(); 
-	next.onload = function() {
-		ctx.drawImage(next, 204, HEIGHT-90); 
-	}; 
-	next.src = NEXT_LEVEL_PATH ; 
+	ctx.drawImage(imgres[6].res, (WIDTH-imgres[6].width)/2, (HEIGHT-imgres[6].height)); 
 }
 
 function drawCreditScene() {
-	credit_image = new Image(); 
-	credit_image.onload = function() {
-		ctx.drawImage(credit_image, 0, 0);
-	};
-	credit_image.src = CREDIT_SCREEN_PATH ; 
+	ctx.drawImage(imgres[2].res, imgres[2].x, imgres[2].y); 
 }
 
 function drawSplashScreen() {
-	splash_image = new Image();
-	splash_image.onload = function() {
-		ctx.drawImage(splash_image, 0, 0); 
-	}; 
-	splash_image.src = SPLASH_SCREEN_PATH ; 
+	ctx.drawImage(imgres[1].res, imgres[1].x, imgres[1].y); 
 }
 
 function drawLevelSelectScene() {
-	DrawLevelIcons[GAME_LEVEL].unlocked = true ; 
-	levels_image = new Image(); 
-	llevel = new Image();
-	ulevel = new Image(); 
-	var loaded = 0 ; 
-	ulevel.onload = function() { loaded += 1 ; }; 
-	llevel.onload = function() { loaded += 1 ; };  
-	levels_image.onload = function() {
-		ctx.drawImage(levels_image, 0, 0); 
-		if(loaded > 1)
-			for(i=0; i<6; ++i)
-				ctx.drawImage((DrawLevelIcons[i].unlocked == true ? ulevel : llevel), 
-					DrawLevelIcons[i].x, DrawLevelIcons[i].y); 
-	}; 
-	ulevel.src = LEVEL_UNLOCKED_ICON_PATH ; 
-	llevel.src = LEVEL_LOCKED_ICON_PATH ; 
-	levels_image.src = LEVEL_SELECT_SCREEN_PATH ; 
+	ctx.drawImage(imgres[3].res, imgres[3].x, imgres[3].y); 
+	for(i=0; i<6; ++i)
+		ctx.drawImage((licondata[i].unlocked == true ? imgres[5].res : imgres[4].res), 
+			licondata[i].x, licondata[i].y); 
 }
 
 function drawGameScenes(_gameState) {

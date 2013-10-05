@@ -89,9 +89,9 @@ var levelSelectSceneHandler = {
 				//console.log(mouse.x + "," + mouse.y); 
 				
 				for(i=0; i<6; ++i)
-					if(checkBounds(mouse, DrawLevelIcons[i].x, DrawLevelIcons[i].y, 
-						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
-						+ LEVEL_ICON_HEIGHT) && DrawLevelIcons[i].unlocked == true) {
+					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
+						licondata[i].x + imgres[4].width, licondata[i].y 
+						+ imgres[4].height) && licondata[i].unlocked == true) {
 						clear();
 						gameState = RUNNING ; 
 						GAME_LEVEL = i ; 
@@ -106,9 +106,9 @@ var levelSelectSceneHandler = {
 				}; 
 				
 				for(i=0; i<=GAME_LEVEL; ++i)
-					if(checkBounds(mouse, DrawLevelIcons[i].x, DrawLevelIcons[i].y, 
-						DrawLevelIcons[i].x + LEVEL_ICON_WIDTH, DrawLevelIcons[i].y 
-						+ LEVEL_ICON_HEIGHT)) 
+					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
+						licondata[i].x + imgres[4].width, licondata[i].y 
+						+ imgres[4].height)) 
 						canvas.style.cursor = 'pointer' ;
 					else
 						canvas.style.cursor = 'default' ;

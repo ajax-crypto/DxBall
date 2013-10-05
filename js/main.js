@@ -29,6 +29,7 @@ function gameLoop() {
 			console.log("level " + GAME_LEVEL); 
 			gameState = LEVEL_COMPLETE ; 
 			++GAME_LEVEL ;
+			licondata[GAME_LEVEL].unlocked = true ; 
 		} 
 	}	
 	
