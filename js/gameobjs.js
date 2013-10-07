@@ -6,39 +6,31 @@
 	this.dy = movey ;
 	this.color = color ;
 	this.ticks = 0 ; 
-	
-	this.draw = function() {
-		ctx.fillStyle = this.color;
-		circle(this.x, this.y, this.radius);
-	} ;
-	
-	this.speedup = function() {
+}
+
+Ball.prototype.speedup = function() {
 		if(this.dy < 0)
 			this.dy -= BallDefaults.SPEED_UP ; 
 		else 
 			this.dy += BallDefaults.SPEED_UP ; 
 	};
 	
-	this.normalSpeed = function() {
+Ball.prototype.normalSpeed = function() {
 		if(this.dy < 0)
 			this.dy = -BallDefaults.SPEED ; 
 		else 
 			this.dy = BallDefaults.SPEED ; 
 	};
 	
-	this.minDistanceX = function() { 
-		return (this.dx > 0) ? this.x + this.radius : this.x - this.radius ; 
-	};
-	
-	this.minDistanceY = function() {
-		return (this.dy > 0) ? this.y + this.radius : ((this.y >= 0) ? this.y : this.y - this.radius) ; 
-	};
-	
-	this.move = function() { 
+Ball.prototype.move = function() { 
 		this.x += this.dx;
 		this.y += this.dy;
 	};
-}
+	
+Ball.prototype.draw = function() {
+		ctx.fillStyle = this.color;
+		circle(this.x, this.y, this.radius);
+	} ;
 
 var ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
@@ -50,14 +42,16 @@ function initBall() {
 	ball.dy = BallDefaults.DY ; 
 }
 
-/********************* Paddle **************************/
+/********************* Paddle **************************
+ * Its a singleton !
+ * *****************************************************/
 
-function Paddle(xpos, height, width, color, speed) {
-	this.x = xpos ; 
-	this.height = height ; 
-	this.width = width ; 
-	this.color = color ; 
-	this.speed = speed ; 
+var paddle = new function () {
+	this.x = PaddleDefaults.XPOS ; 
+	this.height = PaddleDefaults.HEIGHT ; 
+	this.width = PaddleDefaults.WIDTH ; 
+	this.color = PaddleDefaults.COLOR ; 
+	this.speed = PaddleDefaults.SPEED ; 
 	this.ticks = 0 ; 
 	
 	this.draw = function() {
@@ -88,10 +82,7 @@ function Paddle(xpos, height, width, color, speed) {
 	this.moveRight = function() {
 		this.x += this.speed ;
 	};	
-}
-
-var paddle = new Paddle(PaddleDefaults.XPOS, PaddleDefaults.HEIGHT, PaddleDefaults.WIDTH, 
-					PaddleDefaults.COLOR, PaddleDefaults.SPEED); 
+}; 
 
 /***************************** Bricks ***************************/
 
@@ -137,8 +128,9 @@ function Brick(type) {
 			this.points = -50 ;
 		break ;
 	}
-	
-	this.draw = function(x, y) { 
+} 
+
+Brick.prototype.draw = function(x, y) { 
 		if(!this.visible)
 			this.destroyed = true ; 
 		if (this.visible) {
@@ -146,17 +138,16 @@ function Brick(type) {
 			rect((y * (this.width + this.padding)) + this.padding, (x * (this.
 				height + this.padding)) + this.padding, this.width, this.height);
 		}
-	} ; 
+	};
 	
-	this.destroy = function() {
+Brick.prototype.destroy = function() {
 		this.destroyed = true ;
 		this.visible = false ; 
 	}; 
-	
-	this.weaken = function() {
+
+Brick.prototype.weaken = function() {
 		this.destructible-- ;
 	}; 
-} 
 
 var totalBricks = 0;
 
