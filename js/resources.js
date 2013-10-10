@@ -10,12 +10,12 @@
 ***********************************/ 
 
 var resources = ['img/paddle.png', 
-				 'img/splash.png', 
-				 'img/credit.png', 
-				 'img/lselect.png', 
-				 'img/ulevel.png',
-				 'img/llevel.png',
-				 'img/next.png']; 
+		 'img/splash.png', 
+		 'img/credit.png', 
+		 'img/lselect.png', 
+		 'img/ulevel.png',
+		 'img/llevel.png',
+		 'img/next.png']; 
 
 function Resource(res) {
 	this.res = res ;
