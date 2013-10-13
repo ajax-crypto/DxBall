@@ -7,8 +7,13 @@ function isComplete() {
 }
 
 function gameLoop() { 
-	if(prevState != gameState)
+	
+	if(gameState == PAUSED)
+		return ; 
+	
+	if(prevState != gameState) {
 		handleGameEvents(gameState, prevState); 
+		console.log("prev : " + prevState + " now : " + gameState);  } 
 	
 	if(gameState == RUNNING || prevState != gameState)
 		drawGameScenes(gameState); 

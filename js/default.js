@@ -65,6 +65,6 @@ var PAUSED = 4 ;
 var CREDIT_SCENE = 5 ; 
 var LEVEL_SELECT = 6 ; 
 
-var gameState = START ; 
+var gameState = SPLASH_SCREEN ; 
 var prevState = -2 ; 
 var playState = true ; 

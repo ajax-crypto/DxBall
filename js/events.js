@@ -38,6 +38,14 @@ var runningGameSceneHandler = {
 					paddle.x = Math.min(WIDTH - paddle.width, paddle.x);
 			    }
 			break ;
+			
+			case 'click' :
+				console.log("clicked !"); 
+				if(gameState == RUNNING)
+					gameState = PAUSED ;
+				else if(gameState == PAUSED)
+					resumeGame() ; 
+			break ; 
 		}
 	}
 }; 
@@ -60,6 +68,11 @@ var splashScreenHandler = {
 					clear(); 
 					gameState = CREDIT_SCENE ; 
 				}
+				else if(checkBounds(mouse, 0, 0, 640, 417)) {
+					clear() ;
+					gameState = LEVEL_SELECT ;
+				}
+				
 			break ;
 				
 			case 'mousemove' : 
@@ -68,7 +81,8 @@ var splashScreenHandler = {
 					y: evt.pageY - canvasMinY
 				}; 
 	  
-				if(checkBounds(mouse, 250, 417, 402, 480)) 
+				if(checkBounds(mouse, 250, 417, 402, 480) ||
+				   checkBounds(mouse, 0, 0, 640, 417))
 					canvas.style.cursor = 'pointer' ;
 				else
 					canvas.style.cursor = 'default' ;
@@ -120,9 +134,11 @@ var levelSelectSceneHandler = {
 var creditSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
-			case 'click' : gameState = LEVEL_SELECT ; 
+			case 'click' : 
+				gameState = LEVEL_SELECT ; 
 			break ; 
-			case 'mousemove' : canvas.style.cursor = 'pointer' ; 
+			case 'mousemove' : 
+				canvas.style.cursor = 'pointer' ; 
 			break ; 
 		}
 	}
@@ -143,7 +159,7 @@ var levelCompleteSceneHandler = {
 				}
 			break ; 
 			case 'mousemove' : 
-			var mouse = {
+				var mouse = {
 					x: evt.pageX - canvasMinX,
 					y: evt.pageY - canvasMinY
 				}; 
@@ -163,14 +179,17 @@ function unregisterEvents(state) {
 			canvas.removeEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.removeEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.removeEventListener('mousemove', runningGameSceneHandler, false); 
+			canvas.removeEventListener('click', runningGameSceneHandler, false);
 		break ;
 		case SPLASH_SCREEN :
 			canvas.removeEventListener('click', splashScreenHandler, false); 
 			canvas.removeEventListener('mousemove', splashScreenHandler, false); 
+			console.log("removed splash"); 
 		break;
 		case LEVEL_SELECT :
 			canvas.removeEventListener('click', levelSelectSceneHandler, false); 
-			canvas.removeEventListener('mousemove', levelSelectSceneHandler, false); 
+			canvas.removeEventListener('mousemove', levelSelectSceneHandler, false);
+			console.log("removed levels"); 
 		break ; 
 		case CREDIT_SCENE :
 			canvas.removeEventListener('click', creditSceneHandler, false); 
@@ -186,15 +205,16 @@ function unregisterEvents(state) {
 function handleGameEvents(currState, prevState) {
 	unregisterEvents(prevState); 
 	switch(currState) {
-		case START : 
 		case SPLASH_SCREEN :
 			canvas.addEventListener('click', splashScreenHandler, false); 
 			canvas.addEventListener('mousemove', splashScreenHandler, false); 
+			console.log("added splash"); 
 		break;
 		case RUNNING : 
 			canvas.addEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);
+			canvas.addEventListener('click', runningGameSceneHandler, false);
 		break ;
 		case LEVEL_COMPLETE : 
 			canvas.addEventListener('click', levelCompleteSceneHandler, false);
@@ -203,6 +223,7 @@ function handleGameEvents(currState, prevState) {
 		case LEVEL_SELECT :
 			canvas.addEventListener('click', levelSelectSceneHandler, false); 
 			canvas.addEventListener('mousemove', levelSelectSceneHandler, false);
+			console.log("added levels"); 
 		break ; 
 		case CREDIT_SCENE : 
 			canvas.addEventListener('click', creditSceneHandler, false); 

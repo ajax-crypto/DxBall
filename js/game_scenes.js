@@ -45,7 +45,6 @@ function drawLevelSelectScene() {
 
 function drawGameScenes(_gameState) {
 	switch(_gameState) {
-		case START :
 		case SPLASH_SCREEN :
 			drawSplashScreen();
 			break ;
