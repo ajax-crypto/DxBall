@@ -46,6 +46,8 @@ function givePositions() {
 					            };
 	}
 	licondata[0].unlocked = true ; 
+	imgres[6].x = ~~((WIDTH - imgres[6].width)/2);
+	imgres[6].y = ~~(HEIGHT - imgres[6].height);
 }
 
 function preloadimages(arr){

@@ -25,7 +25,7 @@ function drawLevelCompleteScene() {
 	ctx.fillText("LEVEL COMPLETE", WIDTH/2-80, HEIGHT/2);
 	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
 	ctx.globalCompositeOperation="source-over";
-	ctx.drawImage(imgres[6].res, (WIDTH-imgres[6].width)/2, (HEIGHT-imgres[6].height)); 
+	ctx.drawImage(imgres[6].res, imgres[6].x, imgres[6].y); 
 }
 
 function drawCreditScene() {
