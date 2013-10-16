@@ -45,7 +45,7 @@ function givePositions() {
 						          unlocked: false
 					            };
 	}
-	licondata[0].unlocked = true ; 
+	licondata[0].unlocked = true ; // Start with first level
 	imgres[6].x = ~~((WIDTH - imgres[6].width)/2);
 	imgres[6].y = ~~(HEIGHT - imgres[6].height);
 }
@@ -81,12 +81,9 @@ function preloadimages(arr){
 }
  
 function loadResources(start) {
-	console.log("Loading resources..."); 
 	preloadimages(resources).done(function(images){
-		for(i=0; i<images.length; ++i) {
+		for(i=0; i<images.length; ++i)
 			imgres[i] = new Resource(images[i]);
-			console.log(imgres[i].height + "," + imgres[i].width); 
-		}
 		givePositions(); 
 		if(start)
 			startGame(); 

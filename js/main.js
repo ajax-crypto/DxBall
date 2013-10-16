@@ -2,44 +2,7 @@
 /******************** Game Loop ********************/ 
 
 function isComplete() {
-	//console.log(totalBricks + " left "); 
 	return (totalBricks == 0) ; 
-}
-
-function gameLoop() { 
-	
-	if(gameState == PAUSED)
-		return ; 
-	
-	if(prevState != gameState) {
-		handleGameEvents(gameState, prevState); 
-		console.log("prev : " + prevState + " now : " + gameState);  } 
-	
-	if(gameState == RUNNING || prevState != gameState)
-		drawGameScenes(gameState); 
-	
-	prevState = gameState ; 
-
-	//console.log(gameState); 
-		
-	if(gameState == RUNNING) {
-		playState = handleCollisions(); 
-		
-		if(!playState) {
-		    //console.log("Game over"); 
-			gameState = GAME_OVER ;
-		}
-	
-		if(isComplete()) {
-			console.log("level " + GAME_LEVEL); 
-			gameState = LEVEL_COMPLETE ; 
-			++GAME_LEVEL ;
-			licondata[GAME_LEVEL].unlocked = true ; 
-		} 
-	}	
-	
-	if(gameState != PAUSED)
-		loop = setTimeout(gameLoop, 1000/FPS); 
 }
 
 function restartGame() {
@@ -48,9 +11,33 @@ function restartGame() {
 	startGame(); 
 }
 
+function gameLoop() { 
+	if(prevState != gameState) {
+		if(gameState != PAUSED)
+			handleGameEvents(gameState, prevState); 
+		drawGameScenes(gameState) ;
+	}
+	prevState = gameState ; 
+	switch(gameState) {
+		case PAUSED :
+			return; 
+		case RUNNING :
+			drawGameScenes(gameState) ;
+			playState = handleCollisions(); 
+			if(!playState) 
+				gameState = GAME_OVER ;
+			if(isComplete()) {
+				gameState = LEVEL_COMPLETE ; 
+				++GAME_LEVEL ;
+				licondata[GAME_LEVEL].unlocked = true ; 
+			} 
+		break ;
+	}
+	loop = setTimeout(gameLoop, 1000/FPS); 
+}
+
 function startGame() {
 	clearTimeout(loop); 
-	console.log("Starting ball speed " + ball.dx + " " + ball.dy); 
 	initBricks(); 
 	initBall(); 
 	playState = true ; 
@@ -58,8 +45,7 @@ function startGame() {
 }
 
 function resumeGame() {
-	gameState = RUNNING ; 
-	//console.log(gameState + " " + prevState); 
-	gameLoop();
+	gameState = RUNNING ;
+	gameLoop(); 
 }
 	
