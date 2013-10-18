@@ -53,3 +53,22 @@ function clear() {
 function image(img, cx, cy, x, y, w, h) {
 	ctx.drawImage(img, cx, cy, img.width, img.height, x, y, w, h); 
 }  
+
+/* Note : If you run into the error : "Tainted canvas/DOM exception 18", 
+ * then run chromium/chrome with the option --allow-file-access-from-files
+ * This happens because data is accessed which is not in the same domain as
+ * in the canvas 
+ */
+function grayscale() {
+	if(canvas.width > 0 && canvas.height > 0) {
+		var imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT);
+		for(var i = 0; i < imageData.data.length; i += 4) {
+			var r = imageData.data[i];
+			var g = imageData.data[i + 1];
+			var b = imageData.data[i + 2];
+			imageData.data[i] = imageData.data[i + 1] = 
+				imageData.data[i + 2] = (r+g+b)/3;
+		}
+		ctx.putImageData(imageData, 0, 0);
+    }
+}

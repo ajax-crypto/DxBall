@@ -41,6 +41,7 @@ function drawLevelSelectScene() {
 }
 
 function drawPausedGameScene() {
+	grayscale() ; 
 	ctx.drawImage(imgres[7].res, imgres[7].x, imgres[7].y); 
 }
 
