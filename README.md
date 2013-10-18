@@ -9,7 +9,7 @@ Tested in IE10, Chrome 29.0.1547.57 and Chromium 28.0.1500.71.
 
 NOTE : 
 The game resolution is fixed at 640 * 480 right now and FPS at 60.
-The code lacks documentation. 
+The code lacks documentation and is littered with global variables.
 
 Inspired by the following
 <a href = "http://billmill.org/static/canvastutorial/">
