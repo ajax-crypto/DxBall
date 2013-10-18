@@ -1,5 +1,7 @@
 ﻿var canvas = document.getElementById('dxball'); 
 var ctx = canvas.getContext('2d');
+ctx.font = '20px Verdana' ;
+ctx.textAlign = 'center' ;
 
 var WIDTH = 640;
 var HEIGHT = 480;
@@ -29,7 +31,7 @@ var Colors = Object.freeze({ WHITE : "#FFFFFF",
 			     GOLD : "#FFD700"
 			  }); 
 
-var BrickDefaults = Object.freeze({ WIDTH : 80, 
+var BrickDefaults = Object.freeze({ WIDTH : ~~(640/8), 
 				    HEIGHT : 25,
 				    PADDING : 1,
 				    TRUE_HEIGHT : 26,

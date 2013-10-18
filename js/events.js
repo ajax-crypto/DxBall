@@ -19,21 +19,21 @@ var runningGameSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'keydown' : 
-				if (evt.keyCode == 39) 
+				if(evt.keyCode == 39) 
 					rightDown = true;
-				else if (evt.keyCode == 37) 
+				else if(evt.keyCode == 37) 
 					leftDown = true;
 			break ;
 				 
 			case 'keyup' : 
-				if (evt.keyCode == 39) 
+				if(evt.keyCode == 39) 
 					rightDown = false;
-				else if (evt.keyCode == 37) 
+				else if(evt.keyCode == 37) 
 					leftDown = false;
 			break ;
 				
 			case 'mousemove' : 
-				if (evt.pageX > canvasMinX && evt.pageX < canvasMaxX) {
+				if(evt.pageX > canvasMinX && evt.pageX < canvasMaxX) {
 					paddle.x = Math.max(evt.pageX - canvasMinX - (paddle.width/2), 0);
 					paddle.x = Math.min(WIDTH - paddle.width, paddle.x);
 			    }
@@ -62,7 +62,10 @@ var splashScreenHandler = {
 					x: evt.pageX - canvasMinX,
 					y: evt.pageY - canvasMinY
 				}; 
-	
+				
+				/* If user clicked anywhere except for "credit", 
+				 * go to level selection screen, else go to credit scene
+				 */
 				if(checkBounds(mouse, 250, 417, 402, 480)) {
 					clear(); 
 					gameState = CREDIT_SCENE ; 
@@ -75,16 +78,7 @@ var splashScreenHandler = {
 			break ;
 				
 			case 'mousemove' : 
-				var mouse = {
-					x: evt.pageX - canvasMinX,
-					y: evt.pageY - canvasMinY
-				}; 
-	  
-				if(checkBounds(mouse, 250, 417, 402, 480) ||
-				   checkBounds(mouse, 0, 0, 640, 417))
-					canvas.style.cursor = 'pointer' ;
-				else
-					canvas.style.cursor = 'default' ;
+				canvas.style.cursor = 'pointer' ;
 			break ;
 		}
 	}

@@ -1,48 +1,45 @@
 ﻿// Handles paddle collision with canvas walls
 function handlePaddle() {
-	if (rightDown && (paddle.x < canvasMaxX)) {
+	if(rightDown && (paddle.x < canvasMaxX)) {
 		paddle.moveRight();
 	}
-	else if (leftDown && (paddle.x > canvasMinX)) {
+	else if(leftDown && (paddle.x > canvasMinX)) {
 		paddle.moveLeft();
 	}
 }
 
 // Handles ball and brick collision
 function handleBallBrick() {
+	// Check if ball is within the region where bricks exist
 	if (ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
+		// Calculate row and col of the brick hit
 		var row = ~~(ball.y/BrickDefaults.TRUE_HEIGHT);
 		var col = ~~(ball.x/BrickDefaults.TRUE_WIDTH);
-		
-		//console.log(row+","+col+" : "+ball.y+","+ball.x); 
-		
 		if(row >= 0 && col >= 0 && bricks[row][col].visible) {
-			if(ball.x > col*BrickDefaults.HEIGHT && ball.x < (col+1)*BrickDefaults.HEIGHT)
-				ball.dx = -ball.dx ; 
-			else 
-				ball.dy = -ball.dy;		
-				
-			//console.log(ball.minDistanceY() + " , " + row*BrickDefaults.WIDTH + " , " + (row+1)*BrickDefaults.WIDTH); 
-			
-			if(bricks[row][col].speedup) 
-				ball.speedup() ;
-			else
-				ball.normalSpeed(); 
-			
-			if(bricks[row][col].destructible == 1) {
-				bricks[row][col].destroy() ;
-				--totalBricks ; 
-				console.log("bricks remaining : " + totalBricks); 
-				
-				if(bricks[row][col].paddleElongate > 0) 
-					paddle.elongate(); 
-				else if(bricks[row][col].paddleElongate < 0)
-					paddle.shorten(); 
+			bricks[row][col].hit() ; 	
+			if(ball.x > (col)*BrickDefaults.HEIGHT && ball.x < (col+1)*BrickDefaults.HEIGHT)
+				ball.collideH() ; 
+			//else
+				ball.collideV() ;	
+			// Change game object properties based on brick type the ball hit
+			switch(bricks[row][col].type) {
+				case 1 : 
+					ball.speedup() ;
+				break ;
+				case 2 :
+					bricks[row][col].weaken() ; 
+					ball.normalSpeed(); 
+				break ;
+				case 4 :
+					paddle.shorten();
+					ball.normalSpeed(); 
+				break ;
+				case 5 :
+					paddle.elongate();
+					ball.normalSpeed(); 
+				break ;
 			}
-			
-			else if(bricks[row][col].destructible > 1)
-				bricks[row][col].weaken() ; 
-				
+			// Add to points tally
 			points += bricks[row][col].points ; 
 		}
 	}
@@ -54,22 +51,17 @@ function handleBallPaddle() {
 	var ballleft  = ball.x + ball.dx - ball.radius ; 
 	var bally     = ball.y + ball.dy ;
 	
-    if (ballright > WIDTH || ballleft < 0)
-		ball.dx = -ball.dx;
-	if (bally < 0)
-		ball.dy = -ball.dy;
+    if(ballright > WIDTH || ballleft < 0)
+		ball.collideH() ; 
+	if(bally < 0)
+		ball.collideV();
 		
-	else if (bally > HEIGHT - paddle.height) {
+	else if(bally > HEIGHT - paddle.height) {
 		if(ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
 		
 			//move the ball according to where it hit the paddle
 			ball.dx =  8*((ball.x-(paddle.x + paddle.width/2))/paddle.width);
-			ball.dy = -ball.dy;
-			
-			if(paddle.ticks > 0)
-				paddle.ticks-- ;
-				
-			//console.log(paddle.ticks + " , " + ball.ticks);
+			ball.collideV();
 		}
 		else if(bally > HEIGHT) {
 			return false ; // ball falls here 
@@ -78,12 +70,11 @@ function handleBallPaddle() {
 	return true ; 
 }
 
+// Handle all collisions and move ball
 function handleCollisions() { 
-	
 	handlePaddle();
 	handleBallBrick();
 	var temp = handleBallPaddle(); 
 	ball.move(); 
-	
 	return temp ; 
 }

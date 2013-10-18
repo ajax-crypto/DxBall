@@ -11,9 +11,8 @@ function drawGameOverScene() {
 	ctx.fillStyle = Colors.RED ;
 	rect(0, 0, WIDTH, HEIGHT); 
 	ctx.fillStyle = Colors.GOLD ; 
-	ctx.font = "20px Verdana" ;
-	ctx.fillText("GAME OVER", WIDTH/2-50, HEIGHT/2);
-	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
+	ctx.fillText('GAME OVER', WIDTH/2, HEIGHT/2);
+	ctx.fillText('You have scored ' + points, WIDTH/2, HEIGHT/2 + 20); 
 }
 
 function drawLevelCompleteScene() {
@@ -21,10 +20,8 @@ function drawLevelCompleteScene() {
 	ctx.fillStyle = Colors.FORESTGREEN ;
 	rect(0, 0, WIDTH, HEIGHT); 
 	ctx.fillStyle = Colors.WHITE ; 
-	ctx.font = "20px Verdana" ;
-	ctx.fillText("LEVEL COMPLETE", WIDTH/2-80, HEIGHT/2);
-	ctx.fillText("You have scored " + points, WIDTH/2-100, HEIGHT/2 + 30);
-	ctx.globalCompositeOperation="source-over";
+	ctx.fillText('LEVEL COMPLETE', WIDTH/2, HEIGHT/2);
+	ctx.fillText('You have scored ' + points, WIDTH/2, HEIGHT/2 + 20);
 	ctx.drawImage(imgres[6].res, imgres[6].x, imgres[6].y); 
 }
 

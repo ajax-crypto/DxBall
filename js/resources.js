@@ -86,6 +86,6 @@ function loadResources(start) {
 			imgres[i] = new Resource(images[i]);
 		givePositions(); 
 		if(start)
-			startGame(); 
+			startGame(); // Start game only if resources are loaded
 	});
 }
