@@ -7,6 +7,7 @@
  * Res 5 : Level unlocked screen
  * Res 6 : Level locked screen
  * Res 7 : Next level screen
+ * Res 8 : Paused screen
 ***********************************/ 
 
 var resources = ['img/paddle.png', 
@@ -15,7 +16,8 @@ var resources = ['img/paddle.png',
 		 'img/lselect.png', 
 		 'img/ulevel.png',
 		 'img/llevel.png',
-		 'img/next.png']; 
+		 'img/next.png',
+		 'img/pause.png']; 
 
 function Resource(res) {
 	this.res = res ;
@@ -48,6 +50,8 @@ function givePositions() {
 	licondata[0].unlocked = true ; // Start with first level
 	imgres[6].x = ~~((WIDTH - imgres[6].width)/2);
 	imgres[6].y = ~~(HEIGHT - imgres[6].height);
+	imgres[7].x = ~~((WIDTH - imgres[7].width)/2);
+	imgres[7].y = ~~((HEIGHT/2)-(imgres[7].height/2));
 }
 
 function preloadimages(arr){

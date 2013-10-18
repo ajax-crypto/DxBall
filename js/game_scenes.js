@@ -40,6 +40,10 @@ function drawLevelSelectScene() {
 			licondata[i].x, licondata[i].y); 
 }
 
+function drawPausedGameScene() {
+	ctx.drawImage(imgres[7].res, imgres[7].x, imgres[7].y); 
+}
+
 function drawGameScenes(_gameState) {
 	switch(_gameState) {
 		case SPLASH_SCREEN :
@@ -48,6 +52,9 @@ function drawGameScenes(_gameState) {
 		case RUNNING : 
 			drawGameRunningScene();
 			break ;
+		case PAUSED :
+			drawPausedGameScene() ;
+			break ; 
 		case CREDIT_SCENE :
 			drawCreditScene(); 
 			break ;

@@ -10,8 +10,10 @@ function handlePaddle() {
 
 // Handles ball and brick collision
 function handleBallBrick() {
+	
 	// Check if ball is within the region where bricks exist
 	if (ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
+		
 		// Calculate row and col of the brick hit
 		var row = ~~(ball.y/BrickDefaults.TRUE_HEIGHT);
 		var col = ~~(ball.x/BrickDefaults.TRUE_WIDTH);
@@ -21,6 +23,7 @@ function handleBallBrick() {
 				ball.collideH() ; 
 			//else
 				ball.collideV() ;	
+				
 			// Change game object properties based on brick type the ball hit
 			switch(bricks[row][col].type) {
 				case 1 : 

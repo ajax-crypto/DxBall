@@ -14,6 +14,50 @@ document.getElementById('pause').addEventListener('click', function() {
 		}
 	}, false); 
 
+function checkBounds(pos, x1, y1, x2, y2) {
+	return (pos.x < x2 && pos.x > x1 && pos.y < y2 && pos.y > y1); 
+}
+
+var pausedGameSceneHandler = {
+	handleEvent : function(evt) {
+		switch(evt.type) {
+			case 'click' :
+				var mouse = {
+					x: evt.pageX - canvasMinX,
+					y: evt.pageY - canvasMinY
+				}; 
+				
+				var option = ~~(imgres[7].height/3) ; 
+				
+				if(checkBounds(mouse, imgres[7].x, imgres[7].y, 
+					imgres[7].x + imgres[7].width, imgres[7].y + 
+					imgres[7].height)) {
+					if(mouse.y < (option + imgres[7].y)) 
+						restartGame(); 
+					else if(mouse.y > (option + imgres[7].y) && 
+						mouse.y < (2*option + imgres[7].y)) 
+						resumeGame();  
+					else
+						gameState = LEVEL_SELECT ;  
+				}
+			break ;
+			case 'mousemove' :
+				var mouse = {
+					x: evt.pageX - canvasMinX,
+					y: evt.pageY - canvasMinY
+				}; 
+				
+				if(checkBounds(mouse, imgres[7].x, imgres[7].y, 
+					imgres[7].x + imgres[7].width, imgres[7].y + 
+					imgres[7].height)) 
+					canvas.style.cursor = 'pointer' ;
+				else
+					canvas.style.cursor = 'default' ;
+			break ;
+		}
+	}
+}
+						
 
 var runningGameSceneHandler = {
 	handleEvent : function(evt) {
@@ -49,10 +93,6 @@ var runningGameSceneHandler = {
 	}
 }; 
 
-function checkBounds(pos, x1, y1, x2, y2) {
-	return (pos.x < x2 && pos.x > x1 && pos.y < y2 && pos.y > y1); 
-}
-
 var splashScreenHandler = {
 	handleEvent : function(evt) { 
 		switch(evt.type) {
@@ -66,14 +106,11 @@ var splashScreenHandler = {
 				/* If user clicked anywhere except for "credit", 
 				 * go to level selection screen, else go to credit scene
 				 */
-				if(checkBounds(mouse, 250, 417, 402, 480)) {
-					clear(); 
+				clear();
+				if(checkBounds(mouse, 250, 417, 402, 480))  
 					gameState = CREDIT_SCENE ; 
-				}
-				else if(checkBounds(mouse, 0, 0, 640, 417)) {
-					clear() ;
+				else 
 					gameState = LEVEL_SELECT ;
-				}
 				
 			break ;
 				
@@ -182,6 +219,10 @@ function unregisterEvents(state) {
 			canvas.removeEventListener('mousemove', runningGameSceneHandler, false); 
 			canvas.removeEventListener('click', runningGameSceneHandler, false);
 		break ;
+		case PAUSED : 
+			canvas.removeEventListener('click', pausedGameSceneHandler, false); 
+			canvas.removeEventListener('mousemove', pausedGameSceneHandler, false); 
+		break ;
 		case SPLASH_SCREEN :
 			canvas.removeEventListener('click', splashScreenHandler, false); 
 			canvas.removeEventListener('mousemove', splashScreenHandler, false); 
@@ -216,6 +257,10 @@ function handleGameEvents(currState, prevState) {
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);
 			canvas.addEventListener('click', runningGameSceneHandler, false);
+		break ;
+		case PAUSED : 
+			canvas.addEventListener('click', pausedGameSceneHandler, false); 
+			canvas.addEventListener('mousemove', pausedGameSceneHandler, false); 
 		break ;
 		case LEVEL_COMPLETE : 
 			canvas.addEventListener('click', levelCompleteSceneHandler, false);
