@@ -1,19 +1,4 @@
-﻿document.getElementById('start').addEventListener('click', function() { 
-		pause.innerHTML = "Pause" ; 
-		restartGame(); 
-	}, false); 
-	
-document.getElementById('pause').addEventListener('click', function() {
-		if(gameState == RUNNING) {
-			gameState = PAUSED ; 
-			pause.innerHTML = "Resume" ; 
-		}
-		else if(gameState == PAUSED) {
-			resumeGame(); 
-			pause.innerHTML = "Pause" ;
-		}
-	}, false); 
-
+﻿
 function checkBounds(pos, x1, y1, x2, y2) {
 	return (pos.x < x2 && pos.x > x1 && pos.y < y2 && pos.y > y1); 
 }

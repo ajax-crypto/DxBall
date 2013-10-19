@@ -8,6 +8,8 @@
  * Res 6 : Level locked screen
  * Res 7 : Next level screen
  * Res 8 : Paused screen
+ * Res 9 : Coin Gift
+ * Res 10 : Extra Life Gift
 ***********************************/ 
 
 var resources = ['img/paddle.png', 
@@ -17,7 +19,9 @@ var resources = ['img/paddle.png',
 		 'img/ulevel.png',
 		 'img/llevel.png',
 		 'img/next.png',
-		 'img/pause.png']; 
+		 'img/pause.png',
+		 'img/coin.png',
+		 'img/heart.png' ]; 
 
 function Resource(res) {
 	this.res = res ;

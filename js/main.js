@@ -35,6 +35,7 @@ function startGame() {
 	clearTimeout(loop); 
 	initBricks(); 
 	initBall(); 
+	initGifts(); 
 	playState = true ; 
 	gameLoop(); 
 }

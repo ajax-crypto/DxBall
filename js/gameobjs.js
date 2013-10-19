@@ -85,6 +85,59 @@ var paddle = new function () {
 	};	
 }; 
 
+/*************************Gifts*******************************/
+
+function Gift(type, x, y) {
+	this.points = 0 ; 
+	this.chance = false ;
+	this.multiple = false ;
+	this.x = x ;
+	this.y = y ; 
+	this.active = false ; 
+	this.res = null ; 
+	
+	switch(type) {
+		case 1 : 
+			this.points = 1000 ; 
+			this.res = imgres[8].res ; 
+		break ;
+		case 2 :
+			this.chance = true ;
+			this.res = imgres[9].res ; 
+		break ;
+		case 3 :
+			this.multiple = true ;
+		break ;
+	}
+}
+
+Gift.prototype.activate = function() {
+		this.active = true ; 
+	}; 
+	
+Gift.prototype.deactivate = function() {
+		this.active = false ; 
+	}; 
+
+Gift.prototype.speed = 2 ; 
+
+Gift.prototype.draw = function() {
+		if(this.active) 
+			ctx.drawImage(this.res, this.x, this.y); 
+	};
+	
+Gift.prototype.move = function() {
+		if(this.active)
+			this.y += this.speed ; 
+	};
+	
+var gift ; 
+
+function initGifts() {
+	gift = new Gift(gifts[GAME_LEVEL].type, gifts[GAME_LEVEL].col*BrickDefaults.WIDTH + 
+		(BrickDefaults.WIDTH/2), (gifts[GAME_LEVEL].row+1)*BrickDefaults.TRUE_HEIGHT); 
+}
+		
 /***************************** Bricks ***************************/
 
 function Brick(type) {
@@ -98,7 +151,7 @@ function Brick(type) {
 	this.destructible = 1 ; 
 	this.destroyed = false ; 
 	this.paddleElongate = 0 ; 
-	this.type = type ;
+	this.type = type ; 
 	switch(this.type) {
 		case 0 :
 			this.visible = false ;
@@ -183,4 +236,3 @@ function drawbricks() {
 		for (j=0; j < NCOLS; j++) 
 			bricks[i][j].draw(i, j); 
 }
-

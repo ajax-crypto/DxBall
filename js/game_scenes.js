@@ -4,6 +4,7 @@
 	ball.draw(); 
 	paddle.draw(); 
     drawbricks(); 
+    gift.draw(); 
 }
 
 function drawGameOverScene() { 

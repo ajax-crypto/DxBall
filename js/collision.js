@@ -23,7 +23,10 @@ function handleBallBrick() {
 				ball.collideH() ; 
 			//else
 				ball.collideV() ;	
-				
+			
+			if(gifts[GAME_LEVEL].row == row && gifts[GAME_LEVEL].col == col)
+				gift.activate(); 
+			
 			// Change game object properties based on brick type the ball hit
 			switch(bricks[row][col].type) {
 				case 1 : 
@@ -43,8 +46,17 @@ function handleBallBrick() {
 				break ;
 			}
 			// Add to points tally
-			points += bricks[row][col].points ; 
+			points += bricks[row][col].points ;  
 		}
+	}
+}
+
+function handleGiftPaddle() {
+	if(gift.active && gift.y > (HEIGHT - paddle.height) && gift.x < 
+	(paddle.x + paddle.width) && gift.x > paddle.x) {
+		points += gift.points ;
+		console.log("p : " + points);  
+		gift.deactivate() ; 
 	}
 }
 
@@ -77,7 +89,9 @@ function handleBallPaddle() {
 function handleCollisions() { 
 	handlePaddle();
 	handleBallBrick();
+	handleGiftPaddle(); 
 	var temp = handleBallPaddle(); 
 	ball.move(); 
+	gift.move();
 	return temp ; 
 }
