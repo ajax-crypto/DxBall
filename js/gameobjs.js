@@ -6,6 +6,14 @@
 	this.dy = movey ;
 	this.color = color ;
 	this.ticks = 0 ; 
+	this.life = 0 ; 
+	this.anotherLife = function() {
+		this.life++ ; 
+	};
+	
+	this.usedOneLife = function() {
+		this.life-- ;
+	};
 }
 
 Ball.prototype.speedup = function() {
@@ -87,12 +95,11 @@ var paddle = new function () {
 
 /*************************Gifts*******************************/
 
-function Gift(type, x, y) {
+function Gift(type, r, c) {
+	this.type = type ; 
 	this.points = 0 ; 
-	this.chance = false ;
-	this.multiple = false ;
-	this.x = x ;
-	this.y = y ; 
+	this.x = 0 ;
+	this.y = 0 ; 
 	this.active = false ; 
 	this.res = null ; 
 	
@@ -102,22 +109,24 @@ function Gift(type, x, y) {
 			this.res = imgres[8].res ; 
 		break ;
 		case 2 :
-			this.chance = true ;
 			this.res = imgres[9].res ; 
 		break ;
 		case 3 :
-			this.multiple = true ;
+			//
 		break ;
 	}
-}
-
-Gift.prototype.activate = function() {
+	
+	this.x = r*BrickDefaults.WIDTH + ((BrickDefaults.WIDTH - this.res.width)/2) ; 
+	this.y = (c+1)*BrickDefaults.TRUE_HEIGHT ; 
+	
+	this.activate = function() {
 		this.active = true ; 
 	}; 
 	
-Gift.prototype.deactivate = function() {
+	this.deactivate = function() {
 		this.active = false ; 
 	}; 
+}
 
 Gift.prototype.speed = 2 ; 
 
@@ -134,8 +143,7 @@ Gift.prototype.move = function() {
 var gift ; 
 
 function initGifts() {
-	gift = new Gift(gifts[GAME_LEVEL].type, gifts[GAME_LEVEL].col*BrickDefaults.WIDTH + 
-		(BrickDefaults.WIDTH/2), (gifts[GAME_LEVEL].row+1)*BrickDefaults.TRUE_HEIGHT); 
+	gift = new Gift(gifts[GAME_LEVEL].type, gifts[GAME_LEVEL].col, gifts[GAME_LEVEL].row); 
 }
 		
 /***************************** Bricks ***************************/

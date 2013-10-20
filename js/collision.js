@@ -24,6 +24,7 @@ function handleBallBrick() {
 			//else
 				ball.collideV() ;	
 			
+			// If the brick has a gift associated, activate it 
 			if(gifts[GAME_LEVEL].row == row && gifts[GAME_LEVEL].col == col)
 				gift.activate(); 
 			
@@ -54,9 +55,15 @@ function handleBallBrick() {
 function handleGiftPaddle() {
 	if(gift.active && gift.y > (HEIGHT - paddle.height) && gift.x < 
 	(paddle.x + paddle.width) && gift.x > paddle.x) {
-		points += gift.points ;
-		console.log("p : " + points);  
 		gift.deactivate() ; 
+		switch(gift.type) {
+			case 1 : 
+				points += gift.points ; 
+			break ;
+			case 2 : 
+				ball.anotherLife() ;
+			break ; 
+		}
 	}
 }
 
@@ -79,7 +86,14 @@ function handleBallPaddle() {
 			ball.collideV();
 		}
 		else if(bally > HEIGHT) {
-			return false ; // ball falls here 
+			
+			// If player has extra life, the ball bounces off
+			if(ball.life > 0) {
+				ball.collideV(); 
+				ball.usedOneLife();
+			}
+			else
+				return false ; // ball falls here 
 		}
 	}
 	return true ; 

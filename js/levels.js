@@ -5,7 +5,7 @@ var MAX_LEVELS = 6 ;
 
 var gamedata = new Array(MAX_LEVELS);
 
-var gifts = [ { type : 1, row : 7, col : 7 },
+var gifts = [ { type : 2, row : 7, col : 7 },
 			  { type : 1, row : 3, col : 4 },
 			  { type : 2, row : 0, col : 0 } ]; 
 
