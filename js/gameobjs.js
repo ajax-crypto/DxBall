@@ -5,7 +5,7 @@
 	this.dx = movex ;
 	this.dy = movey ;
 	this.color = color ;
-	this.ticks = 0 ; 
+	this.through = false ; 
 	this.life = 0 ; 
 	this.anotherLife = function() {
 		this.life++ ; 
@@ -47,6 +47,10 @@ Ball.prototype.collideH = function() {
 Ball.prototype.collideV = function() {
 		this.dy = -this.dy ;
 	};
+	
+Ball.prototype.passThrough = function() {
+		this.through = true ; 
+	}; 
 
 var ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
@@ -56,6 +60,7 @@ function initBall() {
 	ball.y = BallDefaults.Y ;
 	ball.dx = BallDefaults.DX ;
 	ball.dy = BallDefaults.DY ; 
+	ball.through = false ; 
 }
 
 /********************* Paddle **************************
@@ -112,7 +117,7 @@ function Gift(type, r, c) {
 			this.res = imgres[9].res ; 
 		break ;
 		case 3 :
-			//
+			this.res = imgres[10].res ; 
 		break ;
 	}
 	
@@ -193,8 +198,6 @@ function Brick(type) {
 } 
 
 Brick.prototype.draw = function(x, y) { 
-		if(!this.visible)
-			this.destroyed = true ; 
 		if (this.visible) {
 			ctx.fillStyle = this.color ; 
 			rect((y * (this.width + this.padding)) + this.padding, (x * (this.
@@ -206,18 +209,11 @@ Brick.prototype.destroy = function() {
 		this.destroyed = true ;
 		this.visible = false ; 
 	}; 
-
-Brick.prototype.weaken = function() {
-		if(this.destructible > 1)
-			this.destructible-- ; 
-		else {
-			this.destroyed = true ;
-			this.visible = false ; 
-		}
-	}; 
 	
 Brick.prototype.hit = function() {
-		if(this.destructible == 1) {
+		if(this.destructible > 1)
+			this.destructible-- ; 
+		else if(this.destructible == 1) {
 			this.destroyed = true ;
 			this.visible = false ; 
 			--totalBricks ; 

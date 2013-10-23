@@ -18,34 +18,35 @@ function handleBallBrick() {
 		var row = ~~(ball.y/BrickDefaults.TRUE_HEIGHT);
 		var col = ~~(ball.x/BrickDefaults.TRUE_WIDTH);
 		if(row >= 0 && col >= 0 && bricks[row][col].visible) {
-			bricks[row][col].hit() ; 	
-			if(ball.x > (col)*BrickDefaults.HEIGHT && ball.x < (col+1)*BrickDefaults.HEIGHT)
-				ball.collideH() ; 
-			//else
+			bricks[row][col].hit() ;
+			if(!ball.through) { 	
+				//if(ball.x > (row)*BrickDefaults.HEIGHT && ball.x < (row+1)*BrickDefaults.HEIGHT)
+					//ball.collideH() ; 
 				ball.collideV() ;	
+				
+				// Change game object properties based on brick type the ball hit
+				switch(bricks[row][col].type) {
+					case 1 : 
+						ball.speedup() ;
+					break ;
+					case 2 :
+						ball.normalSpeed(); 
+					break ;
+					case 4 :
+						paddle.shorten();
+						ball.normalSpeed(); 
+					break ;
+					case 5 :
+						paddle.elongate();
+						ball.normalSpeed(); 
+					break ;
+				}
+			}
 			
 			// If the brick has a gift associated, activate it 
 			if(gifts[GAME_LEVEL].row == row && gifts[GAME_LEVEL].col == col)
 				gift.activate(); 
 			
-			// Change game object properties based on brick type the ball hit
-			switch(bricks[row][col].type) {
-				case 1 : 
-					ball.speedup() ;
-				break ;
-				case 2 :
-					bricks[row][col].weaken() ; 
-					ball.normalSpeed(); 
-				break ;
-				case 4 :
-					paddle.shorten();
-					ball.normalSpeed(); 
-				break ;
-				case 5 :
-					paddle.elongate();
-					ball.normalSpeed(); 
-				break ;
-			}
 			// Add to points tally
 			points += bricks[row][col].points ;  
 		}
@@ -62,6 +63,9 @@ function handleGiftPaddle() {
 			break ;
 			case 2 : 
 				ball.anotherLife() ;
+			break ; 
+			case 3 :
+				ball.passThrough() ;
 			break ; 
 		}
 	}

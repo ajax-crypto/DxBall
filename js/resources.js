@@ -10,6 +10,7 @@
  * Res 8 : Paused screen
  * Res 9 : Coin Gift
  * Res 10 : Extra Life Gift
+ * Res 11 : Gift : Ball passes through bricks destroying them
 ***********************************/ 
 
 var resources = ['img/paddle.png', 
@@ -21,7 +22,8 @@ var resources = ['img/paddle.png',
 		 'img/next.png',
 		 'img/pause.png',
 		 'img/coin.png',
-		 'img/heart.png' ]; 
+		 'img/heart.png',
+		 'img/multi.png' ]; 
 
 function Resource(res) {
 	this.res = res ;
