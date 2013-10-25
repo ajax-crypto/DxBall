@@ -39,8 +39,8 @@ var imgres = [] ;
 var licondata = new Array(6);
 
 function givePositions() {
-	var ICON_PADDING_WIDTH  = ~~((WIDTH-(3*imgres[4].width))/4); 
-	var ICON_PADDING_HEIGHT = ~~((HEIGHT-(2*imgres[4].height))/3); 
+	var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*imgres[4].width))/4); 
+	var ICON_PADDING_HEIGHT = ~~((DxBall.HEIGHT-(2*imgres[4].height))/3); 
 	for(i=0; i<6; ++i)
 	{
 		if(i < 3)
@@ -55,10 +55,10 @@ function givePositions() {
 					            };
 	}
 	licondata[0].unlocked = true ; // Start with first level
-	imgres[6].x = ~~((WIDTH - imgres[6].width)/2);
-	imgres[6].y = ~~(HEIGHT - imgres[6].height);
-	imgres[7].x = ~~((WIDTH - imgres[7].width)/2);
-	imgres[7].y = ~~((HEIGHT/2)-(imgres[7].height/2));
+	imgres[6].x = ~~((DxBall.WIDTH - imgres[6].width)/2);
+	imgres[6].y = ~~(DxBall.HEIGHT - imgres[6].height);
+	imgres[7].x = ~~((DxBall.WIDTH - imgres[7].width)/2);
+	imgres[7].y = ~~((DxBall.HEIGHT/2)-(imgres[7].height/2));
 }
 
 function preloadimages(arr){

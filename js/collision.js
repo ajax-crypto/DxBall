@@ -54,7 +54,7 @@ function handleBallBrick() {
 }
 
 function handleGiftPaddle() {
-	if(gift.active && (gift.y + gift.res.height) > (HEIGHT - paddle.height) && gift.x < 
+	if(gift.active && (gift.y + gift.res.height) > (DxBall.HEIGHT - paddle.height) && gift.x < 
 	(paddle.x + paddle.width) && gift.x > paddle.x) {
 		gift.deactivate() ; 
 		switch(gift.type) {
@@ -77,19 +77,19 @@ function handleBallPaddle() {
 	var ballleft  = ball.x + ball.dx - ball.radius ; 
 	var bally     = ball.y + ball.dy ;
 	
-    if(ballright > WIDTH || ballleft < 0)
+    if(ballright > DxBall.WIDTH || ballleft < 0)
 		ball.collideH() ; 
 	if(bally < 0)
 		ball.collideV();
 		
-	else if(bally > HEIGHT - paddle.height) {
+	else if(bally > DxBall.HEIGHT - paddle.height) {
 		if(ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
 		
 			//move the ball according to where it hit the paddle
 			ball.dx =  8*((ball.x-(paddle.x + paddle.width/2))/paddle.width);
 			ball.collideV();
 		}
-		else if(bally > HEIGHT) {
+		else if(bally > DxBall.HEIGHT) {
 			
 			// If player has extra life, the ball bounces off
 			if(ball.life > 0) {

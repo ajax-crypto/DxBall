@@ -1,13 +1,4 @@
-﻿var canvas = document.getElementById('dxball'); 
-var ctx = canvas.getContext('2d');
-ctx.font = '20px Verdana' ;
-ctx.textAlign = 'center' ;
-var WIDTH = 640;
-var HEIGHT = 480;
-var rightDown = false;
-var leftDown = false;
-
-var GameStates = Object.freeze({
+﻿var GameStates = Object.freeze({
 				 INVALID : 0,
 				 SPLASH_SCREEN : 1,
 				 CHAPTER_SELECT : 2,
@@ -37,37 +28,14 @@ var Colors = Object.freeze({ WHITE : "#FFFFFF",
 			     AQUA : "#00FFFF",
 			     GOLD : "#FFD700"
 			  }); 
-
-var BrickDefaults = Object.freeze({ WIDTH : ~~(640/8), 
-				    HEIGHT : 25,
-				    PADDING : 1,
-				    TRUE_HEIGHT : 26,
-				    TRUE_WIDTH : 81
-				 }); 
-								 
-var PaddleDefaults = Object.freeze({ WIDTH : 75,
-				     HEIGHT : 10,
-				     SPEED : 7,
-				     XPOS : WIDTH/2 
-				   }); 
-								  
-var BallDefaults = Object.freeze({ RADIUS : 6,
-				   COLOR : Colors.WHITE,
-				   SPEED : 4, 
-				   DX : 1.5,
-				   DY : -4,
-				   X : 25,
-				   Y : 250, 
-				   SPEED_UP : 2
-				 }); 
 				 
 var DrawGameScenes = new function() {
 	
 	var self = this ; 
 	
 	self.gameRunningScene = function() {
-		ctx.fillStyle = Colors.BLACK ;
-		clear();
+		DxBall.ctx.fillStyle = Colors.BLACK ;
+		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		ball.draw(); 
 		paddle.draw(); 
 		drawbricks(); 
@@ -75,42 +43,42 @@ var DrawGameScenes = new function() {
 	};
 
 	self.gameOverScene = function() { 
-		clear(); 
-		ctx.fillStyle = Colors.RED ;
-		rect(0, 0, WIDTH, HEIGHT); 
-		ctx.fillStyle = Colors.GOLD ; 
-		ctx.fillText('GAME OVER', WIDTH/2, HEIGHT/2);
-		ctx.fillText('You have scored ' + DxBall.points, WIDTH/2, HEIGHT/2 + 20); 
+		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
+		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.RED); 
+		DxBall.ctx.fillStyle = Colors.GOLD ; 
+		DxBall.ctx.fillText('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2);
+		DxBall.ctx.fillText('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+			DxBall.HEIGHT/2 + 20); 
 	};
 
 	self.levelCompleteScene = function() {
-		clear(); 
-		ctx.fillStyle = Colors.FORESTGREEN ;
-		rect(0, 0, WIDTH, HEIGHT); 
-		ctx.fillStyle = Colors.WHITE ; 
-		ctx.fillText('LEVEL COMPLETE', WIDTH/2, HEIGHT/2);
-		ctx.fillText('You have scored ' + DxBall.points, WIDTH/2, HEIGHT/2 + 20);
-		ctx.drawImage(imgres[6].res, imgres[6].x, imgres[6].y); 
+		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
+		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.FORESTGREEN); 
+		DxBall.ctx.fillStyle = Colors.WHITE ; 
+		DxBall.ctx.fillText('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.HEIGHT/2);
+		DxBall.ctx.fillText('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+			DxBall.HEIGHT/2 + 20);
+		Graphics.image(imgres[6].res, imgres[6].x, imgres[6].y); 
 	};
 
 	self.creditScene = function() {
-		ctx.drawImage(imgres[2].res, imgres[2].x, imgres[2].y); 
+		Graphics.image(imgres[2].res, imgres[2].x, imgres[2].y); 
 	};
 
 	self.splashScreen = function() {
-		ctx.drawImage(imgres[1].res, imgres[1].x, imgres[1].y); 
+		Graphics.image(imgres[1].res, imgres[1].x, imgres[1].y); 
 	};
 
 	self.levelSelectScene = function() {
-		ctx.drawImage(imgres[3].res, imgres[3].x, imgres[3].y); 
+		Graphics.image(imgres[3].res, imgres[3].x, imgres[3].y); 
 		for(i=0; i<6; ++i)
-			ctx.drawImage((licondata[i].unlocked == true ? imgres[5].res : imgres[4].res), 
+			Graphics.image((licondata[i].unlocked == true ? imgres[5].res : imgres[4].res), 
 				licondata[i].x, licondata[i].y); 
 	};
 
 	self.gamePausedScene = function() {
-		grayscale() ; 
-		ctx.drawImage(imgres[7].res, imgres[7].x, imgres[7].y); 
+		Graphics.grayscale() ; 
+		Graphics.image(imgres[7].res, imgres[7].x, imgres[7].y); 
 	};
 	
 	self.drawScene = [];
@@ -130,6 +98,13 @@ var DrawGameScenes = new function() {
 var DxBall = new function() {
 	
 	var self = this ; 
+	
+	self.canvas = document.getElementById('dxball'); 
+	self.ctx = self.canvas.getContext('2d');
+	self.ctx.font = '20px Verdana' ;
+	self.ctx.textAlign = 'center' ;
+	self.WIDTH = 640;
+	self.HEIGHT = 480;
 	
 	self.state = GameStates.SPLASH_SCREEN ; 
 	self.pstate = GameStates.INVALID ; 
