@@ -26,11 +26,12 @@ var resources = ['img/paddle.png',
 		 'img/multi.png' ]; 
 
 function Resource(res) {
-	this.res = res ;
-	this.x = 0 ;
-	this.y = 0 ;
-	this.height = res.height ; 
-	this.width = res.width ;
+	var self = this ; 
+	self.res = res ;
+	self.x = 0 ;
+	self.y = 0 ;
+	self.height = res.height ; 
+	self.width = res.width ;
 }
 
 var imgres = [] ; 
@@ -96,6 +97,6 @@ function loadResources(start) {
 			imgres[i] = new Resource(images[i]);
 		givePositions(); 
 		if(start)
-			startGame(); // Start game only if resources are loaded
+			DxBall.start(); // Start game only if resources are loaded
 	});
 }

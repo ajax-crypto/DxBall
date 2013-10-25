@@ -18,12 +18,12 @@ var pausedGameSceneHandler = {
 					imgres[7].x + imgres[7].width, imgres[7].y + 
 					imgres[7].height)) {
 					if(mouse.y < (option + imgres[7].y)) 
-						restartGame(); 
+						DxBall.restart(); 
 					else if(mouse.y > (option + imgres[7].y) && 
 						mouse.y < (2*option + imgres[7].y)) 
-						resumeGame();  
+						DxBall.resume();  
 					else
-						gameState = LEVEL_SELECT ;  
+						DxBall.setState(GameStates.LEVEL_SELECT) ;  
 				}
 			break ;
 			case 'mousemove' :
@@ -41,8 +41,7 @@ var pausedGameSceneHandler = {
 			break ;
 		}
 	}
-}
-						
+};
 
 var runningGameSceneHandler = {
 	handleEvent : function(evt) {
@@ -69,10 +68,10 @@ var runningGameSceneHandler = {
 			break ;
 			
 			case 'click' :
-				if(gameState == RUNNING)
-					gameState = PAUSED ;
-				else if(gameState == PAUSED) 
-					resumeGame() ; 
+				if(DxBall.isRunning())
+					DxBall.pause(); 
+				else if(DxBall.isPaused()) 
+					DxBall.resume(); 
 			break ; 
 		}
 	}
@@ -93,9 +92,9 @@ var splashScreenHandler = {
 				 */
 				clear();
 				if(checkBounds(mouse, 250, 417, 402, 480))  
-					gameState = CREDIT_SCENE ; 
+					DxBall.setState(GameStates.CREDIT_SCENE) ; 
 				else 
-					gameState = LEVEL_SELECT ;
+					DxBall.setState(GameStates.LEVEL_SELECT) ;
 				
 			break ;
 				
@@ -120,9 +119,9 @@ var levelSelectSceneHandler = {
 						licondata[i].x + imgres[4].width, licondata[i].y 
 						+ imgres[4].height) && licondata[i].unlocked == true) {
 						clear();
-						gameState = RUNNING ; 
-						GAME_LEVEL = i ; 
-						startGame(); 
+						DxBall.setState(GameStates.RUNNING);
+						DxBall.setLevel(i);
+						DxBall.start(); 
 					}
 			break; 
 			
@@ -132,7 +131,7 @@ var levelSelectSceneHandler = {
 					y: evt.pageY - canvasMinY
 				}; 
 				
-				for(i=0; i<=GAME_LEVEL; ++i)
+				for(i=0; i<=DxBall.level; ++i)
 					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
 						licondata[i].x + imgres[4].width, licondata[i].y 
 						+ imgres[4].height)) 
@@ -148,7 +147,7 @@ var creditSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
-				gameState = LEVEL_SELECT ; 
+				DxBall.setState(GameStates.LEVEL_SELECT) ; 
 			break ; 
 			case 'mousemove' : 
 				canvas.style.cursor = 'pointer' ; 
@@ -168,7 +167,7 @@ var levelCompleteSceneHandler = {
 				
 				if(checkBounds(mouse, 204, HEIGHT-90, 435, 480)) {
 					clear(); 
-					gameState = LEVEL_SELECT ; 
+					DxBall.setState(GameStates.LEVEL_SELECT) ; 
 				}
 			break ; 
 			case 'mousemove' : 
@@ -190,7 +189,7 @@ var gameOverSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
-				gameState = LEVEL_SELECT ; 
+				DxBall.setState(GameStates.LEVEL_SELECT) ; 
 			break ;
 		}
 	}
@@ -198,33 +197,33 @@ var gameOverSceneHandler = {
 				
 function unregisterEvents(state) {
 	switch(state) {
-		case RUNNING : 
+		case GameStates.RUNNING : 
 			canvas.removeEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.removeEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.removeEventListener('mousemove', runningGameSceneHandler, false); 
 			canvas.removeEventListener('click', runningGameSceneHandler, false);
 		break ;
-		case PAUSED : 
+		case GameStates.PAUSED : 
 			canvas.removeEventListener('click', pausedGameSceneHandler, false); 
 			canvas.removeEventListener('mousemove', pausedGameSceneHandler, false); 
 		break ;
-		case SPLASH_SCREEN :
+		case GameStates.SPLASH_SCREEN :
 			canvas.removeEventListener('click', splashScreenHandler, false); 
 			canvas.removeEventListener('mousemove', splashScreenHandler, false); 
 		break;
-		case LEVEL_SELECT :
+		case GameStates.LEVEL_SELECT :
 			canvas.removeEventListener('click', levelSelectSceneHandler, false); 
 			canvas.removeEventListener('mousemove', levelSelectSceneHandler, false);
 		break ; 
-		case CREDIT_SCENE :
+		case GameStates.CREDIT_SCENE :
 			canvas.removeEventListener('click', creditSceneHandler, false); 
 			canvas.removeEventListener('mousemove', creditSceneHandler, false); 
 		break ; 
-		case LEVEL_COMPLETE : 
+		case GameStates.LEVEL_COMPLETE : 
 			canvas.removeEventListener('click', levelCompleteSceneHandler, false);
 			canvas.removeEventListener('mousemove', levelCompleteSceneHandler, false);
 		break ;
-		case GAME_OVER :
+		case GameStates.GAME_OVER :
 			canvas.removeEventListener('click', gameOverSceneHandler, false);
 		break ; 
 	}
@@ -233,33 +232,33 @@ function unregisterEvents(state) {
 function handleGameEvents(currState, prevState) {
 	unregisterEvents(prevState); 
 	switch(currState) {
-		case SPLASH_SCREEN :
+		case GameStates.SPLASH_SCREEN :
 			canvas.addEventListener('click', splashScreenHandler, false); 
 			canvas.addEventListener('mousemove', splashScreenHandler, false); 
 		break;
-		case RUNNING : 
+		case GameStates.RUNNING : 
 			canvas.addEventListener('keydown', runningGameSceneHandler, false); 
 			canvas.addEventListener('keyup', runningGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', runningGameSceneHandler, false);
 			canvas.addEventListener('click', runningGameSceneHandler, false);
 		break ;
-		case PAUSED : 
+		case GameStates.PAUSED : 
 			canvas.addEventListener('click', pausedGameSceneHandler, false); 
 			canvas.addEventListener('mousemove', pausedGameSceneHandler, false); 
 		break ;
-		case LEVEL_COMPLETE : 
+		case GameStates.LEVEL_COMPLETE : 
 			canvas.addEventListener('click', levelCompleteSceneHandler, false);
 			canvas.addEventListener('mousemove', levelCompleteSceneHandler, false);
 		break ; 
-		case LEVEL_SELECT :
+		case GameStates.LEVEL_SELECT :
 			canvas.addEventListener('click', levelSelectSceneHandler, false); 
 			canvas.addEventListener('mousemove', levelSelectSceneHandler, false);
 		break ; 
-		case CREDIT_SCENE : 
+		case GameStates.CREDIT_SCENE : 
 			canvas.addEventListener('click', creditSceneHandler, false); 
 			canvas.addEventListener('mousemove', creditSceneHandler, false); 
 		break ; 
-		case GAME_OVER :
+		case GameStates.GAME_OVER :
 			canvas.addEventListener('click', gameOverSceneHandler, false);
 		break ; 
 	}

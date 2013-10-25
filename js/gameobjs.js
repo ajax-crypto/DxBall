@@ -1,55 +1,66 @@
 ﻿function Ball(x, y, radius, movex, movey, color) {
-	this.x = x ; 
-	this.y = y ;
-	this.radius = radius ;
-	this.dx = movex ;
-	this.dy = movey ;
-	this.color = color ;
-	this.through = false ; 
-	this.life = 0 ; 
-	this.anotherLife = function() {
-		this.life++ ; 
+	
+	var self = this ; 
+	
+	self.x = x ; 
+	self.y = y ;
+	self.radius = radius ;
+	self.dx = movex ;
+	self.dy = movey ;
+	self.color = color ;
+	self.through = false ; 
+	self.life = 0 ; 
+	
+	self.anotherLife = function() {
+		self.life++ ; 
 	};
 	
-	this.usedOneLife = function() {
-		this.life-- ;
+	self.usedOneLife = function() {
+		self.life-- ;
 	};
 }
 
 Ball.prototype.speedup = function() {
-		if(this.dy < 0)
-			this.dy -= BallDefaults.SPEED_UP ; 
+		var self = this ; 
+		if(self.dy < 0)
+			self.dy -= BallDefaults.SPEED_UP ; 
 		else 
-			this.dy += BallDefaults.SPEED_UP ; 
+			self.dy += BallDefaults.SPEED_UP ; 
 	};
 	
 Ball.prototype.normalSpeed = function() {
-		if(this.dy < 0)
-			this.dy = -BallDefaults.SPEED ; 
+		var self = this ; 
+		if(self.dy < 0)
+			self.dy = -BallDefaults.SPEED ; 
 		else 
-			this.dy = BallDefaults.SPEED ; 
+			self.dy = BallDefaults.SPEED ; 
 	};
 	
 Ball.prototype.move = function() { 
-		this.x += this.dx;
-		this.y += this.dy;
+		var self = this ; 
+		self.x += self.dx;
+		self.y += self.dy;
 	};
 	
 Ball.prototype.draw = function() {
-		ctx.fillStyle = this.color;
-		circle(this.x, this.y, this.radius);
+		var self = this ; 
+		ctx.fillStyle = self.color;
+		circle(self.x, self.y, self.radius);
 	};
 	
 Ball.prototype.collideH = function() {
-		this.dx = -this.dx ;
+		var self = this ; 
+		self.dx = -self.dx ;
 	};
 
 Ball.prototype.collideV = function() {
-		this.dy = -this.dy ;
+		var self = this ; 
+		self.dy = -self.dy ;
 	};
 	
 Ball.prototype.passThrough = function() {
-		this.through = true ; 
+		var self = this ; 
+		self.through = true ; 
 	}; 
 
 var ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
@@ -68,171 +79,184 @@ function initBall() {
  * *****************************************************/
 
 var paddle = new function () {
-	this.x = PaddleDefaults.XPOS ; 
-	this.height = PaddleDefaults.HEIGHT ; 
-	this.width = PaddleDefaults.WIDTH ; 
-	this.color = PaddleDefaults.COLOR ; 
-	this.speed = PaddleDefaults.SPEED ; 
 	
-	this.draw = function() {
-		ctx.fillStyle = this.color;
-		image(imgres[0].res, 0, 0, this.x, HEIGHT-this.height, this.width, this.height); 
+	var self = this ; 
+	
+	self.x = PaddleDefaults.XPOS ; 
+	self.height = PaddleDefaults.HEIGHT ; 
+	self.width = PaddleDefaults.WIDTH ; 
+	self.color = PaddleDefaults.COLOR ; 
+	self.speed = PaddleDefaults.SPEED ; 
+	
+	self.draw = function() {
+		ctx.fillStyle = self.color;
+		image(imgres[0].res, 0, 0, self.x, HEIGHT-self.height, self.width, self.height); 
 	} ; 
 	
-	this.shorten = function() {
-		if(this.width > 25)
-			this.width -= 10 ;
+	self.shorten = function() {
+		if(self.width > 25)
+			self.width -= 10 ;
 	};
 	
-	this.elongate = function() {
-		if(this.width < 125)
-			this.width += 10 ;
+	self.elongate = function() {
+		if(self.width < 125)
+			self.width += 10 ;
 	};
 	
-	this.moveLeft = function() {
-		this.x -= this.speed ; 
+	self.moveLeft = function() {
+		self.x -= self.speed ; 
 	};
 	
-	this.moveRight = function() {
-		this.x += this.speed ;
+	self.moveRight = function() {
+		self.x += self.speed ;
 	};	
 }; 
 
 /*************************Gifts*******************************/
 
 function Gift(type, r, c) {
-	this.type = type ; 
-	this.points = 0 ; 
-	this.x = 0 ;
-	this.y = 0 ; 
-	this.active = false ; 
-	this.res = null ; 
+	
+	var self = this ; 
+	
+	self.type = type ; 
+	self.points = 0 ; 
+	self.x = 0 ;
+	self.y = 0 ; 
+	self.active = false ; 
+	self.res = null ; 
 	
 	switch(type) {
 		case 1 : 
-			this.points = 1000 ; 
-			this.res = imgres[8].res ; 
+			self.points = 1000 ; 
+			self.res = imgres[8].res ; 
 		break ;
 		case 2 :
-			this.res = imgres[9].res ; 
+			self.res = imgres[9].res ; 
 		break ;
 		case 3 :
-			this.res = imgres[10].res ; 
+			self.res = imgres[10].res ; 
 		break ;
 	}
 	
-	this.x = r*BrickDefaults.WIDTH + ((BrickDefaults.WIDTH - this.res.width)/2) ; 
-	this.y = (c+1)*BrickDefaults.TRUE_HEIGHT ; 
+	self.x = r*BrickDefaults.WIDTH + ((BrickDefaults.WIDTH - self.res.width)/2) ; 
+	self.y = (c+1)*BrickDefaults.TRUE_HEIGHT ; 
 	
-	this.activate = function() {
-		this.active = true ; 
+	self.activate = function() {
+		self.active = true ; 
 	}; 
 	
-	this.deactivate = function() {
-		this.active = false ; 
+	self.deactivate = function() {
+		self.active = false ; 
 	}; 
 }
 
 Gift.prototype.speed = 2 ; 
 
 Gift.prototype.draw = function() {
-		if(this.active) 
-			ctx.drawImage(this.res, this.x, this.y); 
+		var self = this ; 
+		if(self.active) 
+			ctx.drawImage(self.res, self.x, self.y); 
 	};
 	
 Gift.prototype.move = function() {
-		if(this.active)
-			this.y += this.speed ; 
+		var self = this ; 
+		if(self.active)
+			self.y += self.speed ; 
 	};
 	
 var gift ; 
 
 function initGifts() {
-	gift = new Gift(gifts[GAME_LEVEL].type, gifts[GAME_LEVEL].col, gifts[GAME_LEVEL].row); 
+	gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, gifts[DxBall.level].row); 
 }
 		
 /***************************** Bricks ***************************/
 
 function Brick(type) {
-	this.width = BrickDefaults.WIDTH ;
-	this.height = BrickDefaults.HEIGHT ;
-	this.padding = BrickDefaults.PADDING ; 
-	this.points = 100 ;
-	this.color = Colors.BLACK ;
-	this.speedup = false ; 
-	this.visible = true ; 
-	this.destructible = 1 ; 
-	this.destroyed = false ; 
-	this.paddleElongate = 0 ; 
-	this.type = type ; 
-	switch(this.type) {
+	
+	var self = this ; 
+	
+	self.width = BrickDefaults.WIDTH ;
+	self.height = BrickDefaults.HEIGHT ;
+	self.padding = BrickDefaults.PADDING ; 
+	self.points = 100 ;
+	self.color = Colors.BLACK ;
+	self.speedup = false ; 
+	self.visible = true ; 
+	self.destructible = 1 ; 
+	self.destroyed = false ; 
+	self.paddleElongate = 0 ; 
+	self.type = type ; 
+	switch(self.type) {
 		case 0 :
-			this.visible = false ;
+			self.visible = false ;
 		break ;
 		case 1 :
-			this.color = Colors.AQUA ;
-			this.speedup = true ;
+			self.color = Colors.AQUA ;
+			self.speedup = true ;
 		break ;
 		case 2 :
-			this.color = Colors.MAROON ;
-			this.destructible = 3 ;
+			self.color = Colors.MAROON ;
+			self.destructible = 3 ;
 		break ;
 		case 3 :
-			this.color = Colors.GOLD ;
-			this.points = 150 ;
+			self.color = Colors.GOLD ;
+			self.points = 150 ;
 		break ;
 		case 4 :
-			this.color = Colors.FORESTGREEN ;
-			this.paddleElongate = -1 ;
+			self.color = Colors.FORESTGREEN ;
+			self.paddleElongate = -1 ;
 		break ;
 		case 5 :
-			this.color = Colors.WHITE ;
-			this.paddleElongate = 1 ;
+			self.color = Colors.WHITE ;
+			self.paddleElongate = 1 ;
 		break ;
 		case 6 :
-			this.color = Colors.RED ;
-			this.destructible = 0 ;
-			this.points = -50 ;
+			self.color = Colors.RED ;
+			self.destructible = 0 ;
+			self.points = -50 ;
 		break ;
 	}
 } 
 
-Brick.prototype.draw = function(x, y) { 
-		if (this.visible) {
-			ctx.fillStyle = this.color ; 
-			rect((y * (this.width + this.padding)) + this.padding, (x * (this.
-				height + this.padding)) + this.padding, this.width, this.height);
+Brick.prototype.draw = function(x, y) {
+		var self = this ; 
+		if (self.visible) {
+			ctx.fillStyle = self.color ; 
+			rect((y * (self.width + self.padding)) + self.padding, (x * (self.
+				height + self.padding)) + self.padding, self.width, self.height);
 		}
 	};
 	
 Brick.prototype.destroy = function() {
-		this.destroyed = true ;
-		this.visible = false ; 
+		var self = this ; 
+		self.destroyed = true ;
+		self.visible = false ; 
 	}; 
 	
 Brick.prototype.hit = function() {
-		if(this.destructible > 1)
-			this.destructible-- ; 
-		else if(this.destructible == 1) {
-			this.destroyed = true ;
-			this.visible = false ; 
-			--totalBricks ; 
+		var self = this ; 
+		if(self.destructible > 1)
+			self.destructible-- ; 
+		else if(self.destructible == 1) {
+			self.destroyed = true ;
+			self.visible = false ; 
+			DxBall.reduceBrick() ; 
 		}
 	}; 
 
-var totalBricks = 0;
-
 function initBricks() {
     bricks = new Array(NROWS); 
-	totalBricks = 0 ; 
+	var totalBricks = 0 ; 
     for (i=0; i < NROWS; i++) {
         bricks[i] = new Array(NCOLS);
         for (j=0; j < NCOLS; j++) {
-            bricks[i][j] = new Brick(gamedata[GAME_LEVEL][i][j]); 
+            bricks[i][j] = new Brick(gamedata[DxBall.level][i][j]); 
 			if(bricks[i][j].visible == true && bricks[i][j].destructible != 0)
 				++totalBricks ; 
         }
     }
+    DxBall.setBricks(totalBricks); 
 }
 
 function drawbricks() {

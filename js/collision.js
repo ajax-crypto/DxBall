@@ -44,22 +44,22 @@ function handleBallBrick() {
 			}
 			
 			// If the brick has a gift associated, activate it 
-			if(gifts[GAME_LEVEL].row == row && gifts[GAME_LEVEL].col == col)
+			if(gifts[DxBall.level].row == row && gifts[DxBall.level].col == col)
 				gift.activate(); 
 			
 			// Add to points tally
-			points += bricks[row][col].points ;  
+			DxBall.addPoints(bricks[row][col].points) ;  
 		}
 	}
 }
 
 function handleGiftPaddle() {
-	if(gift.active && gift.y > (HEIGHT - paddle.height) && gift.x < 
+	if(gift.active && (gift.y + gift.res.height) > (HEIGHT - paddle.height) && gift.x < 
 	(paddle.x + paddle.width) && gift.x > paddle.x) {
 		gift.deactivate() ; 
 		switch(gift.type) {
 			case 1 : 
-				points += gift.points ; 
+				DxBall.addPoints(gift.points) ; 
 			break ;
 			case 2 : 
 				ball.anotherLife() ;
