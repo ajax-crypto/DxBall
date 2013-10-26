@@ -14,15 +14,15 @@ var pausedGameSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				var option = ~~(imgres[7].height/3) ; 
+				var option = ~~(ImageResource[7].height/3) ; 
 				
-				if(checkBounds(mouse, imgres[7].x, imgres[7].y, 
-					imgres[7].x + imgres[7].width, imgres[7].y + 
-					imgres[7].height)) {
-					if(mouse.y < (option + imgres[7].y)) 
+				if(checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
+					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
+					ImageResource[7].height)) {
+					if(mouse.y < (option + ImageResource[7].y)) 
 						DxBall.restart(); 
-					else if(mouse.y > (option + imgres[7].y) && 
-						mouse.y < (2*option + imgres[7].y)) 
+					else if(mouse.y > (option + ImageResource[7].y) && 
+						mouse.y < (2*option + ImageResource[7].y)) 
 						DxBall.resume();  
 					else
 						DxBall.setState(GameStates.LEVEL_SELECT) ;  
@@ -34,9 +34,9 @@ var pausedGameSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, imgres[7].x, imgres[7].y, 
-					imgres[7].x + imgres[7].width, imgres[7].y + 
-					imgres[7].height)) 
+				if(checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
+					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
+					ImageResource[7].height)) 
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
 					DxBall.canvas.style.cursor = 'default' ;
@@ -118,8 +118,8 @@ var levelSelectSceneHandler = {
 				
 				for(i=0; i<6; ++i)
 					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
-						licondata[i].x + imgres[4].width, licondata[i].y 
-						+ imgres[4].height) && licondata[i].unlocked == true) {
+						licondata[i].x + ImageResource[4].width, licondata[i].y 
+						+ ImageResource[4].height) && licondata[i].unlocked == true) {
 						Graphics.clear();
 						DxBall.setState(GameStates.RUNNING);
 						DxBall.setLevel(i);
@@ -135,8 +135,8 @@ var levelSelectSceneHandler = {
 				
 				for(i=0; i<=DxBall.level; ++i)
 					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
-						licondata[i].x + imgres[4].width, licondata[i].y 
-						+ imgres[4].height)) 
+						licondata[i].x + ImageResource[4].width, licondata[i].y 
+						+ ImageResource[4].height)) 
 						DxBall.canvas.style.cursor = 'pointer' ;
 					else
 						DxBall.canvas.style.cursor = 'default' ;
@@ -178,7 +178,7 @@ var levelCompleteSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, 204, HEIGHT-90, 435, 480))
+				if(checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480))
 					DxBall.canvas.style.cursor = 'pointer' ; 
 				else
 					DxBall.canvas.style.cursor = 'default' ; 

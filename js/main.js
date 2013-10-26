@@ -36,49 +36,47 @@ var DrawGameScenes = new function() {
 	self.gameRunningScene = function() {
 		DxBall.ctx.fillStyle = Colors.BLACK ;
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		ball.draw(); 
+		GameObjects.ball.draw(); 
 		paddle.draw(); 
-		drawbricks(); 
-		gift.draw(); 
+		GameObjects.drawbricks(); 
+		GameObjects.gift.draw(); 
 	};
 
 	self.gameOverScene = function() { 
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.RED); 
-		DxBall.ctx.fillStyle = Colors.GOLD ; 
-		DxBall.ctx.fillText('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2);
-		DxBall.ctx.fillText('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
-			DxBall.HEIGHT/2 + 20); 
+		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.GOLD);
+		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+			DxBall.HEIGHT/2 + 20, Colors.GOLD); 
 	};
 
 	self.levelCompleteScene = function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.FORESTGREEN); 
-		DxBall.ctx.fillStyle = Colors.WHITE ; 
-		DxBall.ctx.fillText('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.HEIGHT/2);
-		DxBall.ctx.fillText('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
-			DxBall.HEIGHT/2 + 20);
-		Graphics.image(imgres[6].res, imgres[6].x, imgres[6].y); 
+		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.WHITE);
+		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+			DxBall.HEIGHT/2 + 20, Colors.WHITE);
+		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
 
 	self.creditScene = function() {
-		Graphics.image(imgres[2].res, imgres[2].x, imgres[2].y); 
+		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
 	};
 
 	self.splashScreen = function() {
-		Graphics.image(imgres[1].res, imgres[1].x, imgres[1].y); 
+		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 
 	};
 
 	self.levelSelectScene = function() {
-		Graphics.image(imgres[3].res, imgres[3].x, imgres[3].y); 
+		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
 		for(i=0; i<6; ++i)
-			Graphics.image((licondata[i].unlocked == true ? imgres[5].res : imgres[4].res), 
+			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
 				licondata[i].x, licondata[i].y); 
 	};
 
 	self.gamePausedScene = function() {
 		Graphics.grayscale() ; 
-		Graphics.image(imgres[7].res, imgres[7].x, imgres[7].y); 
+		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
 	};
 	
 	self.drawScene = [];
@@ -164,9 +162,7 @@ var DxBall = new function() {
 	
 	self.start = function() {
 		clearTimeout(self.loop); 
-		initBricks(); 
-		initBall(); 
-		initGifts(); 
+		GameObjects.init();
 		self.playState = true ; 
 		gameLoop(); 
 	};

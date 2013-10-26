@@ -88,17 +88,6 @@ Ball.prototype.passThrough = function() {
 		self.through = true ; 
 	}; 
 
-var ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
-				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
-
-function initBall() {
-	ball.x = BallDefaults.X ;
-	ball.y = BallDefaults.Y ;
-	ball.dx = BallDefaults.DX ;
-	ball.dy = BallDefaults.DY ; 
-	ball.through = false ; 
-}
-
 /********************* Paddle **************************
  * Its a singleton !
  * *****************************************************/
@@ -114,10 +103,10 @@ var paddle = new function () {
 	self.speed = PaddleDefaults.SPEED ; 
 	
 	self.draw = function() {
-		//Graphics.altImage(imgres[0].res, 0, 0, self.x, DxBall.HEIGHT-self.height, 
+		//Graphics.altImage(ImageResource[0].res, 0, 0, self.x, DxBall.HEIGHT-self.height, 
 			//self.width, self.height); 
 			
-		Graphics.image(imgres[0].res, self.x, DxBall.HEIGHT-self.height);
+		Graphics.image(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height);
 	} ; 
 	
 	self.shorten = function() {
@@ -155,13 +144,13 @@ function Gift(type, r, c) {
 	switch(type) {
 		case 1 : 
 			self.points = 1000 ; 
-			self.res = imgres[8].res ; 
+			self.res = ImageResource[8].res ; 
 		break ;
 		case 2 :
-			self.res = imgres[9].res ; 
+			self.res = ImageResource[9].res ; 
 		break ;
 		case 3 :
-			self.res = imgres[10].res ; 
+			self.res = ImageResource[10].res ; 
 		break ;
 	}
 	
@@ -190,12 +179,6 @@ Gift.prototype.move = function() {
 		if(self.active)
 			self.y += self.speed ; 
 	};
-	
-var gift ; 
-
-function initGifts() {
-	gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, gifts[DxBall.level].row); 
-}
 		
 /***************************** Bricks ***************************/
 
@@ -272,22 +255,52 @@ Brick.prototype.hit = function() {
 		}
 	}; 
 
-function initBricks() {
-    bricks = new Array(NROWS); 
-	var totalBricks = 0 ; 
-    for (i=0; i < NROWS; i++) {
-        bricks[i] = new Array(NCOLS);
-        for (j=0; j < NCOLS; j++) {
-            bricks[i][j] = new Brick(gamedata[DxBall.level][i][j]); 
-			if(bricks[i][j].visible == true && bricks[i][j].destructible != 0)
-				++totalBricks ; 
-        }
-    }
-    DxBall.setBricks(totalBricks); 
-}
+/**********************Game Objects*********************/
 
-function drawbricks() {
-	for (i=0; i < NROWS; i++) 
-		for (j=0; j < NCOLS; j++) 
-			bricks[i][j].draw(i, j); 
-}
+var GameObjects = new function() {
+	
+	var self = this ;
+	
+	self.bricks = new Array(NROWS) ;
+	self.ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
+				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
+	self.gift = null ; 
+
+	self.initGifts = function() {
+		self.gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, 
+			gifts[DxBall.level].row); 
+	};
+
+	self.initBall = function() {
+		self.ball.x = BallDefaults.X ;
+		self.ball.y = BallDefaults.Y ;
+		self.ball.dx = BallDefaults.DX ;
+		self.ball.dy = BallDefaults.DY ; 
+		self.ball.through = false ; 
+	};
+	
+	self.initBricks = function() {
+		var totalBricks = 0 ; 
+		for (i=0; i < NROWS; i++) {
+			self.bricks[i] = new Array(NCOLS);
+			for (j=0; j < NCOLS; j++) {
+				self.bricks[i][j] = new Brick(gamedata[DxBall.level][i][j]); 
+				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
+					++totalBricks ; 
+			}
+		}
+		DxBall.setBricks(totalBricks); 
+	};
+	
+	self.drawbricks = function() {
+		for (i=0; i < NROWS; i++) 
+			for (j=0; j < NCOLS; j++) 
+				self.bricks[i][j].draw(i, j); 
+	};
+	
+	self.init = function() {
+		self.initBall();
+		self.initBricks();
+		self.initGifts();
+	};
+};

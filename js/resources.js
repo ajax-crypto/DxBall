@@ -34,31 +34,31 @@ function Resource(res) {
 	self.width = res.width ;
 }
 
-var imgres = [] ; 
+var ImageResource = [] ; 
 
 var licondata = new Array(6);
 
 function givePositions() {
-	var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*imgres[4].width))/4); 
-	var ICON_PADDING_HEIGHT = ~~((DxBall.HEIGHT-(2*imgres[4].height))/3); 
+	var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*ImageResource[4].width))/4); 
+	var ICON_PADDING_HEIGHT = ~~((DxBall.HEIGHT-(2*ImageResource[4].height))/3); 
 	for(i=0; i<6; ++i)
 	{
 		if(i < 3)
-			licondata[i] = { x: (i*imgres[4].width) + (i+1)*ICON_PADDING_WIDTH,
+			licondata[i] = { x: (i*ImageResource[4].width) + (i+1)*ICON_PADDING_WIDTH,
 						          y: ICON_PADDING_HEIGHT, 
 						          unlocked: false
 					            }; 
 		else
-			licondata[i] = { x: ((i-3)*imgres[4].width) + (i-2)*ICON_PADDING_WIDTH,
-		                          y: ICON_PADDING_HEIGHT*2 + imgres[4].height,
+			licondata[i] = { x: ((i-3)*ImageResource[4].width) + (i-2)*ICON_PADDING_WIDTH,
+		                          y: ICON_PADDING_HEIGHT*2 + ImageResource[4].height,
 						          unlocked: false
 					            };
 	}
 	licondata[0].unlocked = true ; // Start with first level
-	imgres[6].x = ~~((DxBall.WIDTH - imgres[6].width)/2);
-	imgres[6].y = ~~(DxBall.HEIGHT - imgres[6].height);
-	imgres[7].x = ~~((DxBall.WIDTH - imgres[7].width)/2);
-	imgres[7].y = ~~((DxBall.HEIGHT/2)-(imgres[7].height/2));
+	ImageResource[6].x = ~~((DxBall.WIDTH - ImageResource[6].width)/2);
+	ImageResource[6].y = ~~(DxBall.HEIGHT - ImageResource[6].height);
+	ImageResource[7].x = ~~((DxBall.WIDTH - ImageResource[7].width)/2);
+	ImageResource[7].y = ~~((DxBall.HEIGHT/2)-(ImageResource[7].height/2));
 }
 
 function preloadimages(arr){
@@ -94,7 +94,7 @@ function preloadimages(arr){
 function loadResources(start) {
 	preloadimages(resources).done(function(images){
 		for(i=0; i<images.length; ++i)
-			imgres[i] = new Resource(images[i]);
+			ImageResource[i] = new Resource(images[i]);
 		givePositions(); 
 		if(start)
 			DxBall.start(); // Start game only if resources are loaded

@@ -45,6 +45,11 @@
 	self.altImage = function(img, w, h, x, y, xpos, ypos) {
 		DxBall.ctx.drawImage(img, w, h, x, y, xpos, ypos);
 	};
+	
+	self.text = function(str, x, y, color) {
+		DxBall.ctx.fillStyle = color ;
+		DxBall.ctx.fillText(str, x, y);
+	};
 
 /* Note : If you run into the error : "Tainted canvas/DOM exception 18", 
  * then run chromium/chrome with the option --allow-file-access-from-files

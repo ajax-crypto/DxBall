@@ -12,60 +12,60 @@ function handlePaddle() {
 function handleBallBrick() {
 	
 	// Check if ball is within the region where bricks exist
-	if (ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
+	if (GameObjects.ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
 		
 		// Calculate row and col of the brick hit
-		var row = ~~(ball.y/BrickDefaults.TRUE_HEIGHT);
-		var col = ~~(ball.x/BrickDefaults.TRUE_WIDTH);
-		if(row >= 0 && col >= 0 && bricks[row][col].visible) {
-			bricks[row][col].hit() ;
-			if(!ball.through) { 	
+		var row = ~~(GameObjects.ball.y/BrickDefaults.TRUE_HEIGHT);
+		var col = ~~(GameObjects.ball.x/BrickDefaults.TRUE_WIDTH);
+		if(row >= 0 && col >= 0 && GameObjects.bricks[row][col].visible) {
+			GameObjects.bricks[row][col].hit() ;
+			if(!GameObjects.ball.through) { 	
 				//if(ball.x > (row)*BrickDefaults.HEIGHT && ball.x < (row+1)*BrickDefaults.HEIGHT)
 					//ball.collideH() ; 
-				ball.collideV() ;	
+				GameObjects.ball.collideV() ;	
 				
 				// Change game object properties based on brick type the ball hit
-				switch(bricks[row][col].type) {
+				switch(GameObjects.bricks[row][col].type) {
 					case 1 : 
-						ball.speedup() ;
+						GameObjects.ball.speedup() ;
 					break ;
 					case 2 :
-						ball.normalSpeed(); 
+						GameObjects.ball.normalSpeed(); 
 					break ;
 					case 4 :
 						paddle.shorten();
-						ball.normalSpeed(); 
+						GameObjects.ball.normalSpeed(); 
 					break ;
 					case 5 :
 						paddle.elongate();
-						ball.normalSpeed(); 
+						GameObjects.ball.normalSpeed(); 
 					break ;
 				}
 			}
 			
 			// If the brick has a gift associated, activate it 
 			if(gifts[DxBall.level].row == row && gifts[DxBall.level].col == col)
-				gift.activate(); 
+				GameObjects.gift.activate(); 
 			
 			// Add to points tally
-			DxBall.addPoints(bricks[row][col].points) ;  
+			DxBall.addPoints(GameObjects.bricks[row][col].points) ;  
 		}
 	}
 }
 
 function handleGiftPaddle() {
-	if(gift.active && (gift.y + gift.res.height) > (DxBall.HEIGHT - paddle.height) && gift.x < 
-	(paddle.x + paddle.width) && gift.x > paddle.x) {
-		gift.deactivate() ; 
-		switch(gift.type) {
+	if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) > (DxBall.HEIGHT - paddle.height) && GameObjects.gift.x < 
+	(paddle.x + paddle.width) && GameObjects.gift.x > paddle.x) {
+		GameObjects.gift.deactivate() ; 
+		switch(GameObjects.gift.type) {
 			case 1 : 
-				DxBall.addPoints(gift.points) ; 
+				DxBall.addPoints(GameObjects.gift.points) ; 
 			break ;
 			case 2 : 
-				ball.anotherLife() ;
+				GameObjects.ball.anotherLife() ;
 			break ; 
 			case 3 :
-				ball.passThrough() ;
+				GameObjects.ball.passThrough() ;
 			break ; 
 		}
 	}
@@ -73,28 +73,28 @@ function handleGiftPaddle() {
 
 // Handles ball paddle collision 
 function handleBallPaddle() {
-	var ballright = ball.x + ball.dx + ball.radius ; 
-	var ballleft  = ball.x + ball.dx - ball.radius ; 
-	var bally     = ball.y + ball.dy ;
+	var ballright = GameObjects.ball.x + GameObjects.ball.dx + GameObjects.ball.radius ; 
+	var ballleft  = GameObjects.ball.x + GameObjects.ball.dx - GameObjects.ball.radius ; 
+	var bally     = GameObjects.ball.y + GameObjects.ball.dy ;
 	
     if(ballright > DxBall.WIDTH || ballleft < 0)
-		ball.collideH() ; 
+		GameObjects.ball.collideH() ; 
 	if(bally < 0)
-		ball.collideV();
+		GameObjects.ball.collideV();
 		
 	else if(bally > DxBall.HEIGHT - paddle.height) {
-		if(ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+		if(GameObjects.ball.x > paddle.x && GameObjects.ball.x < paddle.x + paddle.width) {
 		
 			//move the ball according to where it hit the paddle
-			ball.dx =  8*((ball.x-(paddle.x + paddle.width/2))/paddle.width);
-			ball.collideV();
+			GameObjects.ball.dx =  8*((GameObjects.ball.x-(paddle.x + paddle.width/2))/paddle.width);
+			GameObjects.ball.collideV();
 		}
 		else if(bally > DxBall.HEIGHT) {
 			
 			// If player has extra life, the ball bounces off
-			if(ball.life > 0) {
-				ball.collideV(); 
-				ball.usedOneLife();
+			if(GameObjects.ball.life > 0) {
+				GameObjects.ball.collideV(); 
+				GameObjects.ball.usedOneLife();
 			}
 			else
 				return false ; // ball falls here 
@@ -109,7 +109,7 @@ function handleCollisions() {
 	handleBallBrick();
 	handleGiftPaddle(); 
 	var temp = handleBallPaddle(); 
-	ball.move(); 
-	gift.move();
+	GameObjects.ball.move(); 
+	GameObjects.gift.move();
 	return temp ; 
 }
