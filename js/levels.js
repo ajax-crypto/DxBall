@@ -1,9 +1,4 @@
-﻿var NROWS = 8;
-var NCOLS = 8;	
-
-var MAX_LEVELS = 6 ;
-
-var gamedata = new Array(MAX_LEVELS);
+﻿var gamedata = new Array(DxBall.MAX_LEVELS);
 
 var gifts = [ { type : 3, row : 7, col : 7 },
 			  { type : 1, row : 3, col : 4 },

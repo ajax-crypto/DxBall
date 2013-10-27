@@ -1,18 +1,21 @@
 ﻿
-var BrickDefaults = Object.freeze({ WIDTH : ~~(640/8), 
-				    HEIGHT : 25,
+var BrickDefaults = Object.freeze({ 
+					WIDTH : ~~((DxBall.WIDTH-1)/DxBall.NCOLS), 
+				    HEIGHT : ~~((DxBall.HEIGHT-1)/(2*DxBall.NROWS)),
 				    PADDING : 1,
-				    TRUE_HEIGHT : 26,
-				    TRUE_WIDTH : 81
+				    TRUE_HEIGHT : ~~(DxBall.HEIGHT/(2*DxBall.NROWS)),
+				    TRUE_WIDTH : ~~(DxBall.WIDTH/8)
 				 }); 
-								 
-var PaddleDefaults = Object.freeze({ WIDTH : 75,
+
+var PaddleDefaults = Object.freeze({ 
+					 WIDTH : ~~(DxBall.WIDTH/8),
 				     HEIGHT : 10,
 				     SPEED : 7,
 				     XPOS : DxBall.WIDTH/2 
 				   }); 
 								  
-var BallDefaults = Object.freeze({ RADIUS : 6,
+var BallDefaults = Object.freeze({ 
+				   RADIUS : 6,
 				   COLOR : Colors.WHITE,
 				   SPEED : 4, 
 				   DX : 1.5,
@@ -88,9 +91,7 @@ Ball.prototype.passThrough = function() {
 		self.through = true ; 
 	}; 
 
-/********************* Paddle **************************
- * Its a singleton !
- * *****************************************************/
+/********************* Paddle **************************/
 
 function Paddle(){
 	
@@ -263,7 +264,7 @@ var GameObjects = new function() {
 	
 	var self = this ;
 	
-	self.bricks = new Array(NROWS) ;
+	self.bricks = new Array(DxBall.NROWS) ;
 	self.ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
 	self.gift = null ; 
@@ -284,9 +285,9 @@ var GameObjects = new function() {
 	
 	self.initBricks = function() {
 		var totalBricks = 0 ; 
-		for (i=0; i < NROWS; i++) {
-			self.bricks[i] = new Array(NCOLS);
-			for (j=0; j < NCOLS; j++) {
+		for (i=0; i < DxBall.NROWS; i++) {
+			self.bricks[i] = new Array(DxBall.NCOLS);
+			for (j=0; j < DxBall.NCOLS; j++) {
 				self.bricks[i][j] = new Brick(gamedata[DxBall.level][i][j]); 
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
@@ -296,8 +297,8 @@ var GameObjects = new function() {
 	};
 	
 	self.drawbricks = function() {
-		for (i=0; i < NROWS; i++) 
-			for (j=0; j < NCOLS; j++) 
+		for (i=0; i < DxBall.NROWS; i++) 
+			for (j=0; j < DxBall.NCOLS; j++) 
 				self.bricks[i][j].draw(i, j); 
 	};
 	

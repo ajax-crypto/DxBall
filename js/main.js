@@ -71,8 +71,12 @@ var DxBall = new function() {
 	self.ctx = self.canvas.getContext('2d');
 	self.ctx.font = '20px Verdana' ;
 	self.ctx.textAlign = 'center' ;
-	self.WIDTH = 640;
-	self.HEIGHT = 480;
+	
+	self.WIDTH = self.canvas.width;
+	self.HEIGHT = self.canvas.height;
+	self.NROWS = 8;
+	self.NCOLS = 8;	
+	self.MAX_LEVELS = 6 ;
 	
 	self.state = GameStates.SPLASH_SCREEN ; 
 	self.pstate = GameStates.INVALID ; 
@@ -154,7 +158,7 @@ function DxBallGameLoop() {
 	DxBall.pstate = DxBall.state ; 
 	if(DxBall.isRunning()) {
 		DrawGameScenes.draw(DxBall.state) ;
-		DxBall.playState = handleCollisions(); 
+		DxBall.playState = CollisionSystem.handleCollisions(); 
 		if(!DxBall.playState) 
 			DxBall.state = GameStates.GAME_OVER ;
 		if(DxBall.isComplete()) {
