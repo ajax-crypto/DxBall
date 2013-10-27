@@ -92,7 +92,7 @@ Ball.prototype.passThrough = function() {
  * Its a singleton !
  * *****************************************************/
 
-var paddle = new function () {
+function Paddle(){
 	
 	var self = this ; 
 	
@@ -101,32 +101,34 @@ var paddle = new function () {
 	self.width = PaddleDefaults.WIDTH ; 
 	self.color = PaddleDefaults.COLOR ; 
 	self.speed = PaddleDefaults.SPEED ; 
-	
-	self.draw = function() {
-		//Graphics.altImage(ImageResource[0].res, 0, 0, self.x, DxBall.HEIGHT-self.height, 
-			//self.width, self.height); 
-			
+}
+
+Paddle.prototype.draw = function() {
+		var self = this ;
 		Graphics.image(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height);
 	} ; 
 	
-	self.shorten = function() {
+Paddle.prototype.shorten = function() {
+		var self = this ;
 		if(self.width > 25)
 			self.width -= 10 ;
 	};
 	
-	self.elongate = function() {
+Paddle.prototype.elongate = function() {
+		var self = this ;
 		if(self.width < 125)
 			self.width += 10 ;
 	};
 	
-	self.moveLeft = function() {
+Paddle.prototype.moveLeft = function() {
+		var self = this ;
 		self.x -= self.speed ; 
 	};
 	
-	self.moveRight = function() {
+Paddle.prototype.moveRight = function() {
+		var self = this ;
 		self.x += self.speed ;
 	};	
-}; 
 
 /*************************Gifts*******************************/
 
@@ -265,6 +267,7 @@ var GameObjects = new function() {
 	self.ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
 	self.gift = null ; 
+	self.paddle = new Paddle() ;
 
 	self.initGifts = function() {
 		self.gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, 
@@ -303,4 +306,11 @@ var GameObjects = new function() {
 		self.initBricks();
 		self.initGifts();
 	};
+	
+	self.draw = function() {
+		self.ball.draw(); 
+		self.paddle.draw(); 
+		self.drawbricks(); 
+		self.gift.draw(); 
+	}
 };

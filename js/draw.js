@@ -1,4 +1,25 @@
-﻿var Graphics = new function() {
+﻿
+var Colors = Object.freeze({ WHITE : "#FFFFFF",
+			     BLACK : "#000000",
+			     RED : "#FF0000", 
+			     ROYALBLUE : "#4169E1",
+			     PURPLE : "#800080",
+			     ORANGERED : "#FF4500",
+			     NAVYBLUE : "#000080",
+			     MAROON : "#800000",
+			     FORESTGREEN : "#228B22",
+			     DODGERBLUE : "#1E90FF",
+			     DARKGREEN : "#006400",
+			     CRIMSON : "#DC143C",
+			     SEAGREEN : "#2E8B57",
+			     TEAL : "#008080",
+			     TORQUIOSE : "#40E0D0",
+			     MAGENTA : "#FF00FF",
+			     AQUA : "#00FFFF",
+			     GOLD : "#FFD700"
+			  }); 
+
+var Graphics = new function() {
 	
 	var self = this ; 
 	

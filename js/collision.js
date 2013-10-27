@@ -1,10 +1,10 @@
 ﻿// Handles paddle collision with canvas walls
 function handlePaddle() {
-	if(rightDown && (paddle.x < canvasMaxX)) {
-		paddle.moveRight();
+	if(EventUtilities.rightDown && (GameObjects.paddle.x < Graphics.canvasMaxX)) {
+		GameObjects.paddle.moveRight();
 	}
-	else if(leftDown && (paddle.x > canvasMinX)) {
-		paddle.moveLeft();
+	else if(EventUtilities.leftDown && (GameObjects.paddle.x > Graphics.canvasMinX)) {
+		GameObjects.paddle.moveLeft();
 	}
 }
 
@@ -12,7 +12,7 @@ function handlePaddle() {
 function handleBallBrick() {
 	
 	// Check if ball is within the region where bricks exist
-	if (GameObjects.ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
+	if(GameObjects.ball.y < NROWS*BrickDefaults.TRUE_HEIGHT) {
 		
 		// Calculate row and col of the brick hit
 		var row = ~~(GameObjects.ball.y/BrickDefaults.TRUE_HEIGHT);
@@ -33,11 +33,11 @@ function handleBallBrick() {
 						GameObjects.ball.normalSpeed(); 
 					break ;
 					case 4 :
-						paddle.shorten();
+						GameObjects.paddle.shorten();
 						GameObjects.ball.normalSpeed(); 
 					break ;
 					case 5 :
-						paddle.elongate();
+						GameObjects.paddle.elongate();
 						GameObjects.ball.normalSpeed(); 
 					break ;
 				}
@@ -54,8 +54,10 @@ function handleBallBrick() {
 }
 
 function handleGiftPaddle() {
-	if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) > (DxBall.HEIGHT - paddle.height) && GameObjects.gift.x < 
-	(paddle.x + paddle.width) && GameObjects.gift.x > paddle.x) {
+	if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) 
+		> (DxBall.HEIGHT - GameObjects.paddle.height) && GameObjects.gift.x < 
+		(GameObjects.paddle.x + GameObjects.paddle.width) && GameObjects.gift.x > 
+		GameObjects.paddle.x) {
 		GameObjects.gift.deactivate() ; 
 		switch(GameObjects.gift.type) {
 			case 1 : 
@@ -82,11 +84,13 @@ function handleBallPaddle() {
 	if(bally < 0)
 		GameObjects.ball.collideV();
 		
-	else if(bally > DxBall.HEIGHT - paddle.height) {
-		if(GameObjects.ball.x > paddle.x && GameObjects.ball.x < paddle.x + paddle.width) {
+	else if(bally > DxBall.HEIGHT - GameObjects.paddle.height) {
+		if(GameObjects.ball.x > GameObjects.paddle.x && GameObjects.ball.x < 
+			GameObjects.paddle.x + GameObjects.paddle.width) {
 		
 			//move the ball according to where it hit the paddle
-			GameObjects.ball.dx =  8*((GameObjects.ball.x-(paddle.x + paddle.width/2))/paddle.width);
+			GameObjects.ball.dx =  8*((GameObjects.ball.x-(GameObjects.paddle.x + 
+				GameObjects.paddle.width/2))/GameObjects.paddle.width);
 			GameObjects.ball.collideV();
 		}
 		else if(bally > DxBall.HEIGHT) {

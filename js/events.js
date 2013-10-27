@@ -1,9 +1,12 @@
 ﻿
-var rightDown = false, leftDown = false ;
+var EventUtilities = {
+	rightDown : false, 
+	leftDown : false,
 
-function checkBounds(pos, x1, y1, x2, y2) {
-	return (pos.x < x2 && pos.x > x1 && pos.y < y2 && pos.y > y1); 
-}
+	checkBounds : function(pos, x1, y1, x2, y2) {
+		return (pos.x < x2 && pos.x > x1 && pos.y < y2 && pos.y > y1); 
+	}
+};
 
 var pausedGameSceneHandler = {
 	handleEvent : function(evt) {
@@ -16,7 +19,7 @@ var pausedGameSceneHandler = {
 				
 				var option = ~~(ImageResource[7].height/3) ; 
 				
-				if(checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
+				if(EventUtilities.checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
 					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
 					ImageResource[7].height)) {
 					if(mouse.y < (option + ImageResource[7].y)) 
@@ -34,7 +37,7 @@ var pausedGameSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
+				if(EventUtilities.checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
 					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
 					ImageResource[7].height)) 
 					DxBall.canvas.style.cursor = 'pointer' ;
@@ -50,22 +53,24 @@ var runningGameSceneHandler = {
 		switch(evt.type) {
 			case 'keydown' : 
 				if(evt.keyCode == 39) 
-					rightDown = true;
+					EventUtilities.rightDown = true;
 				else if(evt.keyCode == 37) 
-					leftDown = true;
+					EventUtilities.leftDown = true;
 			break ;
 				 
 			case 'keyup' : 
 				if(evt.keyCode == 39) 
-					rightDown = false;
+					EventUtilities.rightDown = false;
 				else if(evt.keyCode == 37) 
-					leftDown = false;
+					EventUtilities.leftDown = false;
 			break ;
 				
 			case 'mousemove' : 
 				if(evt.pageX > Graphics.canvasMinX && evt.pageX < Graphics.canvasMaxX) {
-					paddle.x = Math.max(evt.pageX - Graphics.canvasMinX - (paddle.width/2), 0);
-					paddle.x = Math.min(DxBall.WIDTH - paddle.width, paddle.x);
+					GameObjects.paddle.x = Math.max(evt.pageX - Graphics.canvasMinX - 
+						(GameObjects.paddle.width/2), 0);
+					GameObjects.paddle.x = Math.min(DxBall.WIDTH - GameObjects.paddle.width, 
+						GameObjects.paddle.x);
 			    }
 			break ;
 			
@@ -93,7 +98,7 @@ var splashScreenHandler = {
 				 * go to level selection screen, else go to credit scene
 				 */
 				Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-				if(checkBounds(mouse, 250, 417, 402, 480))  
+				if(EventUtilities.checkBounds(mouse, 250, 417, 402, 480))  
 					DxBall.setState(GameStates.CREDIT_SCENE) ; 
 				else 
 					DxBall.setState(GameStates.LEVEL_SELECT) ;
@@ -117,7 +122,7 @@ var levelSelectSceneHandler = {
 				}; 
 				
 				for(i=0; i<6; ++i)
-					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
+					if(EventUtilities.checkBounds(mouse, licondata[i].x, licondata[i].y, 
 						licondata[i].x + ImageResource[4].width, licondata[i].y 
 						+ ImageResource[4].height) && licondata[i].unlocked == true) {
 						Graphics.clear();
@@ -134,7 +139,7 @@ var levelSelectSceneHandler = {
 				}; 
 				
 				for(i=0; i<=DxBall.level; ++i)
-					if(checkBounds(mouse, licondata[i].x, licondata[i].y, 
+					if(EventUtilities.checkBounds(mouse, licondata[i].x, licondata[i].y, 
 						licondata[i].x + ImageResource[4].width, licondata[i].y 
 						+ ImageResource[4].height)) 
 						DxBall.canvas.style.cursor = 'pointer' ;
@@ -167,7 +172,7 @@ var levelCompleteSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480)) {
+				if(EventUtilities.checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480)) {
 					Graphics.clear(); 
 					DxBall.setState(GameStates.LEVEL_SELECT) ; 
 				}
@@ -178,7 +183,7 @@ var levelCompleteSceneHandler = {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480))
+				if(EventUtilities.checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480))
 					DxBall.canvas.style.cursor = 'pointer' ; 
 				else
 					DxBall.canvas.style.cursor = 'default' ; 

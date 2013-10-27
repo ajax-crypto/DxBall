@@ -9,48 +9,35 @@
 				 CREDIT_SCENE : 7
 			 });
  
-var Colors = Object.freeze({ WHITE : "#FFFFFF",
-			     BLACK : "#000000",
-			     RED : "#FF0000", 
-			     ROYALBLUE : "#4169E1",
-			     PURPLE : "#800080",
-			     ORANGERED : "#FF4500",
-			     NAVYBLUE : "#000080",
-			     MAROON : "#800000",
-			     FORESTGREEN : "#228B22",
-			     DODGERBLUE : "#1E90FF",
-			     DARKGREEN : "#006400",
-			     CRIMSON : "#DC143C",
-			     SEAGREEN : "#2E8B57",
-			     TEAL : "#008080",
-			     TORQUIOSE : "#40E0D0",
-			     MAGENTA : "#FF00FF",
-			     AQUA : "#00FFFF",
-			     GOLD : "#FFD700"
-			  }); 
-				 
 var DrawGameScenes = new function() {
 	
 	var self = this ; 
 	
-	self.gameRunningScene = function() {
+	self.drawScene = [];
+	
+	self.drawScene[GameStates.SPLASH_SCREEN] = function() {
+		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 
+	};
+	
+	self.drawScene[GameStates.LEVEL_SELECT] = function() {
+		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
+		for(i=0; i<6; ++i)
+			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
+				licondata[i].x, licondata[i].y); 
+	};
+	
+	self.drawScene[GameStates.RUNNING] = function() {
 		DxBall.ctx.fillStyle = Colors.BLACK ;
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		GameObjects.ball.draw(); 
-		paddle.draw(); 
-		GameObjects.drawbricks(); 
-		GameObjects.gift.draw(); 
+		GameObjects.draw(); 
 	};
-
-	self.gameOverScene = function() { 
-		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.RED); 
-		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.GOLD);
-		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
-			DxBall.HEIGHT/2 + 20, Colors.GOLD); 
+	
+	self.drawScene[GameStates.PAUSED] = function() {
+		Graphics.grayscale() ; 
+		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
 	};
-
-	self.levelCompleteScene = function() {
+	
+	self.drawScene[GameStates.LEVEL_COMPLETE] = function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.FORESTGREEN); 
 		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.WHITE);
@@ -58,35 +45,18 @@ var DrawGameScenes = new function() {
 			DxBall.HEIGHT/2 + 20, Colors.WHITE);
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
-
-	self.creditScene = function() {
-		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
-	};
-
-	self.splashScreen = function() {
-		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 
-	};
-
-	self.levelSelectScene = function() {
-		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
-		for(i=0; i<6; ++i)
-			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
-				licondata[i].x, licondata[i].y); 
-	};
-
-	self.gamePausedScene = function() {
-		Graphics.grayscale() ; 
-		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
-	};
 	
-	self.drawScene = [];
-	self.drawScene[GameStates.SPLASH_SCREEN] = self.splashScreen ; 
-	self.drawScene[GameStates.LEVEL_SELECT] = self.levelSelectScene ; 
-	self.drawScene[GameStates.RUNNING] = self.gameRunningScene ;
-	self.drawScene[GameStates.PAUSED] = self.gamePausedScene ;
-	self.drawScene[GameStates.LEVEL_COMPLETE] = self.levelCompleteScene ;
-	self.drawScene[GameStates.GAME_OVER] = self.gameOverScene ;
-	self.drawScene[GameStates.CREDIT_SCENE] = self.creditScene ; 
+	self.drawScene[GameStates.GAME_OVER] = function() { 
+		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
+		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.RED); 
+		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.GOLD);
+		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+			DxBall.HEIGHT/2 + 20, Colors.GOLD); 
+	};
+
+	self.drawScene[GameStates.CREDIT_SCENE] = function() {
+		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
+	}; 
 	
 	self.draw = function(state) {
 		self.drawScene[state](); 
@@ -164,7 +134,7 @@ var DxBall = new function() {
 		clearTimeout(self.loop); 
 		GameObjects.init();
 		self.playState = true ; 
-		gameLoop(); 
+		DxBallGameLoop(); 
 	};
 
 	self.resume = function() {
@@ -176,7 +146,7 @@ var DxBall = new function() {
 	}
 };
 
-function gameLoop() {
+function DxBallGameLoop() {
 	if(DxBall.pstate != DxBall.state) {
 		handleGameEvents(DxBall.state, DxBall.pstate); 
 		DrawGameScenes.draw(DxBall.state) ;
@@ -193,5 +163,5 @@ function gameLoop() {
 			licondata[DxBall.level].unlocked = true ; 
 		} 
 	}
-	DxBall.loop = setTimeout(gameLoop, 1000/DxBall.FPS); 
+	DxBall.loop = setTimeout(DxBallGameLoop, 1000/DxBall.FPS); 
 }
