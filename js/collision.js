@@ -40,12 +40,12 @@
 	};
 
 	self.handleGiftPaddle = function() {
-		if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) 
-			> (DxBall.HEIGHT - GameObjects.paddle.height) && GameObjects.gift.x < 
-			(GameObjects.paddle.x + GameObjects.paddle.width) && GameObjects.gift.x > 
-			GameObjects.paddle.x) {
+		if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) > 
+			(DxBall.HEIGHT - GameObjects.paddle.height)) {
 			GameObjects.gift.deactivate() ; 
-			GameObjects.distributeGift();
+			if(GameObjects.gift.x < (GameObjects.paddle.x + GameObjects.paddle.width) 
+			&& GameObjects.gift.x > GameObjects.paddle.x)
+				GameObjects.distributeGift();
 		}
 	};
 

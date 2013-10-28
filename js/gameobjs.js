@@ -273,6 +273,7 @@ var GameObjects = new function() {
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
 	self.gift = null ; 
 	self.paddle = new Paddle() ;
+	self.giftCollected  = false ; 
 
 	self.initGifts = function() {
 		self.gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, 
@@ -333,7 +334,9 @@ var GameObjects = new function() {
 		_this.helpers[2] = function() {
 			self.ball.normalSpeed();
 		};
-		_this.helpers[3] = function() {}; 
+		_this.helpers[3] = function() {
+			self.ball.normalSpeed(); 
+		}; 
 		_this.helpers[4] = function() {
 			self.paddle.shorten();
 			self.ball.normalSpeed(); 
@@ -342,7 +345,9 @@ var GameObjects = new function() {
 			self.paddle.elongate();
 			self.ball.normalSpeed(); 
 		};
-		_this.helpers[6] = function() {}; 
+		_this.helpers[6] = function() {
+			self.ball.normalSpeed(); 
+		}; 
 		
 		_this.morph = function(type) {
 			_this.helpers[type]();
@@ -351,6 +356,7 @@ var GameObjects = new function() {
 	
 	self.distributeGift = function() {
 		self.giftHelpers.distribute(self.gift.type);
+		self.giftCollected = true ; 
 	};
 	
 	self.morphObjects = function(row, col) {

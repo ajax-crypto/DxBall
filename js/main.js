@@ -20,43 +20,61 @@ var DrawGameScenes = new function() {
 	};
 	
 	self.drawScene[GameStates.LEVEL_SELECT] = function() {
+		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
 		for(i=0; i<6; ++i)
 			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
 				licondata[i].x, licondata[i].y); 
+		self.drawHUD();
 	};
 	
 	self.drawScene[GameStates.RUNNING] = function() {
 		DxBall.ctx.fillStyle = Colors.BLACK ;
-		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
+		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		GameObjects.draw(); 
+		self.drawHUDinGame();
 	};
 	
 	self.drawScene[GameStates.PAUSED] = function() {
 		Graphics.grayscale() ; 
 		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
+		self.drawHUDinGame();
 	};
 	
 	self.drawScene[GameStates.LEVEL_COMPLETE] = function() {
-		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.FORESTGREEN); 
-		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.WHITE);
+		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
+		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
+		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
 		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
-			DxBall.HEIGHT/2 + 20, Colors.WHITE);
+			DxBall.TOTAL_HEIGHT/2 + 20, Colors.WHITE);
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
 	
 	self.drawScene[GameStates.GAME_OVER] = function() { 
-		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.HEIGHT, Colors.RED); 
-		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.HEIGHT/2, Colors.GOLD);
-		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
-			DxBall.HEIGHT/2 + 20, Colors.GOLD); 
+		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
+		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.RED); 
+		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.GOLD);
+		Graphics.text('You have scored ' + DxBall.temp_points, DxBall.WIDTH/2, 
+			DxBall.TOTAL_HEIGHT/2 + 20, Colors.GOLD); 
 	};
 
 	self.drawScene[GameStates.CREDIT_SCENE] = function() {
 		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
-	}; 
+	};
+	
+	self.drawHUDinGame = function() {
+		if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
+			Graphics.text('Current Points : ' + DxBall.temp_points + ' | Level : ' + (DxBall.level+1)
+				+ ' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+		else
+			Graphics.text('Current Points : ' + DxBall.temp_points + ' | Level : ' + (DxBall.level+1)
+				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+	};
+	
+	self.drawHUD = function() {
+		Graphics.text('Total Points : ' + DxBall.points + ' | Level : ' + (DxBall.level+1)
+				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+	};
 	
 	self.draw = function(state) {
 		self.drawScene[state](); 
@@ -73,7 +91,8 @@ var DxBall = new function() {
 	self.ctx.textAlign = 'center' ;
 	
 	self.WIDTH = self.canvas.width;
-	self.HEIGHT = self.canvas.height;
+	self.HEIGHT = self.canvas.height-50;
+	self.TOTAL_HEIGHT = self.canvas.height;
 	self.NROWS = 8;
 	self.NCOLS = 8;	
 	self.MAX_LEVELS = 6 ;
@@ -86,6 +105,7 @@ var DxBall = new function() {
 	self.level = 0 ; 
 	self.bricks = 0 ; 
 	self.FPS = 60 ; 
+	self.temp_points = 0 ;
 	
 	self.setState = function(state) {
 		self.pstate = self.state ; 
@@ -93,7 +113,7 @@ var DxBall = new function() {
 	};
 	
 	self.addPoints = function(val) {
-		self.points += val ;
+		self.temp_points += val ;
 	};
 	
 	self.setBricks = function(val) {
@@ -105,7 +125,7 @@ var DxBall = new function() {
 	};
 	
 	self.resetPoints = function() {
-		self.points = 0 ;
+		self.temp_points = 0 ;
 	};
 	
 	self.reduceBrick = function() {
@@ -126,6 +146,8 @@ var DxBall = new function() {
 	
 	self.nextLevel = function() {
 		++self.level ;
+		self.points += self.temp_points ; 
+		self.temp_points = 0 ;
 	};
 
 	self.restart = function() {

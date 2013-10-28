@@ -56,7 +56,7 @@ function givePositions() {
 	}
 	licondata[0].unlocked = true ; // Start with first level
 	ImageResource[6].x = ~~((DxBall.WIDTH - ImageResource[6].width)/2);
-	ImageResource[6].y = ~~(DxBall.HEIGHT - ImageResource[6].height);
+	ImageResource[6].y = ~~(DxBall.TOTAL_HEIGHT - ImageResource[6].height);
 	ImageResource[7].x = ~~((DxBall.WIDTH - ImageResource[7].width)/2);
 	ImageResource[7].y = ~~((DxBall.HEIGHT/2)-(ImageResource[7].height/2));
 }
