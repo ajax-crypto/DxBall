@@ -55,8 +55,8 @@ var Graphics = new function() {
 	};
 
 	self.clear = function(w, h) {
-		DxBall.ctx.clearRect(0, 0, w, h);
-		this.rect(0, 0, w, h, Colors.BLACK);
+		//DxBall.ctx.clearRect(0, 0, w, h);
+		self.rect(0, 0, w, h, Colors.BLACK);
 	};
 
 	self.image = function(img, x, y) {

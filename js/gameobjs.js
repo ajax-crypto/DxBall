@@ -1,28 +1,28 @@
 ﻿
 var BrickDefaults = Object.freeze({ 
-					WIDTH : ~~((DxBall.WIDTH-1)/DxBall.NCOLS), 
-				    HEIGHT : ~~((DxBall.HEIGHT-1)/(2*DxBall.NROWS)),
-				    PADDING : 1,
-				    TRUE_HEIGHT : ~~(DxBall.HEIGHT/(2*DxBall.NROWS)),
-				    TRUE_WIDTH : ~~(DxBall.WIDTH/8)
+					WIDTH : ~~((DxBall.WIDTH-1)/DxBall.NCOLS) | 0, 
+				    HEIGHT : ~~((DxBall.HEIGHT-1)/(2*DxBall.NROWS)) | 0,
+				    PADDING : 1 | 0,
+				    TRUE_HEIGHT : ~~(DxBall.HEIGHT/(2*DxBall.NROWS)) | 0,
+				    TRUE_WIDTH : ~~(DxBall.WIDTH/8) | 0
 				 }); 
 
 var PaddleDefaults = Object.freeze({ 
-					 WIDTH : ~~(DxBall.WIDTH/8),
-				     HEIGHT : 10,
-				     SPEED : 7,
-				     XPOS : DxBall.WIDTH/2 
+					 WIDTH : ~~(DxBall.WIDTH/8) | 0,
+				     HEIGHT : 10 | 0,
+				     SPEED : 7 | 0,
+				     XPOS : DxBall.WIDTH/2 | 0 
 				   }); 
 								  
 var BallDefaults = Object.freeze({ 
-				   RADIUS : 6,
+				   RADIUS : 6 | 0,
 				   COLOR : Colors.WHITE,
-				   SPEED : 4, 
-				   DX : 2,
-				   DY : -4,
-				   X : 25,
-				   Y : 250, 
-				   SPEED_UP : 2
+				   SPEED : 4 | 0, 
+				   DX : 2 | 0,
+				   DY : -4 | 0,
+				   X : 25 | 0,
+				   Y : 250 | 0, 
+				   SPEED_UP : 2 | 0
 				 }); 
 				 
 /***********************Ball********************************/
@@ -278,6 +278,7 @@ var GameObjects = new function() {
 	self.initGifts = function() {
 		self.gift = new Gift(gifts[DxBall.level].type, gifts[DxBall.level].col, 
 			gifts[DxBall.level].row); 
+		self.giftCollected = false ;
 	};
 
 	self.initBall = function() {

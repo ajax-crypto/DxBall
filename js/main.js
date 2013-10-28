@@ -29,7 +29,6 @@ var DrawGameScenes = new function() {
 	};
 	
 	self.drawScene[GameStates.RUNNING] = function() {
-		DxBall.ctx.fillStyle = Colors.BLACK ;
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		GameObjects.draw(); 
 		self.drawHUDinGame();
@@ -89,6 +88,7 @@ var DxBall = new function() {
 	self.ctx = self.canvas.getContext('2d');
 	self.ctx.font = '20px Verdana' ;
 	self.ctx.textAlign = 'center' ;
+	//self.ctx.fillStyle = '#000000' ; 
 	
 	self.WIDTH = self.canvas.width;
 	self.HEIGHT = self.canvas.height-50;
