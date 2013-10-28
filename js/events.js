@@ -8,7 +8,11 @@ var EventUtilities = {
 	}
 };
 
-var pausedGameSceneHandler = {
+var EventHandlers = new function() {
+
+	var self = this ;
+
+	self.pausedGameSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' :
@@ -46,9 +50,10 @@ var pausedGameSceneHandler = {
 			break ;
 		}
 	}
-};
+	};
 
-var runningGameSceneHandler = {
+
+	self.runningGameSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'keydown' : 
@@ -82,9 +87,9 @@ var runningGameSceneHandler = {
 			break ; 
 		}
 	}
-}; 
-
-var splashScreenHandler = {
+	}; 
+	
+	self.splashScreenHandler = {
 	handleEvent : function(evt) { 
 		switch(evt.type) {
 			case 'click' : 
@@ -110,9 +115,9 @@ var splashScreenHandler = {
 			break ;
 		}
 	}
-};
+	};
 
-var levelSelectSceneHandler = {
+	self.levelSelectSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
@@ -148,9 +153,9 @@ var levelSelectSceneHandler = {
 			break;
 		}
 	}
-};
+	};
 
-var creditSceneHandler = {
+	self.creditSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
@@ -161,9 +166,9 @@ var creditSceneHandler = {
 			break ; 
 		}
 	}
-};
+	};
 
-var levelCompleteSceneHandler = {
+	self.levelCompleteSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
@@ -190,9 +195,9 @@ var levelCompleteSceneHandler = {
 			break; 
 		}
 	}
-}; 
+	}; 
 
-var gameOverSceneHandler = {
+	self.gameOverSceneHandler = {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
@@ -200,73 +205,74 @@ var gameOverSceneHandler = {
 			break ;
 		}
 	}
-}; 
+	};
 				
-function unregisterEvents(state) {
+	self.unregisterEvents = function(state) {
 	switch(state) {
 		case GameStates.RUNNING : 
-			DxBall.canvas.removeEventListener('keydown', runningGameSceneHandler, false); 
-			DxBall.canvas.removeEventListener('keyup', runningGameSceneHandler, false); 
-			DxBall.canvas.removeEventListener('mousemove', runningGameSceneHandler, false); 
-			DxBall.canvas.removeEventListener('click', runningGameSceneHandler, false);
+			DxBall.canvas.removeEventListener('keydown', self.runningGameSceneHandler, false); 
+			DxBall.canvas.removeEventListener('keyup', self.runningGameSceneHandler, false); 
+			DxBall.canvas.removeEventListener('mousemove', self.runningGameSceneHandler, false); 
+			DxBall.canvas.removeEventListener('click', self.runningGameSceneHandler, false);
 		break ;
 		case GameStates.PAUSED : 
-			DxBall.canvas.removeEventListener('click', pausedGameSceneHandler, false); 
-			DxBall.canvas.removeEventListener('mousemove', pausedGameSceneHandler, false); 
+			DxBall.canvas.removeEventListener('click', self.pausedGameSceneHandler, false); 
+			DxBall.canvas.removeEventListener('mousemove', self.pausedGameSceneHandler, false); 
 		break ;
 		case GameStates.SPLASH_SCREEN :
-			DxBall.canvas.removeEventListener('click', splashScreenHandler, false); 
-			DxBall.canvas.removeEventListener('mousemove', splashScreenHandler, false); 
+			DxBall.canvas.removeEventListener('click', self.splashScreenHandler, false); 
+			DxBall.canvas.removeEventListener('mousemove', self.splashScreenHandler, false); 
 		break;
 		case GameStates.LEVEL_SELECT :
-			DxBall.canvas.removeEventListener('click', levelSelectSceneHandler, false); 
-			DxBall.canvas.removeEventListener('mousemove', levelSelectSceneHandler, false);
+			DxBall.canvas.removeEventListener('click', self.levelSelectSceneHandler, false); 
+			DxBall.canvas.removeEventListener('mousemove', self.levelSelectSceneHandler, false);
 		break ; 
 		case GameStates.CREDIT_SCENE :
-			DxBall.canvas.removeEventListener('click', creditSceneHandler, false); 
-			DxBall.canvas.removeEventListener('mousemove', creditSceneHandler, false); 
+			DxBall.canvas.removeEventListener('click', self.creditSceneHandler, false); 
+			DxBall.canvas.removeEventListener('mousemove', self.creditSceneHandler, false); 
 		break ; 
 		case GameStates.LEVEL_COMPLETE : 
-			DxBall.canvas.removeEventListener('click', levelCompleteSceneHandler, false);
-			DxBall.canvas.removeEventListener('mousemove', levelCompleteSceneHandler, false);
+			DxBall.canvas.removeEventListener('click', self.levelCompleteSceneHandler, false);
+			DxBall.canvas.removeEventListener('mousemove', self.levelCompleteSceneHandler, false);
 		break ;
 		case GameStates.GAME_OVER :
-			DxBall.canvas.removeEventListener('click', gameOverSceneHandler, false);
+			DxBall.canvas.removeEventListener('click', self.gameOverSceneHandler, false);
 		break ; 
 	}
-}
+	};
 
-function handleGameEvents(currState, prevState) {
-	unregisterEvents(prevState); 
+	self.handleGameEvents = function(currState, prevState) {
+	self.unregisterEvents(prevState); 
 	switch(currState) {
 		case GameStates.SPLASH_SCREEN :
-			DxBall.canvas.addEventListener('click', splashScreenHandler, false); 
-			DxBall.canvas.addEventListener('mousemove', splashScreenHandler, false); 
+			DxBall.canvas.addEventListener('click', self.splashScreenHandler, false); 
+			DxBall.canvas.addEventListener('mousemove', self.splashScreenHandler, false); 
 		break;
 		case GameStates.RUNNING : 
-			DxBall.canvas.addEventListener('keydown', runningGameSceneHandler, false); 
-			DxBall.canvas.addEventListener('keyup', runningGameSceneHandler, false); 
-			DxBall.canvas.addEventListener('mousemove', runningGameSceneHandler, false);
-			DxBall.canvas.addEventListener('click', runningGameSceneHandler, false);
+			DxBall.canvas.addEventListener('keydown', self.runningGameSceneHandler, false); 
+			DxBall.canvas.addEventListener('keyup', self.runningGameSceneHandler, false); 
+			DxBall.canvas.addEventListener('mousemove', self.runningGameSceneHandler, false);
+			DxBall.canvas.addEventListener('click', self.runningGameSceneHandler, false);
 		break ;
 		case GameStates.PAUSED : 
-			DxBall.canvas.addEventListener('click', pausedGameSceneHandler, false); 
-			DxBall.canvas.addEventListener('mousemove', pausedGameSceneHandler, false); 
+			DxBall.canvas.addEventListener('click', self.pausedGameSceneHandler, false); 
+			DxBall.canvas.addEventListener('mousemove', self.pausedGameSceneHandler, false); 
 		break ;
 		case GameStates.LEVEL_COMPLETE : 
-			DxBall.canvas.addEventListener('click', levelCompleteSceneHandler, false);
-			DxBall.canvas.addEventListener('mousemove', levelCompleteSceneHandler, false);
+			DxBall.canvas.addEventListener('click', self.levelCompleteSceneHandler, false);
+			DxBall.canvas.addEventListener('mousemove', self.levelCompleteSceneHandler, false);
 		break ; 
 		case GameStates.LEVEL_SELECT :
-			DxBall.canvas.addEventListener('click', levelSelectSceneHandler, false); 
-			DxBall.canvas.addEventListener('mousemove', levelSelectSceneHandler, false);
+			DxBall.canvas.addEventListener('click', self.levelSelectSceneHandler, false); 
+			DxBall.canvas.addEventListener('mousemove', self.levelSelectSceneHandler, false);
 		break ; 
 		case GameStates.CREDIT_SCENE : 
-			DxBall.canvas.addEventListener('click', creditSceneHandler, false); 
-			DxBall.canvas.addEventListener('mousemove', creditSceneHandler, false); 
+			DxBall.canvas.addEventListener('click', self.creditSceneHandler, false); 
+			DxBall.canvas.addEventListener('mousemove', self.creditSceneHandler, false); 
 		break ; 
 		case GameStates.GAME_OVER :
-			DxBall.canvas.addEventListener('click', gameOverSceneHandler, false);
+			DxBall.canvas.addEventListener('click', self.gameOverSceneHandler, false);
 		break ; 
 	}
-}
+	};
+};

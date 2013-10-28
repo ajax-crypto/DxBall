@@ -27,32 +27,14 @@
 					//if(ball.x > (row)*BrickDefaults.HEIGHT && ball.x < (row+1)*BrickDefaults.HEIGHT)
 					//ball.collideH() ; 
 					GameObjects.ball.collideV() ;	
-				
-					// Change game object properties based on brick type the ball hit
-					switch(GameObjects.bricks[row][col].type) {
-					case 1 : 
-						GameObjects.ball.speedup() ;
-					break ;
-					case 2 :
-						GameObjects.ball.normalSpeed(); 
-					break ;
-					case 4 :
-						GameObjects.paddle.shorten();
-						GameObjects.ball.normalSpeed(); 
-					break ;
-					case 5 :
-						GameObjects.paddle.elongate();
-						GameObjects.ball.normalSpeed(); 
-					break ;
-					}
 				}
-			
+				
+				// Based on the bricks properties, change game object properties
+				GameObjects.morphObjects(row, col);
+				
 				// If the brick has a gift associated, activate it 
 				if(gifts[DxBall.level].row == row && gifts[DxBall.level].col == col)
-					GameObjects.gift.activate(); 
-			
-				// Add to points tally
-				DxBall.addPoints(GameObjects.bricks[row][col].points) ;  
+					GameObjects.gift.activate();  
 			}
 		}
 	};
@@ -63,17 +45,7 @@
 			(GameObjects.paddle.x + GameObjects.paddle.width) && GameObjects.gift.x > 
 			GameObjects.paddle.x) {
 			GameObjects.gift.deactivate() ; 
-			switch(GameObjects.gift.type) {
-			case 1 : 
-				DxBall.addPoints(GameObjects.gift.points) ; 
-			break ;
-			case 2 : 
-				GameObjects.ball.anotherLife() ;
-			break ; 
-			case 3 :
-				GameObjects.ball.passThrough() ;
-			break ; 
-			}
+			GameObjects.distributeGift();
 		}
 	};
 

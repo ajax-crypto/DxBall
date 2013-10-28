@@ -63,8 +63,8 @@ var Graphics = new function() {
 		DxBall.ctx.drawImage(img, x, y); 
 	};
 	
-	self.altImage = function(img, w, h, x, y, xpos, ypos) {
-		DxBall.ctx.drawImage(img, w, h, x, y, xpos, ypos);
+	self.altImage = function(img, x, y, w, h) {
+		DxBall.ctx.drawImage(img, x, y, w, h);
 	};
 	
 	self.text = function(str, x, y, color) {

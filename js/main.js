@@ -152,7 +152,7 @@ var DxBall = new function() {
 
 function DxBallGameLoop() {
 	if(DxBall.pstate != DxBall.state) {
-		handleGameEvents(DxBall.state, DxBall.pstate); 
+		EventHandlers.handleGameEvents(DxBall.state, DxBall.pstate); 
 		DrawGameScenes.draw(DxBall.state) ;
 	}
 	DxBall.pstate = DxBall.state ; 

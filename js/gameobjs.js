@@ -18,7 +18,7 @@ var BallDefaults = Object.freeze({
 				   RADIUS : 6,
 				   COLOR : Colors.WHITE,
 				   SPEED : 4, 
-				   DX : 1.5,
+				   DX : 2,
 				   DY : -4,
 				   X : 25,
 				   Y : 250, 
@@ -106,7 +106,8 @@ function Paddle(){
 
 Paddle.prototype.draw = function() {
 		var self = this ;
-		Graphics.image(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height);
+		Graphics.altImage(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height, 
+			self.width, self.height);
 	} ; 
 	
 Paddle.prototype.shorten = function() {
@@ -143,6 +144,7 @@ function Gift(type, r, c) {
 	self.y = 0 ; 
 	self.active = false ; 
 	self.res = null ; 
+	self.used = false ;
 	
 	switch(type) {
 		case 1 : 
@@ -161,11 +163,13 @@ function Gift(type, r, c) {
 	self.y = (c+1)*BrickDefaults.TRUE_HEIGHT ; 
 	
 	self.activate = function() {
-		self.active = true ; 
+		if(!self.used)
+			self.active = true ; 
 	}; 
 	
 	self.deactivate = function() {
 		self.active = false ; 
+		self.used = true ;
 	}; 
 }
 
@@ -173,13 +177,13 @@ Gift.prototype.speed = 2 ;
 
 Gift.prototype.draw = function() {
 		var self = this ; 
-		if(self.active) 
+		if(self.active && !self.used) 
 			Graphics.image(self.res, self.x, self.y); 
 	};
 	
 Gift.prototype.move = function() {
 		var self = this ; 
-		if(self.active)
+		if(self.active && !self.used)
 			self.y += self.speed ; 
 	};
 		
@@ -258,7 +262,7 @@ Brick.prototype.hit = function() {
 		}
 	}; 
 
-/**********************Game Objects*********************/
+/**************************Game Objects******************************/
 
 var GameObjects = new function() {
 	
@@ -300,6 +304,58 @@ var GameObjects = new function() {
 		for (i=0; i < DxBall.NROWS; i++) 
 			for (j=0; j < DxBall.NCOLS; j++) 
 				self.bricks[i][j].draw(i, j); 
+	};
+	
+	self.giftHelpers = new function() {
+		var _this = this ; 
+		_this.helpers = [] ; 
+		_this.helpers[1] = function() {
+			DxBall.addPoints(self.gift.points);
+		};
+		_this.helpers[2] = function() {
+			self.ball.anotherLife() ;
+		};
+		_this.helpers[3] = function() {
+			self.ball.passThrough() ;
+		};
+		
+		_this.distribute = function(type) {
+			_this.helpers[type]();
+		};
+	};
+	
+	self.morphingHelpers = new function() {
+		var _this = this ; 
+		_this.helpers = [] ; 
+		_this.helpers[1] = function() {
+			self.ball.speedup() ;
+		};
+		_this.helpers[2] = function() {
+			self.ball.normalSpeed();
+		};
+		_this.helpers[3] = function() {}; 
+		_this.helpers[4] = function() {
+			self.paddle.shorten();
+			self.ball.normalSpeed(); 
+		};
+		_this.helpers[5] = function() {
+			self.paddle.elongate();
+			self.ball.normalSpeed(); 
+		};
+		_this.helpers[6] = function() {}; 
+		
+		_this.morph = function(type) {
+			_this.helpers[type]();
+		};
+	};
+	
+	self.distributeGift = function() {
+		self.giftHelpers.distribute(self.gift.type);
+	};
+	
+	self.morphObjects = function(row, col) {
+		self.morphingHelpers.morph(self.bricks[row][col].type);
+		DxBall.addPoints(self.bricks[row][col].points);
 	};
 	
 	self.init = function() {
