@@ -63,10 +63,10 @@ var DrawGameScenes = new function() {
 	
 	self.drawHUDinGame = function() {
 		if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
-			Graphics.text('Current Points : ' + DxBall.temp_points + ' | Level : ' + (DxBall.level+1)
+			Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
 				+ ' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 		else
-			Graphics.text('Current Points : ' + DxBall.temp_points + ' | Level : ' + (DxBall.level+1)
+			Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
 				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 	};
 	
@@ -106,6 +106,31 @@ var DxBall = new function() {
 	self.bricks = 0 ; 
 	self.FPS = 60 ; 
 	self.temp_points = 0 ;
+	self.millisecond = 0;
+	self.second = 0 ;
+	self.minute = 0 ;
+	
+	self.elapseTime = function() {
+		if(self.millisecond >= 60) {
+			self.millisecond = 0 ;
+			self.second += 1 ;
+			if(self.second >= 60) {
+				self.minute += 1 ;
+				self.second = 0 ;
+			}
+		}
+		++self.millisecond ;
+	};
+	
+	self.getElapsedTime = function() {
+		return self.minute + ((self.second < 10) ? ": 0" : ' : ') + self.second ;
+	};
+	
+	self.initTimer = function() {
+		self.millisecond = 0 ;
+		self.second = 0 ;
+		self.minute = 0 ;
+	};
 	
 	self.setState = function(state) {
 		self.pstate = self.state ; 
@@ -161,6 +186,7 @@ var DxBall = new function() {
 		clearTimeout(self.loop); 
 		GameObjects.init();
 		self.playState = true ; 
+		self.initTimer() ;
 		DxBallGameLoop(); 
 	};
 
@@ -174,6 +200,7 @@ var DxBall = new function() {
 };
 
 function DxBallGameLoop() {
+	DxBall.elapseTime(); 
 	if(DxBall.pstate != DxBall.state) {
 		EventHandlers.handleGameEvents(DxBall.state, DxBall.pstate); 
 		DrawGameScenes.draw(DxBall.state) ;
