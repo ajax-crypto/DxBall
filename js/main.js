@@ -113,7 +113,8 @@ var DxBall = new function() {
 	};
 	
 	self.addPoints = function(val) {
-		self.temp_points += val ;
+		if(self.temp_points + val >= 0)
+			self.temp_points += val ;
 	};
 	
 	self.setBricks = function(val) {
