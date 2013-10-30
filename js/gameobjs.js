@@ -170,6 +170,7 @@ function Gift(type, r, c) {
 	self.deactivate = function() {
 		self.active = false ; 
 		self.used = true ;
+		DxBall.shouldDrawHUDinGame = true ;
 	}; 
 }
 
@@ -259,6 +260,7 @@ Brick.prototype.hit = function() {
 			self.destroyed = true ;
 			self.visible = false ; 
 			DxBall.reduceBrick() ; 
+			DxBall.shouldDrawHUDinGame = true ;
 		}
 	}; 
 

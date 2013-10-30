@@ -48,15 +48,21 @@ var Graphics = new function() {
 
 	self.rect = function(x, y, w, h, color) {
 		DxBall.ctx.fillStyle = color ;
-		DxBall.ctx.beginPath();
-		DxBall.ctx.rect(x, y, w, h);
-		DxBall.ctx.closePath();
-		DxBall.ctx.fill();
+		DxBall.ctx.fillRect(x, y, w, h);
+		//DxBall.ctx.beginPath();
+		//DxBall.ctx.rect(x, y, w, h);
+		//DxBall.ctx.closePath();
+		//DxBall.ctx.fill();
 	};
 
 	self.clear = function(w, h) {
 		//DxBall.ctx.clearRect(0, 0, w, h);
 		self.rect(0, 0, w, h, Colors.BLACK);
+	};
+	
+	self.clearPortion = function(x, y, w, h) {
+		//DxBall.ctx.clearRect(0, 0, w, h);
+		self.rect(x, y, w, h, Colors.BLACK);
 	};
 
 	self.image = function(img, x, y) {

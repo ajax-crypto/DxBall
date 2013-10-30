@@ -29,7 +29,7 @@ var DrawGameScenes = new function() {
 	};
 	
 	self.drawScene[GameStates.RUNNING] = function() {
-		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
+		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		GameObjects.draw(); 
 		self.drawHUDinGame();
 	};
@@ -44,7 +44,7 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
 		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
-		Graphics.text('You have scored ' + DxBall.points, DxBall.WIDTH/2, 
+		Graphics.text('You have scored ' + DxBall.prev_points, DxBall.WIDTH/2, 
 			DxBall.TOTAL_HEIGHT/2 + 20, Colors.WHITE);
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
@@ -62,12 +62,16 @@ var DrawGameScenes = new function() {
 	};
 	
 	self.drawHUDinGame = function() {
-		if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
-			Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
-				+ ' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
-		else
-			Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
-				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+		if(DxBall.shouldDrawHUDinGame) {
+			Graphics.clearPortion(0, DxBall.HEIGHT, DxBall.WIDTH, 50);
+			if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
+				Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
+					+ ' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+			else
+				Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
+					, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+			DxBall.shouldDrawHUDinGame = false ;
+		}
 	};
 	
 	self.drawHUD = function() {
@@ -106,14 +110,17 @@ var DxBall = new function() {
 	self.bricks = 0 ; 
 	self.FPS = 60 ; 
 	self.temp_points = 0 ;
+	self.prev_points = 0 ;
 	self.millisecond = 0;
 	self.second = 0 ;
 	self.minute = 0 ;
+	self.shouldDrawHUDinGame = false ;
 	
-	self.elapseTime = function() {
-		if(self.millisecond >= 60) {
+	self.tick = function() {
+		if(self.millisecond >= 80) {
 			self.millisecond = 0 ;
 			self.second += 1 ;
+			self.shouldDrawHUDinGame = true ;
 			if(self.second >= 60) {
 				self.minute += 1 ;
 				self.second = 0 ;
@@ -123,7 +130,7 @@ var DxBall = new function() {
 	};
 	
 	self.getElapsedTime = function() {
-		return self.minute + ((self.second < 10) ? ": 0" : ' : ') + self.second ;
+		return self.minute + ' : ' + self.second ;
 	};
 	
 	self.initTimer = function() {
@@ -173,6 +180,7 @@ var DxBall = new function() {
 	self.nextLevel = function() {
 		++self.level ;
 		self.points += self.temp_points ; 
+		self.prev_points = self.temp_points ;
 		self.temp_points = 0 ;
 	};
 
@@ -200,7 +208,7 @@ var DxBall = new function() {
 };
 
 function DxBallGameLoop() {
-	DxBall.elapseTime(); 
+	DxBall.tick(); 
 	if(DxBall.pstate != DxBall.state) {
 		EventHandlers.handleGameEvents(DxBall.state, DxBall.pstate); 
 		DrawGameScenes.draw(DxBall.state) ;
