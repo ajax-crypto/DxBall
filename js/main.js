@@ -44,8 +44,8 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
 		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
-		Graphics.text('You have scored ' + DxBall.prev_points, DxBall.WIDTH/2, 
-			DxBall.TOTAL_HEIGHT/2 + 20, Colors.WHITE);
+		Graphics.text('You have scored ' + DxBall.prev_points + ' in ' + 
+			DxBall.getElapsedTime(), DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2 + 30, Colors.WHITE);
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
 	
@@ -53,7 +53,7 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.RED); 
 		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.GOLD);
-		Graphics.text('You have scored ' + DxBall.temp_points, DxBall.WIDTH/2, 
+		Graphics.text('You lost ' + DxBall.temp_points, DxBall.WIDTH/2, 
 			DxBall.TOTAL_HEIGHT/2 + 20, Colors.GOLD); 
 	};
 
@@ -65,11 +65,11 @@ var DrawGameScenes = new function() {
 		if(DxBall.shouldDrawHUDinGame) {
 			Graphics.clearPortion(0, DxBall.HEIGHT, DxBall.WIDTH, 50);
 			if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
-				Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
-					+ ' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+				Graphics.text('Current Points : ' + DxBall.temp_points + 
+				' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 			else
-				Graphics.text('Current Points : ' + DxBall.temp_points + ' | ' + DxBall.getElapsedTime()
-					, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
+				Graphics.text('Current Points : ' + DxBall.temp_points, 
+					DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 			DxBall.shouldDrawHUDinGame = false ;
 		}
 	};
@@ -120,7 +120,6 @@ var DxBall = new function() {
 		if(self.millisecond >= 80) {
 			self.millisecond = 0 ;
 			self.second += 1 ;
-			self.shouldDrawHUDinGame = true ;
 			if(self.second >= 60) {
 				self.minute += 1 ;
 				self.second = 0 ;
@@ -130,7 +129,7 @@ var DxBall = new function() {
 	};
 	
 	self.getElapsedTime = function() {
-		return self.minute + ' : ' + self.second ;
+		return self.minute + ':' + self.second ;
 	};
 	
 	self.initTimer = function() {
@@ -210,12 +209,12 @@ var DxBall = new function() {
 function DxBallGameLoop() {
 	DxBall.tick(); 
 	if(DxBall.pstate != DxBall.state) {
-		EventHandlers.handleGameEvents(DxBall.state, DxBall.pstate); 
+		EventHandlers.registerGameEvents(DxBall.state, DxBall.pstate); 
 		DrawGameScenes.draw(DxBall.state) ;
 	}
 	DxBall.pstate = DxBall.state ; 
 	if(DxBall.isRunning()) {
-		DrawGameScenes.draw(DxBall.state) ;
+		DrawGameScenes.drawScene[GameStates.RUNNING]() ;
 		DxBall.playState = CollisionSystem.handleCollisions(); 
 		if(!DxBall.playState) 
 			DxBall.state = GameStates.GAME_OVER ;

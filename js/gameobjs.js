@@ -260,8 +260,8 @@ Brick.prototype.hit = function() {
 			self.destroyed = true ;
 			self.visible = false ; 
 			DxBall.reduceBrick() ; 
-			DxBall.shouldDrawHUDinGame = true ;
 		}
+		DxBall.shouldDrawHUDinGame = true ;
 	}; 
 
 /**************************Game Objects******************************/

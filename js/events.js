@@ -242,7 +242,7 @@ var EventHandlers = new function() {
 	}
 	};
 
-	self.handleGameEvents = function(currState, prevState) {
+	self.registerGameEvents = function(currState, prevState) {
 	self.unregisterEvents(prevState); 
 	switch(currState) {
 		case GameStates.SPLASH_SCREEN :
