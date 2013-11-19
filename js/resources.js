@@ -79,7 +79,7 @@ function preloadimages(arr){
             imageloadpost();
         };
         newimages[i].onerror = function(){
-            imageloadpost();
+            alert('Failed...');
         };
     }
     //return blank object with done() method

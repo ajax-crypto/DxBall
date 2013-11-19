@@ -88,8 +88,6 @@
 		self.handleBallBrick();
 		self.handleGiftPaddle(); 
 		var temp = self.handleBallPaddle(); 
-		GameObjects.ball.move(); 
-		GameObjects.gift.move();
 		return temp ; 
 	};
 };

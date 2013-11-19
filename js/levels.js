@@ -1,10 +1,10 @@
 ﻿var gamedata = new Array(DxBall.MAX_LEVELS);
 
 var gifts = [ { type : 3, row : 7, col : 7 },
-			  { type : 1, row : 3, col : 4 },
-			  { type : 2, row : 0, col : 0 },
-			  { type : 1, row : 7, col : 7 },
-			  { type : 3, row : 3, col : 4 } ] ; 
+	      { type : 1, row : 3, col : 4 },
+	      { type : 2, row : 0, col : 0 },
+	      { type : 1, row : 7, col : 7 },
+	      { type : 3, row : 3, col : 4 } ] ; 
 
 gamedata[0] = [ [0, 0, 0, 0, 0, 0, 0, 0 ],
 		[0, 0, 0, 0, 0, 0, 0, 0 ],

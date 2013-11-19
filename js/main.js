@@ -44,7 +44,7 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
 		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
-		Graphics.text('You have scored ' + DxBall.prev_points + ' in ' + 
+		Graphics.text('You have scored ' + DxBall.getPointsScored() + ' in ' + 
 			DxBall.getElapsedTime(), DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2 + 30, Colors.WHITE);
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
@@ -53,7 +53,7 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.RED); 
 		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.GOLD);
-		Graphics.text('You lost ' + DxBall.temp_points, DxBall.WIDTH/2, 
+		Graphics.text('You lost ' + DxBall.getCurrentPoints(), DxBall.WIDTH/2, 
 			DxBall.TOTAL_HEIGHT/2 + 20, Colors.GOLD); 
 	};
 
@@ -64,18 +64,18 @@ var DrawGameScenes = new function() {
 	self.drawHUDinGame = function() {
 		if(DxBall.shouldDrawHUDinGame) {
 			Graphics.clearPortion(0, DxBall.HEIGHT, DxBall.WIDTH, 50);
-			if(GameObjects.giftCollected && DxBall.state == GameStates.RUNNING)
-				Graphics.text('Current Points : ' + DxBall.temp_points + 
+			if(GameObjects.giftCollected)
+				Graphics.text('Current Points : ' + DxBall.getCurrentPoints() + 
 				' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 			else
-				Graphics.text('Current Points : ' + DxBall.temp_points, 
+				Graphics.text('Current Points : ' + DxBall.getCurrentPoints(), 
 					DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 			DxBall.shouldDrawHUDinGame = false ;
 		}
 	};
 	
 	self.drawHUD = function() {
-		Graphics.text('Total Points : ' + DxBall.points + ' | Level : ' + (DxBall.level+1)
+		Graphics.text('Total Points : ' + DxBall.getPointsScored() + ' | Level : ' + (DxBall.level+1)
 				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 	};
 	
@@ -104,38 +104,42 @@ var DxBall = new function() {
 	self.state = GameStates.SPLASH_SCREEN ; 
 	self.pstate = GameStates.INVALID ; 
 	self.playstate = true ; 
-	self.points = 0 ; 
 	self.loop = 0 ; 
 	self.level = 0 ; 
 	self.bricks = 0 ; 
 	self.FPS = 60 ; 
-	self.temp_points = 0 ;
-	self.prev_points = 0 ;
-	self.millisecond = 0;
-	self.second = 0 ;
-	self.minute = 0 ;
 	self.shouldDrawHUDinGame = false ;
 	
+	temp_points = 0 ;
+	prev_points = 0 ;
+	points = 0 ; 
+	
+	unit_t = 0;
+	second = 0 ;
+	minute = 0 ;
+	
 	self.tick = function() {
-		if(self.millisecond >= 80) {
-			self.millisecond = 0 ;
-			self.second += 1 ;
-			if(self.second >= 60) {
-				self.minute += 1 ;
-				self.second = 0 ;
-			}
+		++unit_t ;
+		if(unit_t == self.FPS)
+		{
+			++second ;
+			unit_t %= self.FPS ;
 		}
-		++self.millisecond ;
+		if(second == 60)
+		{
+			++minute ;
+			second %= 60 ;
+		}
 	};
 	
 	self.getElapsedTime = function() {
-		return self.minute + ':' + self.second ;
+		return minute + ':' + second ;
 	};
 	
 	self.initTimer = function() {
-		self.millisecond = 0 ;
-		self.second = 0 ;
-		self.minute = 0 ;
+		unit_t = 0 ;
+		second = 0 ;
+		minute = 0 ;
 	};
 	
 	self.setState = function(state) {
@@ -144,8 +148,8 @@ var DxBall = new function() {
 	};
 	
 	self.addPoints = function(val) {
-		if(self.temp_points + val >= 0)
-			self.temp_points += val ;
+		if(temp_points + val >= 0)
+			temp_points += val ;
 	};
 	
 	self.setBricks = function(val) {
@@ -178,9 +182,21 @@ var DxBall = new function() {
 	
 	self.nextLevel = function() {
 		++self.level ;
-		self.points += self.temp_points ; 
-		self.prev_points = self.temp_points ;
-		self.temp_points = 0 ;
+		points += temp_points ; 
+		prev_points = temp_points ;
+		temp_points = 0 ;
+	};
+	
+	self.getPointsScored = function() {
+		return prev_points ;
+	};
+	
+	self.getCurrentPoints = function() {
+		return temp_points ;
+	};
+	
+	self.getTotalPoints = function() {
+		return points ;
 	};
 
 	self.restart = function() {
@@ -215,6 +231,8 @@ function DxBallGameLoop() {
 	DxBall.pstate = DxBall.state ; 
 	if(DxBall.isRunning()) {
 		DrawGameScenes.drawScene[GameStates.RUNNING]() ;
+		GameObjects.ball.move(); 
+		GameObjects.gift.move();
 		DxBall.playState = CollisionSystem.handleCollisions(); 
 		if(!DxBall.playState) 
 			DxBall.state = GameStates.GAME_OVER ;

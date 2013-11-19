@@ -146,9 +146,8 @@ var EventHandlers = new function() {
 				for(i=0; i<=DxBall.level; ++i)
 					if(EventUtilities.checkBounds(mouse, licondata[i].x, licondata[i].y, 
 						licondata[i].x + ImageResource[4].width, licondata[i].y 
-						+ ImageResource[4].height)) {
+						+ ImageResource[4].height)) 
 						DxBall.canvas.style.cursor = 'pointer' ;
-						console.log("hehe..."); }
 					else
 						DxBall.canvas.style.cursor = 'default' ;
 			break;

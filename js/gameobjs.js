@@ -1,6 +1,6 @@
 ﻿
 var BrickDefaults = Object.freeze({ 
-					WIDTH : ~~((DxBall.WIDTH-1)/DxBall.NCOLS) | 0, 
+				    WIDTH : ~~((DxBall.WIDTH-1)/DxBall.NCOLS) | 0, 
 				    HEIGHT : ~~((DxBall.HEIGHT-1)/(2*DxBall.NROWS)) | 0,
 				    PADDING : 1 | 0,
 				    TRUE_HEIGHT : ~~(DxBall.HEIGHT/(2*DxBall.NROWS)) | 0,
@@ -8,7 +8,7 @@ var BrickDefaults = Object.freeze({
 				 }); 
 
 var PaddleDefaults = Object.freeze({ 
-					 WIDTH : ~~(DxBall.WIDTH/8) | 0,
+				     WIDTH : ~~(DxBall.WIDTH/8) | 0,
 				     HEIGHT : 10 | 0,
 				     SPEED : 7 | 0,
 				     XPOS : DxBall.WIDTH/2 | 0 
