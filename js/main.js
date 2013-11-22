@@ -1,46 +1,48 @@
 ﻿var GameStates = Object.freeze({
 				 INVALID : 0,
 				 SPLASH_SCREEN : 1,
-				 CHAPTER_SELECT : 2,
+				 LEVEL_SELECT : 2,
 				 RUNNING : 3,
 				 LEVEL_COMPLETE : 4,
 				 GAME_OVER : 5,
 				 PAUSED : 6,
-				 CREDIT_SCENE : 7
+				 CREDIT_SCENE : 7,
+				 INFO_SCREEN : 8,
+				 START_SCREEN : 9,
 			 });
  
 var DrawGameScenes = new function() {
 	
 	var self = this ; 
 	
-	self.drawScene = [];
+	var drawScene = [];
 	
-	self.drawScene[GameStates.SPLASH_SCREEN] = function() {
+	drawScene[GameStates.SPLASH_SCREEN] = function() {
 		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 
 	};
 	
-	self.drawScene[GameStates.LEVEL_SELECT] = function() {
+	drawScene[GameStates.LEVEL_SELECT] = function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
 		for(i=0; i<6; ++i)
 			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
 				licondata[i].x, licondata[i].y); 
-		self.drawHUD();
+		drawHUD();
 	};
 	
-	self.drawScene[GameStates.RUNNING] = function() {
+	drawScene[GameStates.RUNNING] = function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
 		GameObjects.draw(); 
-		self.drawHUDinGame();
+		drawHUDinGame();
 	};
 	
-	self.drawScene[GameStates.PAUSED] = function() {
+	drawScene[GameStates.PAUSED] = function() {
 		Graphics.grayscale() ; 
 		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
-		self.drawHUDinGame();
+		drawHUDinGame();
 	};
 	
-	self.drawScene[GameStates.LEVEL_COMPLETE] = function() {
+	drawScene[GameStates.LEVEL_COMPLETE] = function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
 		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
@@ -49,7 +51,7 @@ var DrawGameScenes = new function() {
 		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
 	};
 	
-	self.drawScene[GameStates.GAME_OVER] = function() { 
+	drawScene[GameStates.GAME_OVER] = function() { 
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.RED); 
 		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.GOLD);
@@ -57,11 +59,19 @@ var DrawGameScenes = new function() {
 			DxBall.TOTAL_HEIGHT/2 + 20, Colors.GOLD); 
 	};
 
-	self.drawScene[GameStates.CREDIT_SCENE] = function() {
+	drawScene[GameStates.CREDIT_SCENE] = function() {
 		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
 	};
 	
-	self.drawHUDinGame = function() {
+	drawScene[GameStates.INFO_SCREEN] = function() {
+		Graphics.image(ImageResource[11].res, ImageResource[11].x, ImageResource[11].y); 
+	};
+	
+	drawScene[GameStates.START_SCREEN] = function() {
+		Graphics.image(ImageResource[12].res, ImageResource[12].x, ImageResource[12].y); 
+	};
+	
+	var drawHUDinGame = function() {
 		if(DxBall.shouldDrawHUDinGame) {
 			Graphics.clearPortion(0, DxBall.HEIGHT, DxBall.WIDTH, 50);
 			if(GameObjects.giftCollected)
@@ -74,13 +84,13 @@ var DrawGameScenes = new function() {
 		}
 	};
 	
-	self.drawHUD = function() {
+	var drawHUD = function() {
 		Graphics.text('Total Points : ' + DxBall.getPointsScored() + ' | Level : ' + (DxBall.level+1)
 				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
 	};
 	
 	self.draw = function(state) {
-		self.drawScene[state](); 
+		drawScene[state](); 
 	};
 };
 
@@ -92,7 +102,6 @@ var DxBall = new function() {
 	self.ctx = self.canvas.getContext('2d');
 	self.ctx.font = '20px Verdana' ;
 	self.ctx.textAlign = 'center' ;
-	//self.ctx.fillStyle = '#000000' ; 
 	
 	self.WIDTH = self.canvas.width;
 	self.HEIGHT = self.canvas.height-50;
@@ -124,11 +133,11 @@ var DxBall = new function() {
 		{
 			++second ;
 			unit_t %= self.FPS ;
-		}
-		if(second == 60)
-		{
-			++minute ;
-			second %= 60 ;
+			if(second == 60)
+			{
+				++minute ;
+				second %= 60 ;
+			}
 		}
 	};
 	
@@ -230,7 +239,7 @@ function DxBallGameLoop() {
 	}
 	DxBall.pstate = DxBall.state ; 
 	if(DxBall.isRunning()) {
-		DrawGameScenes.drawScene[GameStates.RUNNING]() ;
+		DrawGameScenes.draw(GameStates.RUNNING) ;
 		GameObjects.ball.move(); 
 		GameObjects.gift.move();
 		DxBall.playState = CollisionSystem.handleCollisions(); 

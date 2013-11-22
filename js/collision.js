@@ -3,7 +3,7 @@
 	var self = this ;
 	
 	// Handles paddle collision with canvas walls
-	self.handlePaddle = function() {
+	var handlePaddle = function() {
 		if(EventUtilities.rightDown && (GameObjects.paddle.x < Graphics.canvasMaxX)) {
 			GameObjects.paddle.moveRight();
 		}
@@ -13,7 +13,7 @@
 	};
 
 	// Handles ball and brick collision
-	self.handleBallBrick = function() {
+	var handleBallBrick = function() {
 	
 	// Check if ball is within the region where bricks exist
 		if(GameObjects.ball.y < DxBall.NROWS*BrickDefaults.TRUE_HEIGHT) {
@@ -39,7 +39,7 @@
 		}
 	};
 
-	self.handleGiftPaddle = function() {
+	var handleGiftPaddle = function() {
 		if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) > 
 			(DxBall.HEIGHT - GameObjects.paddle.height)) {
 			GameObjects.gift.deactivate() ; 
@@ -50,7 +50,7 @@
 	};
 
 	// Handles ball paddle collision 
-	self.handleBallPaddle = function() {
+	var handleBallPaddle = function() {
 		var ballright = GameObjects.ball.x + GameObjects.ball.dx + GameObjects.ball.radius ; 
 		var ballleft  = GameObjects.ball.x + GameObjects.ball.dx - GameObjects.ball.radius ; 
 		var bally     = GameObjects.ball.y + GameObjects.ball.dy ;
@@ -84,10 +84,10 @@
 
 	// Handle all collisions and move ball
 	self.handleCollisions = function() { 
-		self.handlePaddle();
-		self.handleBallBrick();
-		self.handleGiftPaddle(); 
-		var temp = self.handleBallPaddle(); 
+		handlePaddle();
+		handleBallBrick();
+		handleGiftPaddle(); 
+		var temp = handleBallPaddle(); 
 		return temp ; 
 	};
 };

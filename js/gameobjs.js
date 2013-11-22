@@ -310,60 +310,60 @@ var GameObjects = new function() {
 				self.bricks[i][j].draw(i, j); 
 	};
 	
-	self.giftHelpers = new function() {
+	var giftHelpers = new function() {
 		var _this = this ; 
-		_this.helpers = [] ; 
-		_this.helpers[1] = function() {
+		var helpers = [] ; 
+		helpers[1] = function() {
 			DxBall.addPoints(self.gift.points);
 		};
-		_this.helpers[2] = function() {
+		helpers[2] = function() {
 			self.ball.anotherLife() ;
 		};
-		_this.helpers[3] = function() {
+		helpers[3] = function() {
 			self.ball.passThrough() ;
 		};
 		
 		_this.distribute = function(type) {
-			_this.helpers[type]();
+			helpers[type]();
 		};
 	};
 	
-	self.morphingHelpers = new function() {
+	var morphingHelpers = new function() {
 		var _this = this ; 
-		_this.helpers = [] ; 
-		_this.helpers[1] = function() {
+		var helpers = [] ; 
+		helpers[1] = function() {
 			self.ball.speedup() ;
 		};
-		_this.helpers[2] = function() {
+		helpers[2] = function() {
 			self.ball.normalSpeed();
 		};
-		_this.helpers[3] = function() {
+		helpers[3] = function() {
 			self.ball.normalSpeed(); 
 		}; 
-		_this.helpers[4] = function() {
+		helpers[4] = function() {
 			self.paddle.shorten();
 			self.ball.normalSpeed(); 
 		};
-		_this.helpers[5] = function() {
+		helpers[5] = function() {
 			self.paddle.elongate();
 			self.ball.normalSpeed(); 
 		};
-		_this.helpers[6] = function() {
+		helpers[6] = function() {
 			self.ball.normalSpeed(); 
 		}; 
 		
 		_this.morph = function(type) {
-			_this.helpers[type]();
+			helpers[type]();
 		};
 	};
 	
 	self.distributeGift = function() {
-		self.giftHelpers.distribute(self.gift.type);
+		giftHelpers.distribute(self.gift.type);
 		self.giftCollected = true ; 
 	};
 	
 	self.morphObjects = function(row, col) {
-		self.morphingHelpers.morph(self.bricks[row][col].type);
+		morphingHelpers.morph(self.bricks[row][col].type);
 		DxBall.addPoints(self.bricks[row][col].points);
 	};
 	

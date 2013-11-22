@@ -11,6 +11,8 @@
  * Res 9 : Coin Gift
  * Res 10 : Extra Life Gift
  * Res 11 : Gift : Ball passes through bricks destroying them
+ * Res 12 : Info screen
+ * Res 13 : Start screen
 ***********************************/ 
 
 var resources = ['img/paddle.png', 
@@ -23,7 +25,9 @@ var resources = ['img/paddle.png',
 		 'img/pause.png',
 		 'img/coin.png',
 		 'img/heart.png',
-		 'img/multi.png' ]; 
+		 'img/multi.png',
+		 'img/info.png',
+		 'img/start.png' ]; 
 
 function Resource(res) {
 	var self = this ; 
@@ -79,7 +83,7 @@ function preloadimages(arr){
             imageloadpost();
         };
         newimages[i].onerror = function(){
-            alert('Failed...');
+            alert('Failed to Load Resources');
         };
     }
     //return blank object with done() method
