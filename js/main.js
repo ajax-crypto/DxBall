@@ -10,7 +10,7 @@
 				 INFO_SCREEN : 8,
 				 START_SCREEN : 9,
 			 });
- 
+
 var DrawGameScenes = new function() {
 	
 	var self = this ; 
@@ -112,7 +112,9 @@ var DxBall = new function() {
 	
 	self.state = GameStates.SPLASH_SCREEN ; 
 	self.pstate = GameStates.INVALID ; 
+	self.prevstate = GameStates.INVALID ;
 	self.playstate = true ; 
+	self.playRandom = false ;
 	self.loop = 0 ; 
 	self.level = 0 ; 
 	self.bricks = 0 ; 
@@ -153,7 +155,10 @@ var DxBall = new function() {
 	
 	self.setState = function(state) {
 		self.pstate = self.state ; 
+		self.prevstate = self.state ;
 		self.state = state ; 
+		if(state == GameStates.RUNNING)
+			self.shouldDrawHUDinGame = true ;
 	};
 	
 	self.addPoints = function(val) {
@@ -194,6 +199,7 @@ var DxBall = new function() {
 		points += temp_points ; 
 		prev_points = temp_points ;
 		temp_points = 0 ;
+		licondata[DxBall.level].unlocked = true ;
 	};
 	
 	self.getPointsScored = function() {
@@ -216,7 +222,7 @@ var DxBall = new function() {
 	
 	self.start = function() {
 		clearTimeout(self.loop); 
-		GameObjects.init();
+		self.playRandom ? GameObjects.generateRandomLevel() : GameObjects.init();
 		self.playState = true ; 
 		self.initTimer() ;
 		DxBallGameLoop(); 
@@ -229,6 +235,10 @@ var DxBall = new function() {
 	self.pause = function() {
 		self.state = GameStates.PAUSED ;
 	}
+	
+	self.update = function() {
+		
+	};
 };
 
 function DxBallGameLoop() {
@@ -244,11 +254,10 @@ function DxBallGameLoop() {
 		GameObjects.gift.move();
 		DxBall.playState = CollisionSystem.handleCollisions(); 
 		if(!DxBall.playState) 
-			DxBall.state = GameStates.GAME_OVER ;
+			DxBall.setState(GameStates.GAME_OVER) ;
 		if(DxBall.isComplete()) {
-			DxBall.state = GameStates.LEVEL_COMPLETE ; 
-			DxBall.nextLevel() ;
-			licondata[DxBall.level].unlocked = true ; 
+			DxBall.setState(GameStates.LEVEL_COMPLETE) ; 
+			DxBall.nextLevel() ; 
 		} 
 	}
 	DxBall.loop = setTimeout(DxBallGameLoop, 1000/DxBall.FPS); 

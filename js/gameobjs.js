@@ -282,6 +282,13 @@ var GameObjects = new function() {
 			gifts[DxBall.level].row); 
 		self.giftCollected = false ;
 	};
+	
+	self.initRandomGift = function() {
+		var type = Math.floor(Math.random()*3) + 1;
+		var x = Math.floor(Math.random()*8);
+		var y = Math.floor(Math.random()*8);
+		self.gift = new Gift(type, x, y); 
+	};
 
 	self.initBall = function() {
 		self.ball.x = BallDefaults.X ;
@@ -300,6 +307,26 @@ var GameObjects = new function() {
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
 			}
+		}
+		DxBall.setBricks(totalBricks); 
+	};
+	
+	self.initRandomBricks = function() {
+		var totalBricks = 0, i, j ; 
+		for (i=0; i < DxBall.NROWS; i++) {
+			self.bricks[i] = new Array(DxBall.NCOLS);
+			for (j=0; j < DxBall.NCOLS; j++) {
+				self.bricks[i][j] = new Brick(Math.floor(Math.random()*7)); 
+				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
+					++totalBricks ; 
+			}
+			if(totalBricks > 25)
+				break ;
+		}
+		for (--i; i < DxBall.NROWS; i++) {
+			self.bricks[i] = new Array(DxBall.NCOLS);
+			for (j=0; j < DxBall.NCOLS; j++)
+				self.bricks[i][j] = new Brick(0);
 		}
 		DxBall.setBricks(totalBricks); 
 	};
@@ -371,6 +398,12 @@ var GameObjects = new function() {
 		self.initBall();
 		self.initBricks();
 		self.initGifts();
+	};
+	
+	self.generateRandomLevel = function() {
+		self.initBall();
+		self.initRandomBricks();
+		self.initRandomGift();
 	};
 	
 	self.draw = function() {

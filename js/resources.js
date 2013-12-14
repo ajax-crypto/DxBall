@@ -38,7 +38,7 @@ function Resource(res) {
 	self.width = res.width ;
 }
 
-var ImageResource = [] ; 
+ImageResource = [] ; 
 
 var licondata = new Array(6);
 

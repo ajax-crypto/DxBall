@@ -31,8 +31,8 @@ var EventHandlers = new function() {
 					else if(mouse.y > (option + ImageResource[7].y) && 
 						mouse.y < (2*option + ImageResource[7].y)) 
 						DxBall.resume();  
-					else
-						DxBall.setState(GameStates.LEVEL_SELECT) ;  
+					else 
+						DxBall.setState(DxBall.prevstate) ;  
 				}
 			break ;
 			case 'mousemove' :
@@ -132,6 +132,8 @@ var EventHandlers = new function() {
 						DxBall.setLevel(i);
 						DxBall.start(); 
 					}
+				if(EventUtilities.checkBounds(mouse, 0, 380, 50, 430))
+					DxBall.setState(GameStates.START_SCREEN) ;
 			break; 
 			
 			case 'mousemove':
@@ -147,6 +149,10 @@ var EventHandlers = new function() {
 						DxBall.canvas.style.cursor = 'pointer' ;
 					else
 						DxBall.canvas.style.cursor = 'default' ;
+				if(EventUtilities.checkBounds(mouse, 0, 380, 50, 430))
+					DxBall.canvas.style.cursor = 'pointer' ;
+				else
+					DxBall.canvas.style.cursor = 'default' ;
 			break;
 		}
 	}
@@ -175,7 +181,8 @@ var EventHandlers = new function() {
 				}; 
 				
 				if(EventUtilities.checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480)) 
-					DxBall.setState(GameStates.LEVEL_SELECT) ; 
+					DxBall.playRandom ? DxBall.setState(GameStates.START_SCREEN) :
+					DxBall.setState(GameStates.LEVEL_SELECT) ;
 			break ; 
 			case 'mousemove' : 
 				var mouse = {
@@ -196,7 +203,8 @@ var EventHandlers = new function() {
 	handleEvent : function(evt) {
 		switch(evt.type) {
 			case 'click' : 
-				DxBall.setState(GameStates.LEVEL_SELECT) ; 
+				DxBall.playRandom ? DxBall.setState(GameStates.START_SCREEN) :
+					DxBall.setState(GameStates.LEVEL_SELECT) ;
 			break ;
 			case 'mousemove' : 
 				DxBall.canvas.style.cursor = 'pointer' ; 
@@ -231,6 +239,11 @@ var EventHandlers = new function() {
 					DxBall.setState(GameStates.LEVEL_SELECT); 
 				else if(EventUtilities.checkBounds(mouse, 170, 322, 437, 392))
 					DxBall.setState(GameStates.INFO_SCREEN);
+				else if(EventUtilities.checkBounds(mouse, 170, 180, 437, 265)) {
+					DxBall.playRandom = true ;
+					DxBall.setState(GameStates.RUNNING);
+					DxBall.start();
+				}
 			break ;
 			
 			case 'mousemove' :
@@ -240,7 +253,8 @@ var EventHandlers = new function() {
 				}; 
 				
 				if(EventUtilities.checkBounds(mouse, 170, 55, 437, 140)
-				   || EventUtilities.checkBounds(mouse, 170, 322, 437, 392)) 
+				   || EventUtilities.checkBounds(mouse, 170, 322, 437, 392)
+				   || EventUtilities.checkBounds(mouse, 170, 180, 437, 265)) 
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
 					DxBall.canvas.style.cursor = 'default' ;
