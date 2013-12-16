@@ -123,17 +123,26 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
-				for(i=0; i<6; ++i)
-					if(EventUtilities.checkBounds(mouse, licondata[i].x, licondata[i].y, 
-						licondata[i].x + ImageResource[4].width, licondata[i].y 
-						+ ImageResource[4].height) && licondata[i].unlocked == true) {
-						DxBall.setState(GameStates.RUNNING);
-						DxBall.setLevel(i);
-						DxBall.start(); 
-					}
-				if(EventUtilities.checkBounds(mouse, 0, 380, 50, 430))
-					DxBall.setState(GameStates.START_SCREEN) ;
+
+				SceneData.data[GameStates.LEVEL_SELECT].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.LEVEL_SELECT].whichRegion();
+				console.log(region);
+				switch(region) {
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL1 :
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL2 :
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL3 :
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL4 :
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL5 :
+					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL6 :
+						if(DxBall.setLevel(region)) {
+							DxBall.setState(GameStates.RUNNING);
+							DxBall.start(); 
+						}
+					break ;
+					case SceneData.data[GameStates.LEVEL_SELECT].BACK :
+						DxBall.setState(GameStates.START_SCREEN) ;
+					break ;
+				}
 			break; 
 			
 			case 'mousemove':
@@ -141,18 +150,12 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
-				for(i=0; i<=DxBall.level; ++i)
-					if(EventUtilities.checkBounds(mouse, licondata[i].x, licondata[i].y, 
-						licondata[i].x + ImageResource[4].width, licondata[i].y 
-						+ ImageResource[4].height)) 
-						DxBall.canvas.style.cursor = 'pointer' ;
-					else
-						DxBall.canvas.style.cursor = 'default' ;
-				if(EventUtilities.checkBounds(mouse, 0, 380, 50, 430))
+				SceneData.data[GameStates.LEVEL_SELECT].determineRegion(mouse, 'mousemove');
+				if(SceneData.data[GameStates.LEVEL_SELECT].whichRegion() != -1)
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
 					DxBall.canvas.style.cursor = 'default' ;
+				
 			break;
 		}
 	}
@@ -179,8 +182,9 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
-				if(EventUtilities.checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480)) 
+				SceneData.data[GameStates.LEVEL_COMPLETE].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.LEVEL_COMPLETE].whichRegion();
+				if(region != -1)  
 					DxBall.playRandom ? DxBall.setState(GameStates.START_SCREEN) :
 					DxBall.setState(GameStates.LEVEL_SELECT) ;
 			break ; 
@@ -189,8 +193,8 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
-				if(EventUtilities.checkBounds(mouse, 204, DxBall.HEIGHT-90, 435, 480))
+				SceneData.data[GameStates.LEVEL_COMPLETE].determineRegion(mouse, 'click');
+				if(SceneData.data[GameStates.LEVEL_COMPLETE].whichRegion() != -1)
 					DxBall.canvas.style.cursor = 'pointer' ; 
 				else
 					DxBall.canvas.style.cursor = 'default' ; 
@@ -233,16 +237,25 @@ var EventHandlers = new function() {
 				var mouse = {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
-				}; 
-
-				if(EventUtilities.checkBounds(mouse, 170, 55, 437, 140)) 
-					DxBall.setState(GameStates.LEVEL_SELECT); 
-				else if(EventUtilities.checkBounds(mouse, 170, 322, 437, 392))
-					DxBall.setState(GameStates.INFO_SCREEN);
-				else if(EventUtilities.checkBounds(mouse, 170, 180, 437, 265)) {
-					DxBall.playRandom = true ;
-					DxBall.setState(GameStates.RUNNING);
-					DxBall.start();
+				}; 	
+				SceneData.data[GameStates.START_SCREEN].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.START_SCREEN].whichRegion() ;
+				switch(region)
+				{
+					case SceneData.data[GameStates.START_SCREEN].CAMPAIGN :
+						DxBall.setState(GameStates.LEVEL_SELECT); 
+					break ;
+					case SceneData.data[GameStates.START_SCREEN].RANDOM :
+						DxBall.playRandom = true ;
+						DxBall.setState(GameStates.RUNNING);
+						DxBall.start();
+					break ;
+					case SceneData.data[GameStates.START_SCREEN].INFO :
+						DxBall.setState(GameStates.INFO_SCREEN);
+					break ;
+					case SceneData.data[GameStates.START_SCREEN].SETTINGS :
+						DxBall.setState(GameStates.SETTINGS);
+					break; 
 				}
 			break ;
 			
@@ -251,17 +264,57 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
-				if(EventUtilities.checkBounds(mouse, 170, 55, 437, 140)
-				   || EventUtilities.checkBounds(mouse, 170, 322, 437, 392)
-				   || EventUtilities.checkBounds(mouse, 170, 180, 437, 265)) 
+				SceneData.data[GameStates.START_SCREEN].determineRegion(mouse, 'mousemove');
+				if(SceneData.data[GameStates.START_SCREEN].whichRegion() != -1)
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
 					DxBall.canvas.style.cursor = 'default' ;
 			break ;
 		}
 	}
-	};		
+	};	
+	
+	var settingsSceneHandler = {
+	handleEvent : function(evt) {
+		switch(evt.type) {
+			case 'click' : 
+				var mouse = {
+					x: evt.pageX - Graphics.canvasMinX,
+					y: evt.pageY - Graphics.canvasMinY
+				}; 	
+				SceneData.data[GameStates.SETTINGS].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.SETTINGS].whichRegion() ;
+				switch(region)
+				{
+					case SceneData.data[GameStates.SETTINGS].EASY :
+						GameObjects.ball.life = 2 ;
+					break ;
+					case SceneData.data[GameStates.SETTINGS].MEDIUM :
+						GameObjects.ball.life = 1 ;
+					break ;
+					case SceneData.data[GameStates.SETTINGS].HARD :
+						GameObjects.ball.life = 0 ;
+					break ;
+					case SceneData.data[GameStates.SETTINGS].BACK :
+						DxBall.setState(GameStates.START_SCREEN) ;
+					break; 
+				}
+			break ;
+			
+			case 'mousemove':
+				var mouse = {
+					x: evt.pageX - Graphics.canvasMinX,
+					y: evt.pageY - Graphics.canvasMinY
+				}; 
+				SceneData.data[GameStates.SETTINGS].determineRegion(mouse, 'mousemove');
+				if(SceneData.data[GameStates.SETTINGS].whichRegion() != -1)
+					DxBall.canvas.style.cursor = 'pointer' ;
+				else
+					DxBall.canvas.style.cursor = 'default' ;
+			break;
+		}
+	}
+	};
 				
 	var unregisterEvents = function(state) {
 		switch(state) {
@@ -303,6 +356,10 @@ var EventHandlers = new function() {
 				DxBall.canvas.removeEventListener('click', gameOverSceneHandler, false);
 				DxBall.canvas.removeEventListener('mousemove', gameOverSceneHandler, false);
 			break ; 
+			case GameStates.SETTINGS :
+				DxBall.canvas.removeEventListener('click', settingsSceneHandler, false);
+				DxBall.canvas.removeEventListener('mousemove', settingsSceneHandler, false);
+			break ;
 		}
 	};
 
@@ -346,6 +403,10 @@ var EventHandlers = new function() {
 			case GameStates.GAME_OVER :
 				DxBall.canvas.addEventListener('click', gameOverSceneHandler, false);
 				DxBall.canvas.addEventListener('mousemove', gameOverSceneHandler, false);
+			break ;
+			case GameStates.SETTINGS :
+				DxBall.canvas.addEventListener('click', settingsSceneHandler, false);
+				DxBall.canvas.addEventListener('mousemove', settingsSceneHandler, false);
 			break ; 
 		}
 	};

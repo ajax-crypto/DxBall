@@ -9,90 +9,8 @@
 				 CREDIT_SCENE : 7,
 				 INFO_SCREEN : 8,
 				 START_SCREEN : 9,
+				 SETTINGS : 10
 			 });
-
-var DrawGameScenes = new function() {
-	
-	var self = this ; 
-	
-	var drawScene = [];
-	
-	drawScene[GameStates.SPLASH_SCREEN] = function() {
-		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 
-	};
-	
-	drawScene[GameStates.LEVEL_SELECT] = function() {
-		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
-		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
-		for(i=0; i<6; ++i)
-			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
-				licondata[i].x, licondata[i].y); 
-		drawHUD();
-	};
-	
-	drawScene[GameStates.RUNNING] = function() {
-		Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-		GameObjects.draw(); 
-		drawHUDinGame();
-	};
-	
-	drawScene[GameStates.PAUSED] = function() {
-		Graphics.grayscale() ; 
-		Graphics.image(ImageResource[7].res, ImageResource[7].x, ImageResource[7].y); 
-		drawHUDinGame();
-	};
-	
-	drawScene[GameStates.LEVEL_COMPLETE] = function() {
-		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
-		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.FORESTGREEN); 
-		Graphics.text('LEVEL COMPLETE', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.WHITE);
-		Graphics.text('You have scored ' + DxBall.getPointsScored() + ' in ' + 
-			DxBall.getElapsedTime(), DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2 + 30, Colors.WHITE);
-		Graphics.image(ImageResource[6].res, ImageResource[6].x, ImageResource[6].y); 
-	};
-	
-	drawScene[GameStates.GAME_OVER] = function() { 
-		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
-		Graphics.rect(0, 0, DxBall.WIDTH, DxBall.TOTAL_HEIGHT, Colors.RED); 
-		Graphics.text('GAME OVER', DxBall.WIDTH/2, DxBall.TOTAL_HEIGHT/2, Colors.GOLD);
-		Graphics.text('You lost ' + DxBall.getCurrentPoints(), DxBall.WIDTH/2, 
-			DxBall.TOTAL_HEIGHT/2 + 20, Colors.GOLD); 
-	};
-
-	drawScene[GameStates.CREDIT_SCENE] = function() {
-		Graphics.image(ImageResource[2].res, ImageResource[2].x, ImageResource[2].y); 
-	};
-	
-	drawScene[GameStates.INFO_SCREEN] = function() {
-		Graphics.image(ImageResource[11].res, ImageResource[11].x, ImageResource[11].y); 
-	};
-	
-	drawScene[GameStates.START_SCREEN] = function() {
-		Graphics.image(ImageResource[12].res, ImageResource[12].x, ImageResource[12].y); 
-	};
-	
-	var drawHUDinGame = function() {
-		if(DxBall.shouldDrawHUDinGame) {
-			Graphics.clearPortion(0, DxBall.HEIGHT, DxBall.WIDTH, 50);
-			if(GameObjects.giftCollected)
-				Graphics.text('Current Points : ' + DxBall.getCurrentPoints() + 
-				' | Gift collected !', DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
-			else
-				Graphics.text('Current Points : ' + DxBall.getCurrentPoints(), 
-					DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
-			DxBall.shouldDrawHUDinGame = false ;
-		}
-	};
-	
-	var drawHUD = function() {
-		Graphics.text('Total Points : ' + DxBall.getPointsScored() + ' | Level : ' + (DxBall.level+1)
-				, DxBall.WIDTH/2, (DxBall.HEIGHT+30), Colors.WHITE);
-	};
-	
-	self.draw = function(state) {
-		drawScene[state](); 
-	};
-};
 
 var DxBall = new function() {
 	
@@ -171,7 +89,11 @@ var DxBall = new function() {
 	};
 	
 	self.setLevel = function(val) {
-		self.level = val ;
+		if(val <= self.level) {
+			self.level = val ;
+			return true ;
+		}
+		return false ;
 	};
 	
 	self.resetPoints = function() {
@@ -234,31 +156,41 @@ var DxBall = new function() {
 	
 	self.pause = function() {
 		self.state = GameStates.PAUSED ;
-	}
-	
-	self.update = function() {
-		
 	};
+	
+	self.updateData = function() {
+		this.pstate = this.state ; 
+		if(this.isRunning()) {
+			GameObjects.ball.move(); 
+			GameObjects.gift.move();
+			this.playState = CollisionSystem.handleCollisions(); 
+			if(!this.playState) 
+				this.setState(GameStates.GAME_OVER) ;
+			if(this.isComplete()) {
+				this.setState(GameStates.LEVEL_COMPLETE) ; 
+				this.nextLevel() ; 
+			} 
+		}
+	};
+	
+	self.render = function() {
+		if(DrawGameScenes.shouldDrawAgain(this.state))
+			DrawGameScenes.draw(this.state) ;
+	};
+	
+	self.updateScene = function() {
+		if(this.pstate != this.state) {
+			EventHandlers.registerGameEvents(this.state, this.pstate); 
+			DrawGameScenes.draw(this.state) ;
+		}
+	};
+
 };
 
 function DxBallGameLoop() {
 	DxBall.tick(); 
-	if(DxBall.pstate != DxBall.state) {
-		EventHandlers.registerGameEvents(DxBall.state, DxBall.pstate); 
-		DrawGameScenes.draw(DxBall.state) ;
-	}
-	DxBall.pstate = DxBall.state ; 
-	if(DxBall.isRunning()) {
-		DrawGameScenes.draw(GameStates.RUNNING) ;
-		GameObjects.ball.move(); 
-		GameObjects.gift.move();
-		DxBall.playState = CollisionSystem.handleCollisions(); 
-		if(!DxBall.playState) 
-			DxBall.setState(GameStates.GAME_OVER) ;
-		if(DxBall.isComplete()) {
-			DxBall.setState(GameStates.LEVEL_COMPLETE) ; 
-			DxBall.nextLevel() ; 
-		} 
-	}
+	DxBall.updateScene() ;
+	DxBall.updateData();
+	DxBall.render() ;
 	DxBall.loop = setTimeout(DxBallGameLoop, 1000/DxBall.FPS); 
 }

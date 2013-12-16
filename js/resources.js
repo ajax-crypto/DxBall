@@ -13,7 +13,11 @@
  * Res 11 : Gift : Ball passes through bricks destroying them
  * Res 12 : Info screen
  * Res 13 : Start screen
+ * Res 14 : Settings screen
 ***********************************/ 
+
+var ImageResource = [] ; 
+var licondata = [] ;
 
 var resources = ['img/paddle.png', 
 		 'img/splash.png', 
@@ -27,7 +31,8 @@ var resources = ['img/paddle.png',
 		 'img/heart.png',
 		 'img/multi.png',
 		 'img/info.png',
-		 'img/start.png' ]; 
+		 'img/start.png',
+		 'img/settings.png' ]; 
 
 function Resource(res) {
 	var self = this ; 
@@ -37,10 +42,6 @@ function Resource(res) {
 	self.height = res.height ; 
 	self.width = res.width ;
 }
-
-ImageResource = [] ; 
-
-var licondata = new Array(6);
 
 function givePositions() {
 	var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*ImageResource[4].width))/4); 
@@ -99,8 +100,148 @@ function loadResources(start) {
 	preloadimages(resources).done(function(images){
 		for(i=0; i<images.length; ++i)
 			ImageResource[i] = new Resource(images[i]);
-		givePositions(); 
+		givePositions();
+		SceneData.init(); 
 		if(start)
 			DxBall.start(); // Start game only if resources are loaded
 	});
 }
+
+
+/*********************************************************
+ * The variable SceneData contains data in form
+ * of regions, which denotes that they carry special
+ * significance i.e. These regions when clicked (or
+ * any other GUI events) upon will perform certain tasks.
+ * *******************************************************/ 
+ 
+var SceneData = new function() {
+	var self = this ;
+	var initOnce = false ;
+	self.data = [] ;
+	
+	// Ommitted a tab indentation. 
+	self.init = function () {
+	if(initOnce)
+		return ;
+	self.data[GameStates.SETTINGS] = new function() { 
+		var _this = this ;
+		_this.EASY = 0 ;
+		_this.MEDIUM = 1 ;
+		_this.HARD = 2 ;
+		_this.BACK = 3 ;
+		var selectedRegion = -1 ;
+		
+		var regions = [ { startx : 210, starty : 180, endx : 420, endy : 240 },
+			            { startx : 210, starty : 240, endx : 420, endy : 310 },
+						{ startx : 210, starty : 310, endx : 420, endy : 380 },
+						{ startx : 0, starty : 430, endx : 50, endy : 480 } ];
+		var drawRegion = [ { x : 200, y : 205, r : 5 },
+		                   { x : 200, y : 280, r : 5 },
+		                   { x : 200, y : 345, r : 5 } ];
+		
+		_this.determineRegion = function(mouse, event) {
+			selectedRegion = -1 ;
+			for(var i=0; i<regions.length; i++) {
+				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
+					regions[i].starty, regions[i].endx, regions[i].endy)) {
+					selectedRegion = i ;
+					if(event == 'click')
+						DrawGameScenes.makeSceneRedraw(GameStates.SETTINGS) ;
+				}
+			}
+		};
+		
+		_this.getRegionData = function() {
+			return drawRegion[selectedRegion] ;
+		};
+		
+		_this.whichRegion = function() {
+			return selectedRegion ;
+		};
+	};
+	
+	self.data[GameStates.START_SCREEN] = new function() {
+		var _this = this ;
+		_this.CAMPAIGN = 0;
+		_this.RANDOM = 1 ;
+		_this.INFO = 2 ;
+		_this.SETTINGS = 3 ;
+		var selectedRegion = -1 ;
+		var regions = [ { startx : 170, starty : 55, endx : 437, endy : 140 },
+			            { startx : 170, starty : 180, endx : 437, endy : 265 },
+						{ startx : 170, starty : 322, endx : 437, endy : 392 },
+						{ startx : 565, starty : 410, endx : 640, endy : 480 } ];
+		
+		_this.determineRegion = function(mouse, event) {
+			selectedRegion = -1 ;
+			for(var i=0; i<regions.length; i++) {
+				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
+					regions[i].starty, regions[i].endx, regions[i].endy)) {
+					selectedRegion = i ;
+				}
+			}
+		};
+		
+		_this.whichRegion = function() {
+			return selectedRegion ;
+		};
+	};
+	
+	self.data[GameStates.LEVEL_SELECT] = new function() {
+		var _this = this ;
+		_this.LEVEL1 = 0 ;
+		_this.LEVEL2 = 1 ;
+		_this.LEVEL3 = 2 ;
+		_this.LEVEL4 = 3 ;
+		_this.LEVEL5 = 4 ;
+		_this.LEVEL6 = 5 ;
+		_this.BACK = 6 ;
+		
+		var selectedRegion = -1 ;
+		var w = ImageResource[4].width, h = ImageResource[4].height ;
+		var regions = [ ];
+		for(i=0; i<licondata.length; ++i)
+			regions[i] = { startx : licondata[i].x, starty : licondata[i].y,
+			  endx : licondata[i].x + w, endy : licondata[i].y + h } ;
+		regions[i] = { startx : 0, starty : 380, endx : 50, endy : 430 } ;
+		
+		_this.determineRegion = function(mouse, event) {
+			selectedRegion = -1 ;
+			for(var i=0; i<regions.length; i++) {
+				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
+					regions[i].starty, regions[i].endx, regions[i].endy)) {
+					selectedRegion = i ;
+				}
+			}
+		};
+		
+		_this.whichRegion = function() {
+			return selectedRegion ;
+		};
+	};
+	
+	self.data[GameStates.LEVEL_COMPLETE] = new function() {
+		 var _this = this ;
+		_this.CONTINUE = 0;
+		var selectedRegion = -1 ;
+		var regions = [ { startx : 204, starty : DxBall.HEIGHT-90, endx : 435, endy : 480 } ];
+		
+		_this.determineRegion = function(mouse, event) {
+			selectedRegion = -1 ;
+			for(var i=0; i<regions.length; i++) {
+				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
+					regions[i].starty, regions[i].endx, regions[i].endy)) {
+					selectedRegion = i ;
+				}
+			}
+		};
+		
+		_this.whichRegion = function() {
+			return selectedRegion ;
+		};
+	};
+	initOnce = true ;
+	};
+};
+

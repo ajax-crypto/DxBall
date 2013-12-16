@@ -320,7 +320,7 @@ var GameObjects = new function() {
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
 			}
-			if(totalBricks > 25)
+			if(totalBricks > 40)
 				break ;
 		}
 		for (--i; i < DxBall.NROWS; i++) {
