@@ -137,15 +137,14 @@ var DxBall = new function() {
 	};
 
 	self.restart = function() {
-		self.state = GameStates.RUNNING ; 
-		clearTimeout(self.loop);
+		self.state = GameStates.RUNNING ;
+		self.playRandom ? GameObjects.generateRandomLevel() : GameObjects.init(); 
 		self.start(); 
 	};
 	
 	self.start = function() {
 		clearTimeout(self.loop); 
 		self.playState = true ; 
-		self.temp_points = 0 ;
 		self.initTimer() ;
 		DxBallGameLoop(); 
 	};
@@ -154,14 +153,16 @@ var DxBall = new function() {
 		if(self.setLevel(level)) {
 			self.state = GameStates.RUNNING ;
 			self.playRandom = false ;
+                        self.temp_points = 0 ;
 			GameObjects.init();
 			self.start();
 		}
 	};
 	
 	self.startRandomLevel = function() {
-		self.state = GameStates.RUNNING ;
+		self.setState(GameStates.RUNNING) ;
 		self.playRandom = true ;
+                self.temp_points = 0 ;
 		GameObjects.generateRandomLevel() ;
 		self.start();
 	};

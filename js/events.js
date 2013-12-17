@@ -20,21 +20,7 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				/*
-				var option = ~~(ImageResource[7].height/3) ; 
-				
-				if(EventUtilities.checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
-					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
-					ImageResource[7].height)) {
-					if(mouse.y < (option + ImageResource[7].y)) 
-						DxBall.restart(); 
-					else if(mouse.y > (option + ImageResource[7].y) && 
-						mouse.y < (2*option + ImageResource[7].y)) 
-						DxBall.resume();  
-					else 
-						DxBall.setState(DxBall.prevstate) ;  
-				}*/
-				
+
 				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.PAUSED].whichRegion();
 				switch(region) {
@@ -56,7 +42,7 @@ var EventHandlers = new function() {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'click');
+				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'mouseover');
 				if(SceneData.data[GameStates.PAUSED].whichRegion() != -1) 
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
@@ -95,8 +81,6 @@ var EventHandlers = new function() {
 			case 'click' :
 				if(DxBall.isRunning())
 					DxBall.pause(); 
-				else if(DxBall.isPaused()) 
-					DxBall.resume(); 
 			break ; 
 		}
 	}

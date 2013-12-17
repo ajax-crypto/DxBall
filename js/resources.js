@@ -242,7 +242,7 @@ var SceneData = new function() {
 		};
 	};
 	
-	self.data[GameStates.PAUSED] = = new function() {
+	self.data[GameStates.PAUSED] = new function() {
 		 var _this = this ;
 		_this.RESTART = 0;
 		_this.RESUME = 1;
@@ -252,7 +252,7 @@ var SceneData = new function() {
 		var heights = ~~(ImageResource[7].height/3) ;
 		for(var i=0; i<3; ++i)
 			regions[i] = { startx : ImageResource[7].x, 
-				           starty : ImageResource[7].y + i*heights
+				           starty : ImageResource[7].y + i*heights,
 				           endx : ImageResource[7].x + ImageResource[7].width,
 				           endy : ImageResource[7].y + (i+1)*heights };
 		
