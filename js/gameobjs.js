@@ -232,7 +232,7 @@ function Brick(type) {
 		case 6 :
 			self.color = Colors.RED ;
 			self.destructible = 0 ;
-			self.points = -50 ;
+			self.points = -20 ;
 		break ;
 	}
 } 
@@ -320,7 +320,7 @@ var GameObjects = new function() {
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
 			}
-			if(totalBricks > 40)
+			if(totalBricks > 30)
 				break ;
 		}
 		for (--i; i < DxBall.NROWS; i++) {

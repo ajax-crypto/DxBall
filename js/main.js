@@ -144,10 +144,26 @@ var DxBall = new function() {
 	
 	self.start = function() {
 		clearTimeout(self.loop); 
-		self.playRandom ? GameObjects.generateRandomLevel() : GameObjects.init();
 		self.playState = true ; 
+		self.temp_points = 0 ;
 		self.initTimer() ;
 		DxBallGameLoop(); 
+	};
+	
+	self.startLevel = function(level) {
+		if(self.setLevel(level)) {
+			self.state = GameStates.RUNNING ;
+			self.playRandom = false ;
+			GameObjects.init();
+			self.start();
+		}
+	};
+	
+	self.startRandomLevel = function() {
+		self.state = GameStates.RUNNING ;
+		self.playRandom = true ;
+		GameObjects.generateRandomLevel() ;
+		self.start();
 	};
 
 	self.resume = function() {
@@ -159,29 +175,34 @@ var DxBall = new function() {
 	};
 	
 	self.updateData = function() {
-		this.pstate = this.state ; 
-		if(this.isRunning()) {
+		self.pstate = self.state ; 
+		if(self.isRunning()) {
 			GameObjects.ball.move(); 
 			GameObjects.gift.move();
-			this.playState = CollisionSystem.handleCollisions(); 
-			if(!this.playState) 
-				this.setState(GameStates.GAME_OVER) ;
-			if(this.isComplete()) {
-				this.setState(GameStates.LEVEL_COMPLETE) ; 
-				this.nextLevel() ; 
+			self.playState = CollisionSystem.handleCollisions(); 
+			if(!self.playState) 
+				self.setState(GameStates.GAME_OVER) ;
+			if(self.isComplete()) {
+				
+				// Award bonus if completed within 1 minute
+				if(minute < 1)
+					prev_points += 500 ;
+					
+				self.setState(GameStates.LEVEL_COMPLETE) ; 
+				self.nextLevel() ; 
 			} 
 		}
 	};
 	
 	self.render = function() {
-		if(DrawGameScenes.shouldDrawAgain(this.state))
-			DrawGameScenes.draw(this.state) ;
+		if(DrawGameScenes.shouldDrawAgain(self.state))
+			DrawGameScenes.draw(self.state) ;
 	};
 	
 	self.updateScene = function() {
-		if(this.pstate != this.state) {
-			EventHandlers.registerGameEvents(this.state, this.pstate); 
-			DrawGameScenes.draw(this.state) ;
+		if(self.pstate != self.state) {
+			EventHandlers.registerGameEvents(self.state, self.pstate); 
+			DrawGameScenes.draw(self.state) ;
 		}
 	};
 

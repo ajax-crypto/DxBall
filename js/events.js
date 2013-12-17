@@ -20,7 +20,7 @@ var EventHandlers = new function() {
 					x: evt.pageX - Graphics.canvasMinX,
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
-				
+				/*
 				var option = ~~(ImageResource[7].height/3) ; 
 				
 				if(EventUtilities.checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
@@ -33,7 +33,22 @@ var EventHandlers = new function() {
 						DxBall.resume();  
 					else 
 						DxBall.setState(DxBall.prevstate) ;  
+				}*/
+				
+				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.PAUSED].whichRegion();
+				switch(region) {
+					case SceneData.data[GameStates.PAUSED].RESTART :
+						DxBall.restart(); 
+					break ;
+					case SceneData.data[GameStates.PAUSED].RESUME :
+						DxBall.resume(); 
+					break ;
+					case SceneData.data[GameStates.PAUSED].BACK :
+						DxBall.setState(DxBall.prevstate) ;
+					break ;
 				}
+				
 			break ;
 			case 'mousemove' :
 				var mouse = {
@@ -41,9 +56,8 @@ var EventHandlers = new function() {
 					y: evt.pageY - Graphics.canvasMinY
 				}; 
 				
-				if(EventUtilities.checkBounds(mouse, ImageResource[7].x, ImageResource[7].y, 
-					ImageResource[7].x + ImageResource[7].width, ImageResource[7].y + 
-					ImageResource[7].height)) 
+				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'click');
+				if(SceneData.data[GameStates.PAUSED].whichRegion() != -1) 
 					DxBall.canvas.style.cursor = 'pointer' ;
 				else
 					DxBall.canvas.style.cursor = 'default' ;
@@ -126,7 +140,6 @@ var EventHandlers = new function() {
 
 				SceneData.data[GameStates.LEVEL_SELECT].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.LEVEL_SELECT].whichRegion();
-				console.log(region);
 				switch(region) {
 					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL1 :
 					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL2 :
@@ -134,10 +147,7 @@ var EventHandlers = new function() {
 					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL4 :
 					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL5 :
 					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL6 :
-						if(DxBall.setLevel(region)) {
-							DxBall.setState(GameStates.RUNNING);
-							DxBall.start(); 
-						}
+						DxBall.startLevel(region); 
 					break ;
 					case SceneData.data[GameStates.LEVEL_SELECT].BACK :
 						DxBall.setState(GameStates.START_SCREEN) ;
@@ -246,9 +256,7 @@ var EventHandlers = new function() {
 						DxBall.setState(GameStates.LEVEL_SELECT); 
 					break ;
 					case SceneData.data[GameStates.START_SCREEN].RANDOM :
-						DxBall.playRandom = true ;
-						DxBall.setState(GameStates.RUNNING);
-						DxBall.start();
+						DxBall.startRandomLevel();
 					break ;
 					case SceneData.data[GameStates.START_SCREEN].INFO :
 						DxBall.setState(GameStates.INFO_SCREEN);

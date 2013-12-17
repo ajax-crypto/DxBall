@@ -241,6 +241,35 @@ var SceneData = new function() {
 			return selectedRegion ;
 		};
 	};
+	
+	self.data[GameStates.PAUSED] = = new function() {
+		 var _this = this ;
+		_this.RESTART = 0;
+		_this.RESUME = 1;
+		_this.BACK = 2 ;
+		var selectedRegion = -1 ;
+		var regions = [] ;
+		var heights = ~~(ImageResource[7].height/3) ;
+		for(var i=0; i<3; ++i)
+			regions[i] = { startx : ImageResource[7].x, 
+				           starty : ImageResource[7].y + i*heights
+				           endx : ImageResource[7].x + ImageResource[7].width,
+				           endy : ImageResource[7].y + (i+1)*heights };
+		
+		_this.determineRegion = function(mouse, event) {
+			selectedRegion = -1 ;
+			for(var i=0; i<regions.length; i++) {
+				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
+					regions[i].starty, regions[i].endx, regions[i].endy)) {
+					selectedRegion = i ;
+				}
+			}
+		};
+		
+		_this.whichRegion = function() {
+			return selectedRegion ;
+		};
+	};
 	initOnce = true ;
 	};
 };
