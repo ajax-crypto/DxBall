@@ -51,9 +51,9 @@ function Ball(x, y, radius, movex, movey, color) {
 
 Ball.prototype.speedup = function() {
 		var self = this ; 
-		if(self.dy < 0)
+		if(self.dy < 0 && self.dy > -4)
 			self.dy -= BallDefaults.SPEED_UP ; 
-		else 
+		else if(self.dy < 0 && self.dy < 9)
 			self.dy += BallDefaults.SPEED_UP ; 
 	};
 	

@@ -114,163 +114,123 @@ function loadResources(start) {
  * significance i.e. These regions when clicked (or
  * any other GUI events) upon will perform certain tasks.
  * *******************************************************/ 
+
+ 
+function SceneDataFormat(_regions, _drawRegions) {
+	var self = this ;
+	var selectedRegion = -1 ;
+	self.regions = _regions ;
+	self.drawRegion = _drawRegions ;
+}
+		
+SceneDataFormat.prototype.whichRegion = function() {
+		return selectedRegion ;
+	};
+	
+SceneDataFormat.prototype.determineRegion = function(mouse, event) {
+		var self = this ;
+		selectedRegion = -1 ;
+		for(var i=0; i<self.regions.length; i++) {
+			if(EventUtilities.checkBounds(mouse, self.regions[i].startx, 
+				self.regions[i].starty, self.regions[i].endx, self.regions[i].endy)) {
+				selectedRegion = i ;
+			}
+		}
+	};
+	
+SceneDataFormat.prototype.getRegionData = function() {
+		return this.drawRegion[selectedRegion] ;
+	};
  
 var SceneData = new function() {
 	var self = this ;
 	var initOnce = false ;
 	self.data = [] ;
-	
-	// Ommitted a tab indentation. 
+	self.regions = [] ;
+
 	self.init = function () {
-	if(initOnce)
-		return ;
-	self.data[GameStates.SETTINGS] = new function() { 
-		var _this = this ;
-		_this.EASY = 0 ;
-		_this.MEDIUM = 1 ;
-		_this.HARD = 2 ;
-		_this.BACK = 3 ;
-		var selectedRegion = -1 ;
-		
-		var regions = [ { startx : 210, starty : 180, endx : 420, endy : 240 },
-			            { startx : 210, starty : 240, endx : 420, endy : 310 },
-						{ startx : 210, starty : 310, endx : 420, endy : 380 },
-						{ startx : 0, starty : 430, endx : 50, endy : 480 } ];
-		var drawRegion = [ { x : 200, y : 205, r : 5 },
-		                   { x : 200, y : 280, r : 5 },
-		                   { x : 200, y : 345, r : 5 } ];
-		
-		_this.determineRegion = function(mouse, event) {
-			selectedRegion = -1 ;
-			for(var i=0; i<regions.length; i++) {
-				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
-					regions[i].starty, regions[i].endx, regions[i].endy)) {
-					selectedRegion = i ;
-					if(event == 'click')
-						DrawGameScenes.makeSceneRedraw(GameStates.SETTINGS) ;
-				}
-			}
+		if(initOnce)
+			return ;
+			
+		self.regions[GameStates.SETTINGS] = new function () {
+			var _this = this ;
+			_this.EASY = 0 ;
+			_this.MEDIUM = 1 ;
+			_this.HARD = 2 ;
+			_this.BACK = 3 ;
 		};
 		
-		_this.getRegionData = function() {
-			return drawRegion[selectedRegion] ;
+		self.regions[GameStates.START_SCREEN] = new function() {
+			var _this = this ;
+			_this.CAMPAIGN = 0;
+			_this.RANDOM = 1 ;
+			_this.INFO = 2 ;
+			_this.SETTINGS = 3 ;
 		};
 		
-		_this.whichRegion = function() {
-			return selectedRegion ;
+		self.regions[GameStates.LEVEL_SELECT] = new function() {
+			var _this = this ;
+			_this.LEVEL1 = 0 ;
+			_this.LEVEL2 = 1 ;
+			_this.LEVEL3 = 2 ;
+			_this.LEVEL4 = 3 ;
+			_this.LEVEL5 = 4 ;
+			_this.LEVEL6 = 5 ;
+			_this.BACK = 6 ;
 		};
-	};
+		
+		self.regions[GameStates.LEVEL_COMPLETE] = new function() {
+			var _this = this ;
+			_this.CONTINUE = 0 ;
+		};
+			
+		self.regions[GameStates.PAUSED] = new function() {
+			var _this = this ;
+			_this.RESTART = 0;
+			_this.RESUME = 1;
+			_this.BACK = 2 ;
+		};
+			
+		self.data[GameStates.SETTINGS] = new SceneDataFormat(
+			[ { startx : 210, starty : 180, endx : 420, endy : 240 },
+			  { startx : 210, starty : 240, endx : 420, endy : 310 },
+			  { startx : 210, starty : 310, endx : 420, endy : 380 },
+			  { startx : 0, starty : 430, endx : 50, endy : 480 } ], 
+		    [ { x : 200, y : 205, r : 5 },
+		      { x : 200, y : 280, r : 5 },
+		      { x : 200, y : 345, r : 5 } ]);
 	
-	self.data[GameStates.START_SCREEN] = new function() {
-		var _this = this ;
-		_this.CAMPAIGN = 0;
-		_this.RANDOM = 1 ;
-		_this.INFO = 2 ;
-		_this.SETTINGS = 3 ;
-		var selectedRegion = -1 ;
-		var regions = [ { startx : 170, starty : 55, endx : 437, endy : 140 },
-			            { startx : 170, starty : 180, endx : 437, endy : 265 },
-						{ startx : 170, starty : 322, endx : 437, endy : 392 },
-						{ startx : 565, starty : 410, endx : 640, endy : 480 } ];
-		
-		_this.determineRegion = function(mouse, event) {
-			selectedRegion = -1 ;
-			for(var i=0; i<regions.length; i++) {
-				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
-					regions[i].starty, regions[i].endx, regions[i].endy)) {
-					selectedRegion = i ;
-				}
-			}
-		};
-		
-		_this.whichRegion = function() {
-			return selectedRegion ;
-		};
-	};
+		self.data[GameStates.START_SCREEN] = new SceneDataFormat(
+			[ { startx : 170, starty : 55, endx : 437, endy : 140 },
+			  { startx : 170, starty : 180, endx : 437, endy : 265 },
+			  { startx : 170, starty : 322, endx : 437, endy : 392 },
+		      { startx : 565, starty : 410, endx : 640, endy : 480 } ]);
 	
-	self.data[GameStates.LEVEL_SELECT] = new function() {
-		var _this = this ;
-		_this.LEVEL1 = 0 ;
-		_this.LEVEL2 = 1 ;
-		_this.LEVEL3 = 2 ;
-		_this.LEVEL4 = 3 ;
-		_this.LEVEL5 = 4 ;
-		_this.LEVEL6 = 5 ;
-		_this.BACK = 6 ;
-		
-		var selectedRegion = -1 ;
-		var w = ImageResource[4].width, h = ImageResource[4].height ;
-		var regions = [ ];
-		for(i=0; i<licondata.length; ++i)
-			regions[i] = { startx : licondata[i].x, starty : licondata[i].y,
-			  endx : licondata[i].x + w, endy : licondata[i].y + h } ;
-		regions[i] = { startx : 0, starty : 380, endx : 50, endy : 430 } ;
-		
-		_this.determineRegion = function(mouse, event) {
-			selectedRegion = -1 ;
-			for(var i=0; i<regions.length; i++) {
-				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
-					regions[i].starty, regions[i].endx, regions[i].endy)) {
-					selectedRegion = i ;
-				}
-			}
-		};
-		
-		_this.whichRegion = function() {
-			return selectedRegion ;
-		};
-	};
+		self.data[GameStates.LEVEL_SELECT] = new SceneDataFormat(
+			(function() {
+				var regions = [] ;
+				var w = ImageResource[4].width, h = ImageResource[4].height ;
+				for(i=0; i<licondata.length; ++i)
+					regions[i] = { startx : licondata[i].x, starty : licondata[i].y,
+						endx : licondata[i].x + w, endy : licondata[i].y + h } ;
+						regions[i] = { startx : 0, starty : 380, endx : 50, endy : 430 } ;
+				return regions; })());
 	
-	self.data[GameStates.LEVEL_COMPLETE] = new function() {
-		 var _this = this ;
-		_this.CONTINUE = 0;
-		var selectedRegion = -1 ;
-		var regions = [ { startx : 204, starty : DxBall.HEIGHT-90, endx : 435, endy : 480 } ];
-		
-		_this.determineRegion = function(mouse, event) {
-			selectedRegion = -1 ;
-			for(var i=0; i<regions.length; i++) {
-				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
-					regions[i].starty, regions[i].endx, regions[i].endy)) {
-					selectedRegion = i ;
-				}
-			}
-		};
-		
-		_this.whichRegion = function() {
-			return selectedRegion ;
-		};
-	};
+		self.data[GameStates.LEVEL_COMPLETE] = new SceneDataFormat(
+			[ { startx : 204, starty : DxBall.HEIGHT-90, endx : 435, endy : 480 } ]);
 	
-	self.data[GameStates.PAUSED] = new function() {
-		 var _this = this ;
-		_this.RESTART = 0;
-		_this.RESUME = 1;
-		_this.BACK = 2 ;
-		var selectedRegion = -1 ;
-		var regions = [] ;
-		var heights = ~~(ImageResource[7].height/3) ;
-		for(var i=0; i<3; ++i)
-			regions[i] = { startx : ImageResource[7].x, 
-				           starty : ImageResource[7].y + i*heights,
-				           endx : ImageResource[7].x + ImageResource[7].width,
-				           endy : ImageResource[7].y + (i+1)*heights };
+		self.data[GameStates.PAUSED] = new SceneDataFormat(
+		(function() {
+			var regions = [] ;
+			var heights = ~~(ImageResource[7].height/3) ;
+			for(var i=0; i<3; ++i)
+				regions[i] = { startx : ImageResource[7].x, 
+							starty : ImageResource[7].y + i*heights,
+							endx : ImageResource[7].x + ImageResource[7].width,
+							endy : ImageResource[7].y + (i+1)*heights };
+			return regions; })());
 		
-		_this.determineRegion = function(mouse, event) {
-			selectedRegion = -1 ;
-			for(var i=0; i<regions.length; i++) {
-				if(EventUtilities.checkBounds(mouse, regions[i].startx, 
-					regions[i].starty, regions[i].endx, regions[i].endy)) {
-					selectedRegion = i ;
-				}
-			}
-		};
-		
-		_this.whichRegion = function() {
-			return selectedRegion ;
-		};
-	};
-	initOnce = true ;
+		initOnce = true ;
 	};
 };
 

@@ -24,13 +24,13 @@ var EventHandlers = new function() {
 				SceneData.data[GameStates.PAUSED].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.PAUSED].whichRegion();
 				switch(region) {
-					case SceneData.data[GameStates.PAUSED].RESTART :
+					case SceneData.regions[GameStates.PAUSED].RESTART :
 						DxBall.restart(); 
 					break ;
-					case SceneData.data[GameStates.PAUSED].RESUME :
+					case SceneData.regions[GameStates.PAUSED].RESUME :
 						DxBall.resume(); 
 					break ;
-					case SceneData.data[GameStates.PAUSED].BACK :
+					case SceneData.regions[GameStates.PAUSED].BACK :
 						DxBall.setState(DxBall.prevstate) ;
 					break ;
 				}
@@ -125,15 +125,15 @@ var EventHandlers = new function() {
 				SceneData.data[GameStates.LEVEL_SELECT].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.LEVEL_SELECT].whichRegion();
 				switch(region) {
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL1 :
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL2 :
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL3 :
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL4 :
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL5 :
-					case SceneData.data[GameStates.LEVEL_SELECT].LEVEL6 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL1 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL2 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL3 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL4 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL5 :
+					case SceneData.regions[GameStates.LEVEL_SELECT].LEVEL6 :
 						DxBall.startLevel(region); 
 					break ;
-					case SceneData.data[GameStates.LEVEL_SELECT].BACK :
+					case SceneData.regions[GameStates.LEVEL_SELECT].BACK :
 						DxBall.setState(GameStates.START_SCREEN) ;
 					break ;
 				}
@@ -236,16 +236,16 @@ var EventHandlers = new function() {
 				var region = SceneData.data[GameStates.START_SCREEN].whichRegion() ;
 				switch(region)
 				{
-					case SceneData.data[GameStates.START_SCREEN].CAMPAIGN :
+					case SceneData.regions[GameStates.START_SCREEN].CAMPAIGN :
 						DxBall.setState(GameStates.LEVEL_SELECT); 
 					break ;
-					case SceneData.data[GameStates.START_SCREEN].RANDOM :
+					case SceneData.regions[GameStates.START_SCREEN].RANDOM :
 						DxBall.startRandomLevel();
 					break ;
-					case SceneData.data[GameStates.START_SCREEN].INFO :
+					case SceneData.regions[GameStates.START_SCREEN].INFO :
 						DxBall.setState(GameStates.INFO_SCREEN);
 					break ;
-					case SceneData.data[GameStates.START_SCREEN].SETTINGS :
+					case SceneData.regions[GameStates.START_SCREEN].SETTINGS :
 						DxBall.setState(GameStates.SETTINGS);
 					break; 
 				}
@@ -276,18 +276,19 @@ var EventHandlers = new function() {
 				}; 	
 				SceneData.data[GameStates.SETTINGS].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.SETTINGS].whichRegion() ;
+				DrawGameScenes.makeSceneRedraw(GameStates.SETTINGS) ;
 				switch(region)
 				{
-					case SceneData.data[GameStates.SETTINGS].EASY :
+					case SceneData.regions[GameStates.SETTINGS].EASY :
 						GameObjects.ball.life = 2 ;
 					break ;
-					case SceneData.data[GameStates.SETTINGS].MEDIUM :
+					case SceneData.regions[GameStates.SETTINGS].MEDIUM :
 						GameObjects.ball.life = 1 ;
 					break ;
-					case SceneData.data[GameStates.SETTINGS].HARD :
+					case SceneData.regions[GameStates.SETTINGS].HARD :
 						GameObjects.ball.life = 0 ;
 					break ;
-					case SceneData.data[GameStates.SETTINGS].BACK :
+					case SceneData.regions[GameStates.SETTINGS].BACK :
 						DxBall.setState(GameStates.START_SCREEN) ;
 					break; 
 				}
