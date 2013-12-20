@@ -121,7 +121,7 @@ var DxBall = new function() {
 		points += temp_points ; 
 		prev_points = temp_points ;
 		temp_points = 0 ;
-		licondata[DxBall.level].unlocked = true ;
+		icondata[DxBall.level].unlocked = true ;
 	};
 	
 	self.getPointsScored = function() {

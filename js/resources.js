@@ -17,22 +17,7 @@
 ***********************************/ 
 
 var ImageResource = [] ; 
-var licondata = [] ;
-
-var resources = ['img/paddle.png', 
-		 'img/splash.png', 
-		 'img/credit.png', 
-		 'img/lselect.png', 
-		 'img/ulevel.png',
-		 'img/llevel.png',
-		 'img/next.png',
-		 'img/pause.png',
-		 'img/coin.png',
-		 'img/heart.png',
-		 'img/multi.png',
-		 'img/info.png',
-		 'img/start.png',
-		 'img/settings.png' ]; 
+var icondata = [] ;
 
 function Resource(res) {
 	var self = this ; 
@@ -43,71 +28,82 @@ function Resource(res) {
 	self.width = res.width ;
 }
 
-function givePositions() {
-	var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*ImageResource[4].width))/4); 
-	var ICON_PADDING_HEIGHT = ~~((DxBall.HEIGHT-(2*ImageResource[4].height))/3); 
-	for(i=0; i<6; ++i)
-	{
-		if(i < 3)
-			licondata[i] = { x: (i*ImageResource[4].width) + (i+1)*ICON_PADDING_WIDTH,
-						          y: ICON_PADDING_HEIGHT, 
-						          unlocked: false
-					            }; 
-		else
-			licondata[i] = { x: ((i-3)*ImageResource[4].width) + (i-2)*ICON_PADDING_WIDTH,
-		                          y: ICON_PADDING_HEIGHT*2 + ImageResource[4].height,
-						          unlocked: false
-					            };
-	}
-	licondata[0].unlocked = true ; // Start with first level
-	ImageResource[6].x = ~~((DxBall.WIDTH - ImageResource[6].width)/2);
-	ImageResource[6].y = ~~(DxBall.TOTAL_HEIGHT - ImageResource[6].height);
-	ImageResource[7].x = ~~((DxBall.WIDTH - ImageResource[7].width)/2);
-	ImageResource[7].y = ~~((DxBall.HEIGHT/2)-(ImageResource[7].height/2));
-}
+function ResourceManager(resourceURLs, positionAssign) {
 
-function preloadimages(arr){
-    var newimages = [], loadedimages = 0;
-    var postaction = function(){};
-    var arr = (typeof arr!="object")? [arr] : arr;
-    function imageloadpost(){
-        loadedimages++;
-        if (loadedimages == arr.length){
-			//call postaction and pass in newimages array as parameter
-            postaction(newimages) ;
-        }
-    }
-    for (var i=0; i<arr.length; ++i){
-        newimages[i] = new Image();
-        newimages[i].src = arr[i];
-        newimages[i].onload = function(){
-            imageloadpost();
-        };
-        newimages[i].onerror = function(){
-            alert('Failed to Load Resources');
-        };
-    }
-    //return blank object with done() method
-    return { 
-        done:function(f){
-			//remember user defined callback functions to be called when images load
-            postaction = f || postaction ;
-        }
-    }
-}
+	var resources = resourceURLs ;
+	var givePositions = positionAssign ;
+
+	var preloadImages = function(arr){
+		var newimages = [], loadedimages = 0;
+		var postaction = function(){};
+		var arr = (typeof arr!="object")? [arr] : arr;
+		function imageloadpost(){
+			loadedimages++;
+			if (loadedimages == arr.length){
+				//call postaction and pass in newimages array as parameter
+				postaction(newimages) ;
+			}
+		}
+		for (var i=0; i<arr.length; ++i){
+			newimages[i] = new Image();
+			newimages[i].src = arr[i];
+			newimages[i].onload = function(){
+				imageloadpost();
+			};
+			newimages[i].onerror = function(){
+				alert('Failed to Load Resources');
+			};
+		}
+		//return blank object with done() method
+		return { 
+			done:function(f){
+				//remember user defined callback functions to be called when images load
+				postaction = f || postaction ;
+			}
+		}
+	};
  
-function loadResources(start) {
-	preloadimages(resources).done(function(images){
-		for(i=0; i<images.length; ++i)
-			ImageResource[i] = new Resource(images[i]);
-		givePositions();
-		SceneData.init(); 
-		if(start)
-			DxBall.start(); // Start game only if resources are loaded
-	});
+	this.prepareAndStart = function() {
+		preloadImages(resources).done(function(images){
+			for(i=0; i<images.length; ++i) 
+				ImageResource[i] = new Resource(images[i]);
+			givePositions();
+			SceneData.init(); 
+			DxBall.start();
+		});
+	};
+	
 }
 
-
+var DxBallResources = new ResourceManager( [
+	'img/paddle.png', 'img/splash.png', 'img/credit.png', 
+	'img/lselect.png', 'img/ulevel.png', 'img/llevel.png',
+	'img/next.png', 'img/pause.png', 'img/coin.png',
+	'img/heart.png', 'img/multi.png', 'img/info.png',
+	'img/start.png', 'img/settings.png' ], 
+	(function() {
+		var ICON_PADDING_WIDTH  = ~~((DxBall.WIDTH-(3*ImageResource[4].width))/4); 
+		var ICON_PADDING_HEIGHT = ~~((DxBall.HEIGHT-(2*ImageResource[4].height))/3); 
+		for(i=0; i<6; ++i)
+		{
+			if(i < 3)
+				icondata[i] = { x: (i*ImageResource[4].width) + (i+1)*ICON_PADDING_WIDTH,
+						         y: ICON_PADDING_HEIGHT, 
+						         unlocked: false
+					            }; 
+			else
+				icondata[i] = { x: ((i-3)*ImageResource[4].width) + (i-2)*ICON_PADDING_WIDTH,
+		                         y: ICON_PADDING_HEIGHT*2 + ImageResource[4].height,
+						         unlocked: false
+					            };
+		}
+		icondata[0].unlocked = true ; // Start with first level
+		ImageResource[6].x = ~~((DxBall.WIDTH - ImageResource[6].width)/2);
+		ImageResource[6].y = ~~(DxBall.TOTAL_HEIGHT - ImageResource[6].height);
+		ImageResource[7].x = ~~((DxBall.WIDTH - ImageResource[7].width)/2);
+		ImageResource[7].y = ~~((DxBall.HEIGHT/2)-(ImageResource[7].height/2));
+	}) );
+	
 /*********************************************************
  * The variable SceneData contains data in form
  * of regions, which denotes that they carry special
@@ -152,43 +148,25 @@ var SceneData = new function() {
 		if(initOnce)
 			return ;
 			
-		self.regions[GameStates.SETTINGS] = new function () {
-			var _this = this ;
-			_this.EASY = 0 ;
-			_this.MEDIUM = 1 ;
-			_this.HARD = 2 ;
-			_this.BACK = 3 ;
+		self.regions[GameStates.SETTINGS] = {
+			EASY : 0, MEDIUM : 1, HARD : 2, BACK : 3
 		};
 		
-		self.regions[GameStates.START_SCREEN] = new function() {
-			var _this = this ;
-			_this.CAMPAIGN = 0;
-			_this.RANDOM = 1 ;
-			_this.INFO = 2 ;
-			_this.SETTINGS = 3 ;
+		self.regions[GameStates.START_SCREEN] = {
+			CAMPAIGN : 0, RANDOM : 1, INFO : 2, SETTINGS : 3
 		};
 		
-		self.regions[GameStates.LEVEL_SELECT] = new function() {
-			var _this = this ;
-			_this.LEVEL1 = 0 ;
-			_this.LEVEL2 = 1 ;
-			_this.LEVEL3 = 2 ;
-			_this.LEVEL4 = 3 ;
-			_this.LEVEL5 = 4 ;
-			_this.LEVEL6 = 5 ;
-			_this.BACK = 6 ;
+		self.regions[GameStates.LEVEL_SELECT] = {
+			LEVEL1 : 0, LEVEL2 : 1, LEVEL3 : 2, LEVEL4 : 3, 
+			LEVEL5 : 4, LEVEL6 : 5, BACK : 6
 		};
 		
-		self.regions[GameStates.LEVEL_COMPLETE] = new function() {
-			var _this = this ;
-			_this.CONTINUE = 0 ;
+		self.regions[GameStates.LEVEL_COMPLETE] = {
+			CONTINUE : 0
 		};
 			
-		self.regions[GameStates.PAUSED] = new function() {
-			var _this = this ;
-			_this.RESTART = 0;
-			_this.RESUME = 1;
-			_this.BACK = 2 ;
+		self.regions[GameStates.PAUSED] = {
+			RESTART : 0, RESUME : 1, BACK : 2
 		};
 			
 		self.data[GameStates.SETTINGS] = new SceneDataFormat(
@@ -210,9 +188,9 @@ var SceneData = new function() {
 			(function() {
 				var regions = [] ;
 				var w = ImageResource[4].width, h = ImageResource[4].height ;
-				for(i=0; i<licondata.length; ++i)
-					regions[i] = { startx : licondata[i].x, starty : licondata[i].y,
-						endx : licondata[i].x + w, endy : licondata[i].y + h } ;
+				for(i=0; i<icondata.length; ++i)
+					regions[i] = { startx : icondata[i].x, starty : icondata[i].y,
+						endx : icondata[i].x + w, endy : icondata[i].y + h } ;
 						regions[i] = { startx : 0, starty : 380, endx : 50, endy : 430 } ;
 				return regions; })());
 	

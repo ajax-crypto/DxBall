@@ -109,8 +109,8 @@ var DrawGameScenes = new function() {
 		Graphics.clear(DxBall.WIDTH, DxBall.TOTAL_HEIGHT);
 		Graphics.image(ImageResource[3].res, ImageResource[3].x, ImageResource[3].y); 
 		for(i=0; i<6; ++i)
-			Graphics.image((licondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
-				licondata[i].x, licondata[i].y); 
+			Graphics.image((icondata[i].unlocked == true ? ImageResource[5].res : ImageResource[4].res), 
+				icondata[i].x, icondata[i].y); 
 		drawHUD();
 	};
 	
