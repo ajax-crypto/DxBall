@@ -171,20 +171,32 @@ var SceneData = new function() {
 			START1 : 0, START2 : 1, START3 : 2, CREDITS : 3 
 		};
 		
+		self.regions[GameStates.GAME_OVER] = {
+			CONTINUE : 0 
+		};
+		
+		self.regions[GameStates.INFO_SCREEN] = {
+			CONTINUE : 0 
+		};
+		
+		self.regions[GameStates.CREDIT_SCENE] = {
+			CONTINUE : 0 
+		};
+		
 		self.data[GameStates.SETTINGS] = new SceneDataFormat(
 			[ { startx : 210, starty : 180, endx : 420, endy : 240 },
 			  { startx : 210, starty : 240, endx : 420, endy : 310 },
 			  { startx : 210, starty : 310, endx : 420, endy : 380 },
 			  { startx : 0, starty : 430, endx : 50, endy : 480 } ], 
-		    [ { x : 200, y : 205, r : 5 },
-		      { x : 200, y : 280, r : 5 },
-		      { x : 200, y : 345, r : 5 } ], DxBall.difficulty);
+		    	[ { x : 200, y : 205, r : 5 },
+		      	  { x : 200, y : 280, r : 5 },
+		     	  { x : 200, y : 345, r : 5 } ], DxBall.difficulty);
 	
 		self.data[GameStates.START_SCREEN] = new SceneDataFormat(
 			[ { startx : 170, starty : 55, endx : 437, endy : 140 },
 			  { startx : 170, starty : 180, endx : 437, endy : 265 },
 			  { startx : 170, starty : 322, endx : 437, endy : 392 },
-		      { startx : 565, starty : 410, endx : 640, endy : 480 } ]);
+		     	  { startx : 565, starty : 410, endx : 640, endy : 480 } ]);
 	
 		self.data[GameStates.LEVEL_SELECT] = new SceneDataFormat(
 			(function() {
@@ -205,9 +217,9 @@ var SceneData = new function() {
 			var heights = ~~(ImageResource[7].height/3) ;
 			for(var i=0; i<3; ++i)
 				regions[i] = { startx : ImageResource[7].x, 
-							starty : ImageResource[7].y + i*heights,
-							endx : ImageResource[7].x + ImageResource[7].width,
-							endy : ImageResource[7].y + (i+1)*heights };
+					       starty : ImageResource[7].y + i*heights,
+					       endx : ImageResource[7].x + ImageResource[7].width,
+				       	       endy : ImageResource[7].y + (i+1)*heights };
 			return regions; })());
 			
 		self.data[GameStates.SPLASH_SCREEN] = new SceneDataFormat(
@@ -216,6 +228,15 @@ var SceneData = new function() {
 			  { startx : 402, starty : 417, endx : 640, endy : 480 },
 			  { startx : 250, starty : 417, endx : 402, endy : 480 } ] );
 		
+		self.data[GameStates.GAME_OVER] = new SceneDataFormat(
+			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
+			
+		self.data[GameStates.INFO_SCREEN] = new SceneDataFormat(
+			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
+			
+		self.data[GameStates.CREDIT_SCENE] = new SceneDataFormat(
+			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
+	
 		initOnce = true ;
 	};
 };
