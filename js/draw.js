@@ -99,7 +99,7 @@ var DrawGameScenes = new function() {
 	// Note :
 	// This array maps the index with whether the scene should be redrawn or not.
 	// Mapping is with Game States.
-	var shouldRedraw = [ false, false, false, true, false, false, false, false, false, false, false ] ;
+	var shouldRedraw = [ false, false, false, true, false, false, false, false, false, false, true ] ;
 	
 	drawScene[GameStates.SPLASH_SCREEN] = function() {
 		Graphics.image(ImageResource[1].res, ImageResource[1].x, ImageResource[1].y); 

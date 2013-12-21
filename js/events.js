@@ -99,11 +99,18 @@ var EventHandlers = new function() {
 				/* If user clicked anywhere except for "credit", 
 				 * go to level selection screen, else go to credit scene
 				 */
-				Graphics.clear(DxBall.WIDTH, DxBall.HEIGHT);
-				if(EventUtilities.checkBounds(mouse, 250, 417, 402, 480))  
-					DxBall.setState(GameStates.CREDIT_SCENE) ; 
-				else 
-					DxBall.setState(GameStates.START_SCREEN) ;
+				SceneData.data[GameStates.SPLASH_SCREEN].determineRegion(mouse, 'click');
+				var region = SceneData.data[GameStates.SPLASH_SCREEN].whichRegion();
+				switch(region) {
+					case SceneData.regions[GameStates.SPLASH_SCREEN].START1 :
+					case SceneData.regions[GameStates.SPLASH_SCREEN].START2 :
+					case SceneData.regions[GameStates.SPLASH_SCREEN].START3 :
+						DxBall.setState(GameStates.START_SCREEN) ;
+					break ;
+					case SceneData.regions[GameStates.SPLASH_SCREEN].CREDITS :
+						DxBall.setState(GameStates.CREDIT_SCENE) ;
+					break ;
+				}
 			break ;
 				
 			case 'mousemove' : 
@@ -276,17 +283,13 @@ var EventHandlers = new function() {
 				}; 	
 				SceneData.data[GameStates.SETTINGS].determineRegion(mouse, 'click');
 				var region = SceneData.data[GameStates.SETTINGS].whichRegion() ;
-				DrawGameScenes.makeSceneRedraw(GameStates.SETTINGS) ;
 				switch(region)
 				{
-					case SceneData.regions[GameStates.SETTINGS].EASY :
-						GameObjects.ball.life = 2 ;
-					break ;
+					case SceneData.regions[GameStates.SETTINGS].EASY : 
 					case SceneData.regions[GameStates.SETTINGS].MEDIUM :
-						GameObjects.ball.life = 1 ;
-					break ;
 					case SceneData.regions[GameStates.SETTINGS].HARD :
-						GameObjects.ball.life = 0 ;
+						DrawGameScenes.makeSceneRedraw(GameStates.SETTINGS) ;
+						DxBall.setDifficulty(region);
 					break ;
 					case SceneData.regions[GameStates.SETTINGS].BACK :
 						DxBall.setState(GameStates.START_SCREEN) ;

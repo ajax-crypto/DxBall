@@ -39,10 +39,9 @@ function ResourceManager(resourceURLs, positionAssign) {
 		var arr = (typeof arr!="object")? [arr] : arr;
 		function imageloadpost(){
 			loadedimages++;
-			if (loadedimages == arr.length){
+			if (loadedimages == arr.length)
 				//call postaction and pass in newimages array as parameter
 				postaction(newimages) ;
-			}
 		}
 		for (var i=0; i<arr.length; ++i){
 			newimages[i] = new Image();
@@ -51,7 +50,7 @@ function ResourceManager(resourceURLs, positionAssign) {
 				imageloadpost();
 			};
 			newimages[i].onerror = function(){
-				alert('Failed to Load Resources');
+				alert('Failed to Load Resources :(');
 			};
 		}
 		//return blank object with done() method
@@ -110,32 +109,31 @@ var DxBallResources = new ResourceManager( [
  * significance i.e. These regions when clicked (or
  * any other GUI events) upon will perform certain tasks.
  * *******************************************************/ 
-
  
-function SceneDataFormat(_regions, _drawRegions) {
+function SceneDataFormat(regions, drawRegions, selectedRegion) {
 	var self = this ;
-	var selectedRegion = -1 ;
-	self.regions = _regions ;
-	self.drawRegion = _drawRegions ;
+	self.selectedRegion = (typeof selectedRegion === 'undefined') ? -1 : selectedRegion ;
+	self.regions = regions ;
+	self.drawRegion = drawRegions ;
 }
 		
 SceneDataFormat.prototype.whichRegion = function() {
-		return selectedRegion ;
+		return this.selectedRegion ;
 	};
 	
 SceneDataFormat.prototype.determineRegion = function(mouse, event) {
 		var self = this ;
-		selectedRegion = -1 ;
+		self.selectedRegion = -1 ;
 		for(var i=0; i<self.regions.length; i++) {
 			if(EventUtilities.checkBounds(mouse, self.regions[i].startx, 
 				self.regions[i].starty, self.regions[i].endx, self.regions[i].endy)) {
-				selectedRegion = i ;
+				self.selectedRegion = i ;
 			}
 		}
 	};
 	
 SceneDataFormat.prototype.getRegionData = function() {
-		return this.drawRegion[selectedRegion] ;
+		return this.drawRegion[this.selectedRegion] ;
 	};
  
 var SceneData = new function() {
@@ -168,7 +166,11 @@ var SceneData = new function() {
 		self.regions[GameStates.PAUSED] = {
 			RESTART : 0, RESUME : 1, BACK : 2
 		};
-			
+		
+		self.regions[GameStates.SPLASH_SCREEN] = {
+			START1 : 0, START2 : 1, START3 : 2, CREDITS : 3 
+		};
+		
 		self.data[GameStates.SETTINGS] = new SceneDataFormat(
 			[ { startx : 210, starty : 180, endx : 420, endy : 240 },
 			  { startx : 210, starty : 240, endx : 420, endy : 310 },
@@ -176,7 +178,7 @@ var SceneData = new function() {
 			  { startx : 0, starty : 430, endx : 50, endy : 480 } ], 
 		    [ { x : 200, y : 205, r : 5 },
 		      { x : 200, y : 280, r : 5 },
-		      { x : 200, y : 345, r : 5 } ]);
+		      { x : 200, y : 345, r : 5 } ], DxBall.difficulty);
 	
 		self.data[GameStates.START_SCREEN] = new SceneDataFormat(
 			[ { startx : 170, starty : 55, endx : 437, endy : 140 },
@@ -207,6 +209,12 @@ var SceneData = new function() {
 							endx : ImageResource[7].x + ImageResource[7].width,
 							endy : ImageResource[7].y + (i+1)*heights };
 			return regions; })());
+			
+		self.data[GameStates.SPLASH_SCREEN] = new SceneDataFormat(
+			[ { startx : 0, starty : 0, endx : 640, endy : 417 },
+			  { startx : 0, starty : 417, endx : 250, endy : 480 },
+			  { startx : 402, starty : 417, endx : 640, endy : 480 },
+			  { startx : 250, starty : 417, endx : 402, endy : 480 } ] );
 		
 		initOnce = true ;
 	};

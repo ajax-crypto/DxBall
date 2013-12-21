@@ -38,6 +38,7 @@ var DxBall = new function() {
 	self.bricks = 0 ; 
 	self.FPS = 60 ; 
 	self.shouldDrawHUDinGame = false ;
+	self.difficulty = 0 ;
 	
 	temp_points = 0 ;
 	prev_points = 0 ;
@@ -124,6 +125,10 @@ var DxBall = new function() {
 		icondata[DxBall.level].unlocked = true ;
 	};
 	
+	self.setDifficulty = function(diff) {
+		self.difficulty = diff ;
+	};
+	
 	self.getPointsScored = function() {
 		return prev_points ;
 	};
@@ -138,7 +143,7 @@ var DxBall = new function() {
 
 	self.restart = function() {
 		self.state = GameStates.RUNNING ;
-		self.playRandom ? GameObjects.generateRandomLevel() : GameObjects.init(); 
+		self.playRandom ? GameObjects.generateRandomLevel() : GameObjects.init(self.difficulty); 
 		self.start(); 
 	};
 	
@@ -154,7 +159,7 @@ var DxBall = new function() {
 			self.state = GameStates.RUNNING ;
 			self.playRandom = false ;
                         self.temp_points = 0 ;
-			GameObjects.init();
+			GameObjects.init(self.difficulty);
 			self.start();
 		}
 	};
@@ -163,7 +168,7 @@ var DxBall = new function() {
 		self.setState(GameStates.RUNNING) ;
 		self.playRandom = true ;
                 self.temp_points = 0 ;
-		GameObjects.generateRandomLevel() ;
+		GameObjects.generateRandomLevel(self.difficulty) ;
 		self.start();
 	};
 

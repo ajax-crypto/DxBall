@@ -290,11 +290,12 @@ var GameObjects = new function() {
 		self.gift = new Gift(type, x, y); 
 	};
 
-	self.initBall = function() {
+	self.initBall = function(difficulty) {
 		self.ball.x = BallDefaults.X ;
 		self.ball.y = BallDefaults.Y ;
 		self.ball.dx = BallDefaults.DX ;
 		self.ball.dy = BallDefaults.DY ; 
+		self.ball.life = Math.abs(difficulty - 2) ;
 		self.ball.through = false ; 
 	};
 	
@@ -394,14 +395,14 @@ var GameObjects = new function() {
 		DxBall.addPoints(self.bricks[row][col].points);
 	};
 	
-	self.init = function() {
-		self.initBall();
+	self.init = function(difficulty) {
+		self.initBall(difficulty);
 		self.initBricks();
 		self.initGifts();
 	};
 	
-	self.generateRandomLevel = function() {
-		self.initBall();
+	self.generateRandomLevel = function(difficulty) {
+		self.initBall(difficulty);
 		self.initRandomBricks();
 		self.initRandomGift();
 	};
