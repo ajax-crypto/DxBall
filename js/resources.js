@@ -19,62 +19,7 @@
 var ImageResource = [] ; 
 var icondata = [] ;
 
-function Resource(res) {
-	var self = this ; 
-	self.res = res ;
-	self.x = 0 ;
-	self.y = 0 ;
-	self.height = res.height ; 
-	self.width = res.width ;
-}
-
-function ResourceManager(resourceURLs, positionAssign) {
-
-	var resources = resourceURLs ;
-	var givePositions = positionAssign ;
-
-	var preloadImages = function(arr){
-		var newimages = [], loadedimages = 0;
-		var postaction = function(){};
-		var arr = (typeof arr!="object")? [arr] : arr;
-		function imageloadpost(){
-			loadedimages++;
-			if (loadedimages == arr.length)
-				//call postaction and pass in newimages array as parameter
-				postaction(newimages) ;
-		}
-		for (var i=0; i<arr.length; ++i){
-			newimages[i] = new Image();
-			newimages[i].src = arr[i];
-			newimages[i].onload = function(){
-				imageloadpost();
-			};
-			newimages[i].onerror = function(){
-				alert('Failed to Load Resources :(');
-			};
-		}
-		//return blank object with done() method
-		return { 
-			done:function(f){
-				//remember user defined callback functions to be called when images load
-				postaction = f || postaction ;
-			}
-		}
-	};
- 
-	this.prepareAndStart = function() {
-		preloadImages(resources).done(function(images){
-			for(i=0; i<images.length; ++i) 
-				ImageResource[i] = new Resource(images[i]);
-			givePositions();
-			SceneData.init(); 
-			DxBall.start();
-		});
-	};
-	
-}
-
-var DxBallResources = new ResourceManager( [
+var DxBallResources = new DX.ResourceManager( [
 	'img/paddle.png', 'img/splash.png', 'img/credit.png', 
 	'img/lselect.png', 'img/ulevel.png', 'img/llevel.png',
 	'img/next.png', 'img/pause.png', 'img/coin.png',
@@ -103,39 +48,23 @@ var DxBallResources = new ResourceManager( [
 		ImageResource[7].y = ~~((DxBall.HEIGHT/2)-(ImageResource[7].height/2));
 	}) );
 	
+DxBallResources['prepareAndStart'] = function() {
+		DxBallResources.preloadImages(DxBallResources.resources).done(function (images) {
+			for(i=0; i<images.length; ++i) 
+				ImageResource[i] = new DX.Resource(images[i]);
+			DxBallResources.givePositions();
+			SceneData.init(); 
+			DxBall.start();
+		});
+	};
+
 /*********************************************************
  * The variable SceneData contains data in form
  * of regions, which denotes that they carry special
  * significance i.e. These regions when clicked (or
  * any other GUI events) upon will perform certain tasks.
  * *******************************************************/ 
- 
-function SceneDataFormat(regions, drawRegions, selectedRegion) {
-	var self = this ;
-	self.selectedRegion = (typeof selectedRegion === 'undefined') ? -1 : selectedRegion ;
-	self.regions = regions ;
-	self.drawRegion = drawRegions ;
-}
-		
-SceneDataFormat.prototype.whichRegion = function() {
-		return this.selectedRegion ;
-	};
-	
-SceneDataFormat.prototype.determineRegion = function(mouse, event) {
-		var self = this ;
-		self.selectedRegion = -1 ;
-		for(var i=0; i<self.regions.length; i++) {
-			if(EventUtilities.checkBounds(mouse, self.regions[i].startx, 
-				self.regions[i].starty, self.regions[i].endx, self.regions[i].endy)) {
-				self.selectedRegion = i ;
-			}
-		}
-	};
-	
-SceneDataFormat.prototype.getRegionData = function() {
-		return this.drawRegion[this.selectedRegion] ;
-	};
- 
+
 var SceneData = new function() {
 	var self = this ;
 	var initOnce = false ;
@@ -183,22 +112,22 @@ var SceneData = new function() {
 			CONTINUE : 0 
 		};
 		
-		self.data[GameStates.SETTINGS] = new SceneDataFormat(
+		self.data[GameStates.SETTINGS] = new DX.SceneDataFormat(
 			[ { startx : 210, starty : 180, endx : 420, endy : 240 },
 			  { startx : 210, starty : 240, endx : 420, endy : 310 },
 			  { startx : 210, starty : 310, endx : 420, endy : 380 },
 			  { startx : 0, starty : 430, endx : 50, endy : 480 } ], 
-		    	[ { x : 200, y : 205, r : 5 },
-		      	  { x : 200, y : 280, r : 5 },
-		     	  { x : 200, y : 345, r : 5 } ], DxBall.difficulty);
+		    [ { x : 200, y : 205, r : 5 },
+		      { x : 200, y : 280, r : 5 },
+		      { x : 200, y : 345, r : 5 } ], DxBall.difficulty);
 	
-		self.data[GameStates.START_SCREEN] = new SceneDataFormat(
+		self.data[GameStates.START_SCREEN] = new DX.SceneDataFormat(
 			[ { startx : 170, starty : 55, endx : 437, endy : 140 },
 			  { startx : 170, starty : 180, endx : 437, endy : 265 },
 			  { startx : 170, starty : 322, endx : 437, endy : 392 },
-		     	  { startx : 565, starty : 410, endx : 640, endy : 480 } ]);
+		      { startx : 565, starty : 410, endx : 640, endy : 480 } ]);
 	
-		self.data[GameStates.LEVEL_SELECT] = new SceneDataFormat(
+		self.data[GameStates.LEVEL_SELECT] = new DX.SceneDataFormat(
 			(function() {
 				var regions = [] ;
 				var w = ImageResource[4].width, h = ImageResource[4].height ;
@@ -208,10 +137,10 @@ var SceneData = new function() {
 						regions[i] = { startx : 0, starty : 380, endx : 50, endy : 430 } ;
 				return regions; })());
 	
-		self.data[GameStates.LEVEL_COMPLETE] = new SceneDataFormat(
+		self.data[GameStates.LEVEL_COMPLETE] = new DX.SceneDataFormat(
 			[ { startx : 204, starty : DxBall.HEIGHT-90, endx : 435, endy : 480 } ]);
 	
-		self.data[GameStates.PAUSED] = new SceneDataFormat(
+		self.data[GameStates.PAUSED] = new DX.SceneDataFormat(
 		(function() {
 			var regions = [] ;
 			var heights = ~~(ImageResource[7].height/3) ;
@@ -222,19 +151,19 @@ var SceneData = new function() {
 				       	       endy : ImageResource[7].y + (i+1)*heights };
 			return regions; })());
 			
-		self.data[GameStates.SPLASH_SCREEN] = new SceneDataFormat(
+		self.data[GameStates.SPLASH_SCREEN] = new DX.SceneDataFormat(
 			[ { startx : 0, starty : 0, endx : 640, endy : 417 },
 			  { startx : 0, starty : 417, endx : 250, endy : 480 },
 			  { startx : 402, starty : 417, endx : 640, endy : 480 },
 			  { startx : 250, starty : 417, endx : 402, endy : 480 } ] );
 		
-		self.data[GameStates.GAME_OVER] = new SceneDataFormat(
+		self.data[GameStates.GAME_OVER] = new DX.SceneDataFormat(
 			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
 			
-		self.data[GameStates.INFO_SCREEN] = new SceneDataFormat(
+		self.data[GameStates.INFO_SCREEN] = new DX.SceneDataFormat(
 			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
 			
-		self.data[GameStates.CREDIT_SCENE] = new SceneDataFormat(
+		self.data[GameStates.CREDIT_SCENE] = new DX.SceneDataFormat(
 			[ { startx : 0, starty : 0, endx : 640, endy : 480 } ]);
 	
 		initOnce = true ;

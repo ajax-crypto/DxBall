@@ -1,9 +1,8 @@
-﻿Order
-defaults.js
-draw.js
-events.js
-game_scenes.js
-levels.js
-gameobjs.js
-collision.js
-main.js
+﻿ <script src="js/dxengine.js"></script>
+	<script src="js/resources.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/draw.js"></script>
+	<script src="js/events.js"></script>
+	<script src="js/levels.js"></script>
+	<script src="js/gameobjs.js"></script>
+	<script src="js/collision.js"></script>

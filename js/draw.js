@@ -23,7 +23,7 @@ var Graphics = new function() {
 	
 	var self = this ; 
 	
-	self.getOffset = function(el) {
+	var getOffset = function(el) {
 		var _x = 0;
 		var _y = 0;
 		while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
@@ -34,9 +34,9 @@ var Graphics = new function() {
 		return { top: _y, left: _x };
 	};
 
-    self.canvasMinX = self.getOffset(DxBall.canvas).left;
+    self.canvasMinX = getOffset(DxBall.canvas).left;
 	self.canvasMaxX = self.canvasMinX + DxBall.WIDTH;
-	self.canvasMinY = self.getOffset(DxBall.canvas).top; 
+	self.canvasMinY = getOffset(DxBall.canvas).top; 
 
 	self.circle = function(x, y, r, color) {
 		DxBall.ctx.fillStyle = color ;

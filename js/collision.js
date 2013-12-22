@@ -4,10 +4,10 @@
 	
 	// Handles paddle collision with canvas walls
 	var handlePaddle = function() {
-		if(EventUtilities.rightDown && (GameObjects.paddle.x < Graphics.canvasMaxX)) {
+		if(DX.EventUtilities.rightDown && (GameObjects.paddle.x < Graphics.canvasMaxX)) {
 			GameObjects.paddle.moveRight();
 		}
-		else if(EventUtilities.leftDown && (GameObjects.paddle.x > Graphics.canvasMinX)) {
+		else if(DX.EventUtilities.leftDown && (GameObjects.paddle.x > Graphics.canvasMinX)) {
 			GameObjects.paddle.moveLeft();
 		}
 	};
