@@ -36,29 +36,28 @@ var DxBall = new function() {
 	self.loop = 0 ; 
 	self.level = 0 ; 
 	self.bricks = 0 ; 
-	self.FPS = 60 ; 
+	self.FTS = 1 ; // Frames to skip
 	self.shouldDrawHUDinGame = false ;
 	self.difficulty = 0 ;
+	self.counter = 0 ;
 	
 	temp_points = 0 ;
 	prev_points = 0 ;
 	points = 0 ; 
 	
-	unit_t = 0;
 	second = 0 ;
 	minute = 0 ;
+	prevTime = new Date();
 	
 	self.tick = function() {
-		++unit_t ;
-		if(unit_t == self.FPS)
-		{
+		var d = new Date();
+		if(d.getSeconds() - prevTime.getSeconds() === 1) {
 			++second ;
-			unit_t %= self.FPS ;
-			if(second == 60)
-			{
-				++minute ;
-				second %= 60 ;
-			}
+			prevTime = d ;
+		}
+		if(second > 60) {
+			++minute ;
+			second = 0 ;
 		}
 	};
 	
@@ -215,9 +214,15 @@ var DxBall = new function() {
 };
 
 function DxBallGameLoop() {
+    if (DxBall.counter < DxBall.FTS) {
+        DxBall.counter++;
+        requestAnimationFrame(DxBallGameLoop);
+        return;
+    }
 	DxBall.tick(); 
 	DxBall.updateScene() ;
 	DxBall.updateData();
 	DxBall.render() ;
-	DxBall.loop = setTimeout(DxBallGameLoop, 1000/DxBall.FPS); 
+    DxBall.counter = 0;
+    requestAnimationFrame(DxBallGameLoop);
 }

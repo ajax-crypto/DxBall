@@ -17,7 +17,7 @@ var PaddleDefaults = Object.freeze({
 var BallDefaults = Object.freeze({ 
 				   RADIUS : 6 | 0,
 				   COLOR : Colors.WHITE,
-				   SPEED : 4 | 0, 
+				   SPEED : 2 | 0, 
 				   DX : 2 | 0,
 				   DY : -4 | 0,
 				   X : 25 | 0,
@@ -53,7 +53,7 @@ Ball.prototype.speedup = function() {
 		var self = this ; 
 		if(self.dy < 0 && self.dy > -4)
 			self.dy -= BallDefaults.SPEED_UP ; 
-		else if(self.dy < 0 && self.dy < 9)
+		else if(self.dy > 0 && self.dy < 5)
 			self.dy += BallDefaults.SPEED_UP ; 
 	};
 	
