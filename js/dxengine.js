@@ -194,7 +194,7 @@ window.requestAnimFrame = (function(){
       window.oRequestAnimationFrame      ||
       window.msRequestAnimationFrame     ||
       function(callback, game){
-        game.loop = window.setTimeout(callback, 1000 / 20);
+        game.loop = window.setTimeout(callback, 1000 / game.FPS);
       };
 })();
 

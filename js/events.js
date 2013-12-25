@@ -36,7 +36,8 @@ var EventHandlers = new function () {
 					DxBall.resume(); 
 				break ;
 				case SceneData.regions[state].BACK :
-					DxBall.setState(DxBall.prevstate) ;
+					DxBall.playRandom ? DxBall.setState(GameStates.START_SCREEN) : 
+						DxBall.setState(GameStates.LEVEL_SELECT) ;
 				break ;
 			}
 		}
