@@ -147,7 +147,7 @@ var DxBall = new function() {
 	};
 	
 	self.start = function() {
-		clearTimeout(self.loop); 
+		//clearTimeout(self.loop); 
 		self.playState = true ; 
 		self.initTimer() ;
 		DxBallGameLoop(); 

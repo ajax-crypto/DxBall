@@ -2,8 +2,7 @@
 var _tempMouseMove = {
 	eventType : 'mousemove',
 	handle : function(event, state) {
-		var mouse = { x: event.pageX - Graphics.canvasMinX,
-					  y: event.pageY - Graphics.canvasMinY }; 
+		var mouse = DX.Utilities.getEventLocation(event, DxBall);
 		SceneData.data[state].determineRegion(mouse, 'mouseover');
 		if(SceneData.data[state].whichRegion() != -1) 
 			DxBall.canvas.style.cursor = 'pointer' ;
@@ -26,8 +25,7 @@ var EventHandlers = new function () {
 	_handlers[GameStates.PAUSED] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion();
 			switch(region) {
@@ -53,8 +51,10 @@ var EventHandlers = new function () {
 	}, {
 		eventType : 'mousemove',
 		handle : function(event, state) {
-			if(event.pageX > Graphics.canvasMinX && event.pageX < Graphics.canvasMaxX) {
-					GameObjects.paddle.x = Math.max(event.pageX - Graphics.canvasMinX - 
+			var canvasMinX = DrawGameScenes.Graphics.canvasMinX ;
+			var canvasMaxX = DrawGameScenes.Graphics.canvasMaxX ;
+			if(event.pageX > canvasMinX && event.pageX < canvasMaxX) {
+					GameObjects.paddle.x = Math.max(event.pageX - canvasMinX - 
 						(GameObjects.paddle.width/2), 0);
 					GameObjects.paddle.x = Math.min(DxBall.WIDTH - GameObjects.paddle.width, 
 						GameObjects.paddle.x);
@@ -64,25 +64,24 @@ var EventHandlers = new function () {
 		eventType : 'keydown',
 		handle : function(event, state) {
 			if(event.keyCode == 39) 
-					EventUtilities.rightDown = true;
+					DX.Utilities.rightDown = true;
 				else if(event.keyCode == 37) 
-					EventUtilities.leftDown = true;
+					DX.Utilities.leftDown = true;
 		}
 	}, {
 		eventType : 'keyup',
 		handle : function(event, state) {
 			if(event.keyCode == 39) 
-					EventUtilities.rightDown = false;
+					DX.Utilities.rightDown = false;
 				else if(event.keyCode == 37) 
-					EventUtilities.leftDown = false;
+					DX.Utilities.leftDown = false;
 		}
 	}], GameStates.RUNNING);
 	
 	_handlers[GameStates.SPLASH_SCREEN] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion();
 			switch(region) {
@@ -101,8 +100,7 @@ var EventHandlers = new function () {
 	_handlers[GameStates.LEVEL_SELECT] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion();
 			switch(region) {
@@ -131,8 +129,7 @@ var EventHandlers = new function () {
 	_handlers[GameStates.LEVEL_COMPLETE] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion();
 			if(region != -1)  
@@ -159,8 +156,7 @@ var EventHandlers = new function () {
 	_handlers[GameStates.START_SCREEN] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion() ;
 			switch(region)
@@ -184,8 +180,7 @@ var EventHandlers = new function () {
 	_handlers[GameStates.SETTINGS] = new DX.EventHandler([{ 
 		eventType : 'click', 
 		handle : function(event, state) {
-			var mouse = { x: event.pageX - Graphics.canvasMinX,
-					      y: event.pageY - Graphics.canvasMinY }; 
+			var mouse = DX.Utilities.getEventLocation(event, DxBall);
 			SceneData.data[state].determineRegion(mouse, 'click');
 			var region = SceneData.data[state].whichRegion() ;
 			switch(region)
@@ -204,7 +199,6 @@ var EventHandlers = new function () {
 	}, _tempMouseMove], GameStates.SETTINGS);
 	
 	var unregisterEvents = function(state) {
-		DxBall.canvas.removeEventListener('mousemove', _handlers[state], false);
 		for(var i=0; i<_handlers[state].customHandlers.length; ++i)
 			DxBall.canvas.removeEventListener(_handlers[state].customHandlers[i].eventType, 
 				_handlers[state], false);
@@ -212,7 +206,6 @@ var EventHandlers = new function () {
 
 	self.registerGameEvents = function(currState, prevState) {
 		unregisterEvents(prevState); 
-		DxBall.canvas.addEventListener('mousemove', _handlers[currState], false);
 		for(var i=0; i<_handlers[currState].customHandlers.length; ++i)
 			DxBall.canvas.addEventListener(_handlers[currState].customHandlers[i].eventType, 
 				_handlers[currState], false);

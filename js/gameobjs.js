@@ -73,7 +73,7 @@ Ball.prototype.move = function() {
 	
 Ball.prototype.draw = function() {
 		var self = this ; 
-		Graphics.circle(self.x, self.y, self.radius, self.color);
+		DrawGameScenes.Graphics.circle(self.x, self.y, self.radius, self.color);
 	};
 	
 Ball.prototype.collideH = function() {
@@ -93,20 +93,20 @@ Ball.prototype.passThrough = function() {
 
 /********************* Paddle **************************/
 
-function Paddle(){
+function Paddle(width){
 	
 	var self = this ; 
 	
 	self.x = PaddleDefaults.XPOS ; 
 	self.height = PaddleDefaults.HEIGHT ; 
-	self.width = PaddleDefaults.WIDTH ; 
+	self.width = width ; 
 	self.color = PaddleDefaults.COLOR ; 
 	self.speed = PaddleDefaults.SPEED ; 
 }
 
 Paddle.prototype.draw = function() {
 		var self = this ;
-		Graphics.altImage(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height, 
+		DrawGameScenes.Graphics.altImage(ImageResource[0].res, self.x, DxBall.HEIGHT-self.height, 
 			self.width, self.height);
 	} ; 
 	
@@ -179,7 +179,7 @@ Gift.prototype.speed = 2 ;
 Gift.prototype.draw = function() {
 		var self = this ; 
 		if(self.active && !self.used) 
-			Graphics.image(self.res, self.x, self.y); 
+			DrawGameScenes.Graphics.image(self.res, self.x, self.y); 
 	};
 	
 Gift.prototype.move = function() {
@@ -240,7 +240,7 @@ function Brick(type) {
 Brick.prototype.draw = function(x, y) {
 		var self = this ; 
 		if (self.visible) {
-			Graphics.rect((y * (self.width + self.padding)) + 
+			DrawGameScenes.Graphics.rect((y * (self.width + self.padding)) + 
 				self.padding, (x * (self.height + self.padding)) + 
 				self.padding, self.width, self.height, self.color);
 		}
@@ -274,7 +274,7 @@ var GameObjects = new function() {
 	self.ball = new Ball(BallDefaults.X, BallDefaults.Y, BallDefaults.RADIUS, 
 				BallDefaults.DX, BallDefaults.DY, BallDefaults.COLOR); 
 	self.gift = null ; 
-	self.paddle = new Paddle() ;
+	self.paddle = new Paddle(PaddleDefaults.WIDTH) ;
 	self.giftCollected  = false ; 
 
 	self.initGifts = function() {
@@ -398,12 +398,14 @@ var GameObjects = new function() {
 	self.init = function(difficulty) {
 		self.initBall(difficulty);
 		self.initBricks();
+		self.paddle.width = PaddleDefaults.WIDTH ;
 		self.initGifts();
 	};
 	
 	self.generateRandomLevel = function(difficulty) {
 		self.initBall(difficulty);
 		self.initRandomBricks();
+		self.paddle.width = PaddleDefaults.WIDTH ;
 		self.initRandomGift();
 	};
 	

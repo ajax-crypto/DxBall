@@ -4,11 +4,13 @@
 	
 	// Handles paddle collision with canvas walls
 	var handlePaddle = function() {
-		if(DX.EventUtilities.rightDown && (GameObjects.paddle.x < Graphics.canvasMaxX)) {
+		if(DX.Utilities.rightDown && (GameObjects.paddle.x < DxBall.WIDTH - GameObjects.paddle.width)) {
 			GameObjects.paddle.moveRight();
+			console.log(DxBall.WIDTH - GameObjects.paddle.width + ',' + GameObjects.paddle.x);
 		}
-		else if(DX.EventUtilities.leftDown && (GameObjects.paddle.x > Graphics.canvasMinX)) {
+		else if(DX.Utilities.leftDown && (GameObjects.paddle.x > 0)) {
 			GameObjects.paddle.moveLeft();
+			console.log(GameObjects.paddle.x);
 		}
 	};
 
