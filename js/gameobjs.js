@@ -90,6 +90,32 @@ Ball.prototype.passThrough = function() {
 		var self = this ; 
 		self.through = true ; 
 	}; 
+	
+Ball.prototype.direction = function () {
+		var dir = 'undefined' ;
+		var self = this ;
+		if(self.dx == 0) 
+			dir = (self.dy < 0) ? 'up' : 'down' ;
+		else if(self.dy == 0)
+			dir = (self.dx < 0) ? 'left' : 'right' ;
+		else {
+			if(self.dx < 0 && self.dy < 0)
+				dir = 'leftup' ;
+			else if(self.dx > 0 && self.dy < 0)
+				dir = 'rightup' ;
+			else if(self.dx < 0 && self.dy > 0)
+				dir = 'leftdown' ;
+			else
+				dir = 'rightdown' ;
+		}
+		return dir ;
+	};
+	
+Ball.prototype.getBounds = function () {
+		var self = this ;
+		var x = self.x, y = self.y, r = self.radius ;
+		return { x : x - r, y : y - r, r : self.radius  };
+	};
 
 /********************* Paddle **************************/
 
@@ -190,7 +216,7 @@ Gift.prototype.move = function() {
 		
 /***************************** Bricks ***************************/
 
-function Brick(type) {
+function Brick(type, i, j) {
 	
 	var self = this ; 
 	
@@ -205,6 +231,8 @@ function Brick(type) {
 	self.destroyed = false ; 
 	self.paddleElongate = 0 ; 
 	self.type = type ; 
+	self.x = (j * (self.width + self.padding)) + self.padding;
+	self.y = (i * (self.height + self.padding)) + self.padding;
 	switch(self.type) {
 		case 0 :
 			self.visible = false ;
@@ -240,9 +268,13 @@ function Brick(type) {
 Brick.prototype.draw = function(x, y) {
 		var self = this ; 
 		if (self.visible) {
-			DrawGameScenes.Graphics.rect((y * (self.width + self.padding)) + 
+			//self.x = x ;
+			//self.y = y ;
+			/*DrawGameScenes.Graphics.rect((y * (self.width + self.padding)) + 
 				self.padding, (x * (self.height + self.padding)) + 
 				self.padding, self.width, self.height, self.color);
+			*/
+			DrawGameScenes.Graphics.rect(self.x, self.y, self.width, self.height, self.color);
 		}
 	};
 	
@@ -304,7 +336,7 @@ var GameObjects = new function() {
 		for (i=0; i < DxBall.NROWS; i++) {
 			self.bricks[i] = new Array(DxBall.NCOLS);
 			for (j=0; j < DxBall.NCOLS; j++) {
-				self.bricks[i][j] = new Brick(gamedata[DxBall.level][i][j]); 
+				self.bricks[i][j] = new Brick(gamedata[DxBall.level][i][j], i, j); 
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
 			}
@@ -317,7 +349,7 @@ var GameObjects = new function() {
 		for (i=0; i < DxBall.NROWS; i++) {
 			self.bricks[i] = new Array(DxBall.NCOLS);
 			for (j=0; j < DxBall.NCOLS; j++) {
-				self.bricks[i][j] = new Brick(Math.floor(Math.random()*7)); 
+				self.bricks[i][j] = new Brick(Math.floor(Math.random()*7), i, j); 
 				if(self.bricks[i][j].visible && self.bricks[i][j].destructible != 0)
 					++totalBricks ; 
 			}
@@ -326,8 +358,9 @@ var GameObjects = new function() {
 		}
 		for (--i; i < DxBall.NROWS; i++) {
 			self.bricks[i] = new Array(DxBall.NCOLS);
-			for (j=0; j < DxBall.NCOLS; j++)
-				self.bricks[i][j] = new Brick(0);
+			for (j=0; j < DxBall.NCOLS; j++) {
+				self.bricks[i][j] = new Brick(0, i, j);
+			}
 		}
 		DxBall.setBricks(totalBricks); 
 	};
@@ -335,7 +368,7 @@ var GameObjects = new function() {
 	self.drawbricks = function() {
 		for (i=0; i < DxBall.NROWS; i++) 
 			for (j=0; j < DxBall.NCOLS; j++) 
-				self.bricks[i][j].draw(i, j); 
+				self.bricks[i][j].draw(); 
 	};
 	
 	var giftHelpers = new function() {

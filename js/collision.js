@@ -1,9 +1,9 @@
-﻿var CollisionSystem = new function() {
+﻿var CollisionSystem = new function () {
 	
 	var self = this ;
 	
 	// Handles paddle collision with canvas walls
-	var handlePaddle = function() {
+	var handlePaddle = function () {
 		if(DX.Utilities.rightDown && (GameObjects.paddle.x < DxBall.WIDTH - GameObjects.paddle.width)) {
 			GameObjects.paddle.moveRight();
 			console.log(DxBall.WIDTH - GameObjects.paddle.width + ',' + GameObjects.paddle.x);
@@ -13,9 +13,115 @@
 			console.log(GameObjects.paddle.x);
 		}
 	};
+	
+	var updateMovingObjects = function (object, i, j) {
+		var self = this ;
+		
+		var bx = GameObjects.bricks[i][j].x ;
+		var by = GameObjects.bricks[i][j].y ;
+		var bheight = GameObjects.bricks[i][j].height ;
+		var bwidth = GameObjects.bricks[i][j].width ;
+		
+		var bounds = object.getBounds();
+		var direction = object.direction();
+		
+		var d1 = 0, d2 = 0;
+		var up = false, down = false, right = false, left = false;
+		
+		var collideOblique = function (d1, d2, pos1, pos2) {
+			if(d1 == d2) {
+				if(!(pos1 ^ pos2)) {
+					object.collideH();
+					object.collideV();
+				}
+				else if(pos1 && !pos2)
+					object.collideH();
+				else if(!pos1 && pos2)
+					object.collideV();
+			}
+			else if(d1 > d2)
+				object.collideH();
+			else
+				object.collideV();
+		};
+		
+		switch(direction) {
+			case 'right' : 
+				console.log('right');
+				if(bounds.y > by && bounds.y < (by + bheight))
+					object.collideH();
+			break ;
+			case 'left' :
+				console.log('left');
+				if(bounds.y > by && bounds.y < (by + bheight))
+					object.collideH();
+			break ;
+			case 'up' :
+				console.log('up');
+				if(bounds.x > bx && bounds.x < (bx + bwidth))
+					object.collideV();
+			break;
+			case 'down' :
+				console.log('down');
+				if(bounds.x > bx && bounds.x < (bx + bwidth))
+					object.collideV();
+			break;
+			case 'leftdown' :
+				d1 = (bounds.y + 2*bounds.r) - by;
+				d2 = (bx + bwidth) - bounds.x;
+				console.log('leftdown : ' + (bx + bwidth) + ' , ' + bounds.x);
+				console.log('leftdown : ' + d1 + ' , ' + d2);
+				try {
+					up = GameObjects.bricks[i-1][j].visible ;
+					right = GameObjects.bricks[i][j+1].visible ;
+				} catch(err) { }
+				collideOblique(d1, d2, up, right);
+				up = false ;
+				right = false;
+			break;
+			case 'rightdown' :
+				
+				d1 = (bounds.y + 2*bounds.r) - by;
+				d2 = (bounds.x + 2*bounds.r) - bx;
+				console.log('rightdown : ' + d1 + ' , ' + d2);
+				try {
+					up = GameObjects.bricks[i-1][j].visible ;
+					left = GameObjects.bricks[i][j-1].visible ;
+				} catch(err) { }
+				collideOblique(d1, d2, up, left);
+				up = false ;
+				left = false ;
+			break;
+			case 'rightup' :
+				d1 = (by + bheight) - bounds.y;
+				d2 = (bounds.x + 2*bounds.r) - bx;
+				console.log('rightup : ' + d1 + ' , ' + d2);
+				try {
+					down = GameObjects.bricks[i+1][j].visible ;
+					left = GameObjects.bricks[i][j-1].visible ;
+				} catch(err) { }
+				collideOblique(d1, d2, down, left);
+				down = false;
+				left = false;
+			break;
+			case 'lefttup' :
+				
+				d1 = (by + bheight) - bounds.y;
+				d2 = (bx + bwidth) - bounds.x;
+				console.log('leftup : ' + d1 + ' , ' + d2);
+				try {
+					down = GameObjects.bricks[i+1][j].visible ;
+					right = GameObjects.bricks[i][j+1].visible ;
+				} catch(err) { }
+				collideOblique(d1, d2, down, right);
+				down = false ;
+				right = false;
+			break;
+		}
+	};
 
 	// Handles ball and brick collision
-	var handleBallBrick = function() {
+	var handleBallBrick = function () {
 	
 	// Check if ball is within the region where bricks exist
 		if(GameObjects.ball.y < DxBall.NROWS*BrickDefaults.TRUE_HEIGHT) {
@@ -26,9 +132,7 @@
 			if(row >= 0 && col >= 0 && GameObjects.bricks[row][col].visible) {
 				GameObjects.bricks[row][col].hit() ;
 				if(!GameObjects.ball.through) { 	
-					//if(ball.x > (row)*BrickDefaults.HEIGHT && ball.x < (row+1)*BrickDefaults.HEIGHT)
-					//ball.collideH() ; 
-					GameObjects.ball.collideV() ;	
+					updateMovingObjects(GameObjects.ball, row, col);
 				}
 				
 				// Based on the bricks properties, change game object properties
@@ -41,7 +145,7 @@
 		}
 	};
 
-	var handleGiftPaddle = function() {
+	var handleGiftPaddle = function () {
 		if(GameObjects.gift.active && (GameObjects.gift.y + GameObjects.gift.res.height) > 
 			(DxBall.HEIGHT - GameObjects.paddle.height)) {
 			GameObjects.gift.deactivate() ; 
@@ -52,7 +156,7 @@
 	};
 
 	// Handles ball paddle collision 
-	var handleBallPaddle = function() {
+	var handleBallPaddle = function () {
 		var ballright = GameObjects.ball.x + GameObjects.ball.dx + GameObjects.ball.radius ; 
 		var ballleft  = GameObjects.ball.x + GameObjects.ball.dx - GameObjects.ball.radius ; 
 		var bally     = GameObjects.ball.y + GameObjects.ball.dy ;
@@ -85,7 +189,7 @@
 	};
 
 	// Handle all collisions and move ball
-	self.handleCollisions = function() { 
+	self.handleCollisions = function () { 
 		handlePaddle();
 		handleBallBrick();
 		handleGiftPaddle(); 
